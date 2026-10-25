@@ -167,6 +167,19 @@ jobs:
           path: dist/installer/*
           if-no-files-found: error
 
+      # Evidence on the run page and through the checks API (no log download needed).
+      - name: Report build results
+        if: always()
+        run: |
+          [ -f build/junit.xml ] && python scripts/ci_annotate.py build/junit.xml | grep '^::notice' || true
+          if [ -f build/frozen-selftest.txt ]; then
+            echo "::notice title=Frozen self-test (${{ matrix.target }})::$(grep -cF '[ OK ]' build/frozen-selftest.txt) checks OK; $(grep -E '^Python|^Self-test' build/frozen-selftest.txt | tr '\n' ' ')"
+          fi
+          for f in dist/installer/*; do
+            [ -f "$f" ] && echo "::notice title=Packaged (${{ matrix.target }})::$(basename "$f") — $(( $(wc -c < "$f") / 1048576 )) MB"
+          done
+          true
+
   publish:
     name: Publish release
     needs: build
