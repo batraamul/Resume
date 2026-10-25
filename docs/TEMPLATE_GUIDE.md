@@ -43,6 +43,9 @@ settings appear automatically.
 | **Graphical Career Profile** | framed banner with icons, boxed summary, expertise table, timeline chart, right sidebar with competency bars | no | Graphical career profile |
 | **Research Showcase** | metric tiles, publications-by-year chart, numbered papers, project cards, skill bars | no | Research portfolio |
 | **Infographic Timeline** | banner with icons, left sidebar with bars, project cards, timeline chart | no | Project portfolio |
+| **DoPT Deputation Proforma** | title line and post applied for, items 1–18 in ruled tables, declaration, employer's certificate | no | Deputation proforma, Government bio-data |
+| **Senior Scientist Dossier** | left header with rule, caps-rule headings, full entries, no tables or graphics | yes | Senior Scientist CV |
+| **Senior Scientist Graphical** | navy banner with icons, expertise years chart, career chart, research tiles and publication charts, project cards, sidebar bars | no | Senior scientist graphical profile |
 
 ## Specification reference
 
@@ -101,6 +104,10 @@ LibreOffice and the built-in engine (which embeds metric-compatible open fonts).
   three outputs.
 * **Cards** (`entry.project_style: "cards"`): Challenge, Approach, Outcome, My contribution, verified
   metrics and technologies; only the approved external description when one exists.
+* **Chart styles** (`graphics.chart_styles`): the template's default style per chart, for example
+  `{"career_timeline": "bars", "publications_by_type": "donut"}`. Keys and allowed styles are listed in
+  `ris/domain/charts.py` (career_timeline, publications_by_year, publications_by_type, research_metrics,
+  skill_levels, expertise_years); each resume can override them in Resume Studio.
 * In templates without graphics, the same sections fall back to plain text (bullets or a single line).
 * Inside two-column bodies, tables are not nested (paragraph versions are used) so LibreOffice and Word
   can split the columns across pages.

@@ -529,3 +529,75 @@ def test_update_check_dialog_and_settings(window, monkeypatch, tmp_path):
     window.navigate("settings", "")
     page.update_auto.setChecked(False)
     assert window.ctx.config.update_auto_check is False and not due_for_check(window.ctx.config)
+
+
+@pytest.mark.req("CHT-01", "FMT-01")
+def test_studio_chart_choices_and_proforma_answers(window, qtbot):
+    page = window.pages["studio"]
+    window.navigate("studio", "")
+    page.template.setCurrentIndex(page.template.findData("senior_graphical"))
+    assert page.chart_combos["career_timeline"].isEnabled()
+    assert "Horizontal bars" in page.chart_combos["career_timeline"].itemText(0)  # the template's default
+    cb = page.chart_combos["career_timeline"]
+    cb.setCurrentIndex(cb.findData("donut"))
+    page._flush_save()
+    rec = window.ctx.repo.get(page.variant_id)
+    assert rec.data.charts == {"career_timeline": "donut"}
+    page.template.setCurrentIndex(page.template.findData("ats_minimal"))
+    assert not page.chart_combos["career_timeline"].isEnabled()
+    page.mode.setCurrentIndex(page.mode.findData("deputation_proforma"))
+    assert page.template.currentData() == "dopt_proforma"
+    assert not page.b_proforma.isHidden() and not page.particulars["sc_st_status"].isHidden()
+    page.edit_proforma_answers({"meets_requirements": "Yes.", "application_basis": "Deputation (ISTC)",
+                                "equivalence_authority": ""})
+    page.particulars["date_of_retirement"].setChecked(True)
+    page._flush_save()
+    rec = window.ctx.repo.get(page.variant_id)
+    assert rec.data.mode == "deputation_proforma"
+    assert rec.data.proforma == {"meets_requirements": "Yes.", "application_basis": "Deputation (ISTC)"}
+    assert "date_of_retirement" in rec.data.official_particulars
+    page.mode.setCurrentIndex(page.mode.findData("defence_technical"))
+    assert page.b_proforma.isHidden() and page.particulars["sc_st_status"].isHidden()
+    page._fill_add_section_menu()
+    assert not any("Proforma" in a.text() or "items 1" in a.text() for a in page.b_add_section.menu().actions())
+
+
+@pytest.mark.req("FED-01", "FMT-03")
+def test_openings_list_import_and_recommended_format(window, tmp_path, monkeypatch):
+    import json as _json
+
+    import ris.ui.pages.opportunities as opp
+
+    monkeypatch.setattr(opp, "info", lambda *a, **k: None)
+    feed = {"fetchedAt": "2026-10-19T00:00:00Z", "items": [
+        {"id": "test-sci-f", "org": "Example Organisation", "post": "Scientist F (test)", "level": "13A",
+         "mode": "Deputation", "lastDate": "2099-12-31", "eligibility": "Analogous post at Level 13A.",
+         "link": "https://example.org/notice.pdf", "verified": True}]}
+    path = tmp_path / "e-diary-jobs-feed-2026-10-19.json"
+    path.write_text(_json.dumps(feed), encoding="utf-8")
+    page = window.pages["opportunities"]
+    window.navigate("opportunities", "")
+    res = page.import_openings(str(path))
+    assert res is not None and res.added == ["Scientist F (test)"]
+    assert window.ctx.config.openings_feed_path == str(tmp_path)
+    rec = next(v for v in window.ctx.repo.list(RecordKind.VACANCY) if v.data.title == "Scientist F (test)")
+    assert page.focus_record(rec.id)
+    assert "DoPT" in page.format_box.toPlainText() and "APAR" in page.format_box.toPlainText()
+    page.tailor()
+    variant = next(v for v in window.ctx.repo.list(RecordKind.VARIANT) if v.data.vacancy_id == rec.id)
+    assert variant.data.mode == "deputation_proforma" and variant.data.template_id == "dopt_proforma"
+
+
+@pytest.mark.req("FMT-03")
+def test_recruiter_create_resume_in_format(window):
+    page = window.pages["portals"]
+    window.navigate("portals", "")
+    page.tabs.setCurrentIndex(0)
+    for i in range(page.rec_list.count()):
+        if page.rec_list.item(i).data(0x0100)["id"] == "ntro":
+            page.rec_list.setCurrentRow(i)
+    assert page.b_format.isEnabled() and page.b_format.menu().actions()
+    assert "DoPT" in page.rec_view.toPlainText()
+    r = page._current_recruiter()
+    rec = page.create_resume_in_format(r, r["formats"][0])
+    assert rec.data.mode == "deputation_proforma"

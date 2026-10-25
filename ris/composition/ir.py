@@ -84,7 +84,7 @@ class IRChartPoint(_IRBase):
 
 
 class IRChart(_IRBase):
-    kind: str                # timeline | stacked_years
+    kind: str                # timeline | stacked_years | years_bars
     points: list[IRChartPoint] = Field(default_factory=list)
     alt_text: str = ""
     caption: str = ""
@@ -108,7 +108,7 @@ class IRTable(_IRBase):
 class IRSection(_IRBase):
     key: str
     title: str
-    layout: str  # paragraph | entries | skills | list | table | publications | declaration | particulars
+    layout: str  # paragraph | entries | skills | list | table | publications | declaration | particulars | certificate
     paragraphs: list[str] = Field(default_factory=list)
     entries: list[IREntry] = Field(default_factory=list)
     skill_groups: list[IRSkillGroup] = Field(default_factory=list)
@@ -165,6 +165,8 @@ class ResumeDocument(_IRBase):
     trimmed: list[str] = Field(default_factory=list)
     source_revisions: dict[str, int] = Field(default_factory=dict)
     metadata: dict[str, str] = Field(default_factory=dict)
+    #: Chart choices made for this resume (chart key → style); templates supply the defaults.
+    chart_styles: dict[str, str] = Field(default_factory=dict)
 
     # ------------------------------------------------------------------ helpers for validation
     def section(self, key: str) -> IRSection | None:

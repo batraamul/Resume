@@ -25,7 +25,7 @@ entered and confirmed.
 * **Vacancy analysis** — paste or import a notice; requirements are extracted by transparent rules,
   mapped to your evidence and scored 35/25/15/10/10/5 with a full explanation. The score is never a
   prediction of selection, and formal eligibility is always left to official verification.
-* **Resume Studio** — 11 resume modes × 15 templates (12 classic, 3 graphical), section ordering,
+* **Resume Studio** — 14 resume modes × 18 templates (14 classic, 4 graphical), section ordering,
   contact visibility, record inclusion, per-resume wording approved claim by claim, live preview.
 * **Validated export** — genuine DOCX (real Word styles) and PDF (LibreOffice if installed, otherwise
   a built-in engine with embedded fonts), checked for content, contacts, chronology, confidential text,
@@ -42,6 +42,12 @@ entered and confirmed.
   portal's limits, an ATS readiness checklist and resume-file checks, with sources.
 * **Make it yours** — colour presets, your own colours (contrast-checked), fonts, text size, density, icons,
   navigation and layout; a template designer with live preview and ATS checks.
+* **Scientist F/G applications** — the DoPT deputation bio-data proforma (items 1–18, declaration and
+  employer's certificate), an ATS-safe senior scientist CV with a justification against each requirement, a
+  senior graphical profile, a recommended format and checklist for every vacancy, and import of the weekly
+  openings list.
+* **Chart choices** — switch each chart in a graphical resume off or change its style (timeline, bars, donut,
+  pie, columns, line, dots, tiles), with the facts always also in text.
 * **Installers and automatic updates** — Windows, macOS and Linux installers built by GitHub Actions;
   signed, verified updates from GitHub Releases.
 
@@ -121,6 +127,6 @@ pyinstaller packaging/ris.spec --noconfirm --clean         # dist/ResumeIntellig
 
 ## Status
 
-Version 1.1.0. See [docs/TEST_REPORT.md](docs/TEST_REPORT.md) for exactly what was verified and how,
+Version 1.2.0. See [docs/TEST_REPORT.md](docs/TEST_REPORT.md) for exactly what was verified and how,
 and [CHANGELOG.md](CHANGELOG.md) for known limitations. This software has not had an independent
 security audit and is not claimed to be production-certified.

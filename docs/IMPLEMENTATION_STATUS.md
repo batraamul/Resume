@@ -5,7 +5,7 @@ Evidence for each statement is in [TEST_REPORT.md](TEST_REPORT.md) and [REQUIREM
 
 ## Current phase
 
-Version 1.1.0 — installers for Windows, macOS and Linux built by GitHub Actions, signed automatic updates,
+Version 1.2.0 (Scientist F/G formats, chart choices, openings import) on top of 1.1.0 — installers for Windows, macOS and Linux built by GitHub Actions, signed automatic updates,
 training sections, interview preparation, job-portal kit, appearance and template customisation, developer
 guide. Source code at <https://github.com/batraamul/Resume>.
 
@@ -62,6 +62,10 @@ guide. Source code at <https://github.com/batraamul/Resume>.
     per-platform installation, channels, skip/remind, privacy note.
   - DEVELOPER_GUIDE.md with the tested Resume Lite tutorial.
 
+- Version 1.2 (all with tests): Scientist F/G formats (DoPT deputation proforma, Senior Scientist CV, senior
+  graphical profile; 3 new templates, 18 in all), chart choices for graphical resumes, import of the weekly
+  openings list, recommended format and checklist per vacancy, recruiter formats, two senior career presets.
+
 ## Outstanding (see BACKLOG.md)
 
 - No Apple or Microsoft code-signing certificate is configured, so the operating systems warn on first install.
@@ -88,11 +92,9 @@ guide. Source code at <https://github.com/batraamul/Resume>.
 
 ## Exact next steps
 
-1. Add the `RIS_UPDATE_SIGNING_KEY` repository secret so releases are signed and published automatically.
-   Then publish 1.1.0: *Actions → Release → Run workflow* with tag `v1.1.0` (the release workflow's build
-   jobs already passed in a dry run; tag pushes are not possible from the development session).
-2. Install each 1.1.0 package on a real Windows, macOS and Linux desktop; when 1.1.1 or 1.2.0 is released,
-   test the update from 1.1.0 end to end.
+1. Publish 1.2.0: *Actions → Release → Run workflow* with tag `v1.2.0` (the signing secret is set; 1.1.0 was
+   published signed). Installed 1.1.0 copies are then offered the update — the first real end-to-end update.
+2. Install the packages on real Windows, macOS and Linux desktops.
 3. Code-sign the Windows installer and notarise the macOS app when certificates are available.
 4. Live test Google Drive sync with a real OAuth client and an external AI provider with a real key.
 5. Vector charts and complex-script shaping in the built-in PDF engine.

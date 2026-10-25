@@ -245,6 +245,23 @@ class TemplateDesignerDialog(QDialog):
                 editor.buttons = [ColourButton(c, self._changed) for c in val]  # type: ignore[attr-defined]
                 for b in editor.buttons:  # type: ignore[attr-defined]
                     hl.addWidget(b)
+            elif name == "chart_styles":
+                from ris.domain.charts import CHARTS
+
+                editor = QWidget()
+                cf = QFormLayout(editor)
+                cf.setContentsMargins(0, 0, 0, 0)
+                editor.chart_combos = {}  # type: ignore[attr-defined]
+                for key, chart in CHARTS.items():
+                    cb = QComboBox()
+                    cb.addItem(f"Built-in default ({chart.style_label(chart.default)})", "")
+                    for style, text in chart.styles:
+                        cb.addItem(text, style)
+                    cb.setCurrentIndex(max(0, cb.findData((val or {}).get(key, ""))))
+                    cb.setAccessibleName(f"Default chart: {chart.label}")
+                    cb.currentIndexChanged.connect(self._changed)
+                    editor.chart_combos[key] = cb  # type: ignore[attr-defined]
+                    cf.addRow(chart.label + ":", cb)
             elif name == "sidebar_sections":
                 editor = QListWidget()
                 editor.setMaximumHeight(170)
@@ -279,6 +296,8 @@ class TemplateDesignerDialog(QDialog):
                     if editor.item(i).checkState() == Qt.CheckState.Checked]
         if hasattr(editor, "buttons"):
             return [b.value() for b in editor.buttons]
+        if hasattr(editor, "chart_combos"):
+            return {k: cb.currentData() for k, cb in editor.chart_combos.items() if cb.currentData()}
         return editor.text()
 
     def _set(self, group: str, name: str, value) -> None:
@@ -296,6 +315,9 @@ class TemplateDesignerDialog(QDialog):
         elif hasattr(ed, "buttons"):
             for b, v in zip(ed.buttons, value, strict=False):
                 b.set_value(v)
+        elif hasattr(ed, "chart_combos"):
+            for k, cb in ed.chart_combos.items():
+                cb.setCurrentIndex(max(0, cb.findData((value or {}).get(k, ""))))
 
     def collect(self) -> dict:
         data = json.loads(json.dumps(self.data))

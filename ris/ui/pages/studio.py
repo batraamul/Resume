@@ -34,8 +34,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ris.composition.modes import MODES, SECTION_TITLES, get_mode
+from ris.composition.modes import MODES, PROFORMA_SECTIONS, SECTION_TITLES, get_mode
 from ris.domain import registry
+from ris.domain.charts import CHARTS
 from ris.domain.enums import Confidentiality, RecordKind, ResumeLength, SummaryFocus, Verification, choices, label
 from ris.domain.models import Variant
 from ris.errors import RISError
@@ -68,6 +69,17 @@ CONTACT_KEYS = [("email", "Email"), ("phone", "Telephone"), ("location", "Locati
 PARTICULARS = [("date_of_birth", "Date of birth"), ("date_of_entry_into_service", "Date of entry into service"),
                ("present_pay_level", "Present pay level"), ("nature_of_employment", "Nature of present employment"),
                ("nationality", "Nationality"), ("home_address", "Address for correspondence")]
+#: Extra particulars that only the deputation proforma prints (items 3, 9–15 and 18).
+PROFORMA_PARTICULARS = [("date_of_retirement", "Date of retirement (item 3)"),
+                        ("employer_type", "Type of present employer (item 11)"),
+                        ("present_deputation_details", "Present deputation / contract details (item 9)"),
+                        ("past_deputation_details", "Previous deputation(s) (item 10)"),
+                        ("feeder_grade_status", "Feeder grade status (item 12)"),
+                        ("pay_revision_details", "Revised pay scale details (item 13)"),
+                        ("basic_pay", "Basic pay (item 14)"), ("total_emoluments", "Total emoluments (item 14)"),
+                        ("non_central_pay_details", "Non-Central pay details (item 15)"),
+                        ("sc_st_status", "Whether belongs to SC / ST (item 18)")]
+BASIS_CHOICES = ["", "Deputation (ISTC)", "Deputation (STC)", "Absorption", "Re-employment", "Short-term contract"]
 PICKER_KINDS = [RecordKind.POSITION, RecordKind.ASSIGNMENT, RecordKind.BULLET, RecordKind.EDUCATION,
                 RecordKind.PUBLICATION, RecordKind.PROJECT, RecordKind.SKILL, RecordKind.ACTIVITY,
                 RecordKind.EXPERTISE, RecordKind.REFERENCE, RecordKind.CUSTOM_ENTRY]
@@ -378,11 +390,21 @@ class StudioPage(Page):
         pl.setContentsMargins(0, 0, 0, 0)
         pl.addWidget(QLabel("Official particulars to include (bio-data only):"))
         self.particulars: dict[str, QCheckBox] = {}
-        for k, t in PARTICULARS:
+        self.proforma_only: set[str] = {k for k, _ in PROFORMA_PARTICULARS}
+        for k, t in PARTICULARS + PROFORMA_PARTICULARS:
             cb = QCheckBox(t)
             cb.toggled.connect(lambda _c: self._changed())
             self.particulars[k] = cb
             pl.addWidget(cb)
+        self.proforma_note = muted("Unticked items are left blank on the form, for you to fill in by hand. Enter the "
+                                   "values under Master Profile → Personal details.")
+        pl.addWidget(self.proforma_note)
+        self.employer_cert = QCheckBox("Include the employer's certificate (for your office to complete)")
+        self.employer_cert.toggled.connect(lambda _c: self._changed())
+        pl.addWidget(self.employer_cert)
+        self.b_proforma = button("Proforma answers (items 5, 6 and 17)…", on_click=self.edit_proforma_answers,
+                                 tooltip="Your own statements for the deputation proforma")
+        pl.addWidget(self.b_proforma)
         content.add(self.particulars_box)
         content.add(button("Choose records…", on_click=self.choose_records,
                            tooltip="Include or leave out individual records for this resume"))
@@ -407,10 +429,29 @@ class StudioPage(Page):
         look.body.addLayout(lf)
         look.add(self.photo)
         lay.addWidget(look)
+        charts = Card("Charts (graphical templates)")
+        self.charts_note = muted("")
+        charts.add(self.charts_note)
+        chf = QFormLayout()
+        self.chart_combos: dict[str, QComboBox] = {}
+        for key, chart_info in CHARTS.items():
+            cb = QComboBox()
+            cb.addItem("Template default", "")
+            for style, text in chart_info.styles:
+                cb.addItem(text, style)
+            cb.setToolTip(chart_info.help)
+            cb.setAccessibleName(f"Chart: {chart_info.label}")
+            cb.currentIndexChanged.connect(lambda _i: self._changed())
+            self.chart_combos[key] = cb
+            chf.addRow(chart_info.label + ":", cb)
+        charts.body.addLayout(chf)
+        lay.addWidget(charts)
+        self.charts_card = charts
         lay.addStretch(1)
         for wdg in (self.mode, self.template, self.target, self.vacancy, self.length, self.page_size, self.summary,
                     self.pubs, self.spacing):
             wdg.currentIndexChanged.connect(lambda _i: self._changed())
+        self.template.currentIndexChanged.connect(lambda _i: self._update_charts_ui())
         self.max_pages.valueChanged.connect(lambda _v: self._changed())
         self.font_scale.valueChanged.connect(lambda _v: self._changed())
         self.accent.editingFinished.connect(self._changed)
@@ -568,6 +609,11 @@ class StudioPage(Page):
                 cb.setChecked(k in visible)
             for k, cb in self.particulars.items():
                 cb.setChecked(k in d.official_particulars)
+            self.employer_cert.setChecked(d.include_employer_certificate)
+            self._proforma_answers = dict(d.proforma)
+            for k, cb in self.chart_combos.items():
+                cb.setCurrentIndex(max(cb.findData(d.charts.get(k, "")), 0))
+            self._update_charts_ui()
             self._fill_sections(d)
             self._update_mode_ui(mode)
             self.excluded_note.setText(f"{len(d.exclude_ids)} record(s) left out of this resume."
@@ -604,8 +650,10 @@ class StudioPage(Page):
         menu.clear()
         present = {self.sections.item(i).data(Qt.ItemDataRole.UserRole) for i in range(self.sections.count())}
         mode = get_mode(self.mode.currentData())
-        missing = [k for k in ALL_SECTION_KEYS if k not in present and k not in ("particulars", "declaration",
-                                                                                 "requirements_matrix")]
+        excluded = {"particulars", "declaration", "requirements_matrix"}
+        if not mode.proforma:
+            excluded |= set(PROFORMA_SECTIONS)
+        missing = [k for k in ALL_SECTION_KEYS if k not in present and k not in excluded]
         if not missing:
             menu.addAction("All sections are already listed").setEnabled(False)
         for k in missing:
@@ -625,6 +673,56 @@ class StudioPage(Page):
         self.particulars_box.setVisible(mode.government)
         self.declaration.setVisible(mode.government)
         self.mode_note.setText(mode.description)
+        for k in self.proforma_only:
+            self.particulars[k].setVisible(mode.proforma)
+        for w in (self.proforma_note, self.employer_cert, self.b_proforma):
+            w.setVisible(mode.proforma)
+
+    def _update_charts_ui(self) -> None:
+        spec = self.ctx.templates.find(self.template.currentData() or "")
+        on = bool(spec and spec.graphics.enabled and spec.tables_allowed)
+        for key, cb in self.chart_combos.items():
+            cb.setEnabled(on)
+            default = spec.graphics.chart_styles.get(key, CHARTS[key].default) if spec else CHARTS[key].default
+            cb.setItemText(0, f"Template default ({CHARTS[key].style_label(default)})")
+        self.charts_note.setText(
+            "Switch each chart off or choose how it is drawn. Every chart's facts also appear as text." if on else
+            "This template has no charts. Choose a graphical template (Senior Scientist Graphical, Graphical Career "
+            "Profile, Research Showcase or Infographic Timeline) to use them.")
+
+    def edit_proforma_answers(self, values: dict | None = None) -> dict | None:
+        """Dialog for the candidate's own statements in the proforma (item 5 equivalence, item 6, item 17)."""
+        current = dict(getattr(self, "_proforma_answers", {}))
+        if values is None:
+            from PySide6.QtWidgets import QDialog, QDialogButtonBox, QPlainTextEdit
+
+            dlg = QDialog(self)
+            dlg.setWindowTitle("Proforma answers")
+            form = QFormLayout(dlg)
+            eq = QLineEdit(current.get("equivalence_authority", ""))
+            eq.setPlaceholderText("Only if a qualification was treated as equivalent")
+            stmt = QPlainTextEdit(current.get("meets_requirements", ""))
+            stmt.setPlaceholderText("Your own statement, e.g. 'Yes. Essential qualification: …; experience: …'")
+            stmt.setMaximumHeight(110)
+            basis = QComboBox()
+            basis.setEditable(True)
+            basis.addItems(BASIS_CHOICES)
+            basis.setCurrentText(current.get("application_basis", ""))
+            form.addRow(muted("These are your own statements; the application never answers them for you."))
+            form.addRow("Item 5 — authority for equivalence:", eq)
+            form.addRow("Item 6 — do you meet the essential qualifications and experience?", stmt)
+            form.addRow("Item 17 — basis of application:", basis)
+            bb = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+            bb.accepted.connect(dlg.accept)
+            bb.rejected.connect(dlg.reject)
+            form.addRow(bb)
+            if dlg.exec() != QDialog.DialogCode.Accepted:
+                return None
+            values = {"equivalence_authority": eq.text(), "meets_requirements": stmt.toPlainText(),
+                      "application_basis": basis.currentText()}
+        self._proforma_answers = {k: str(v).strip() for k, v in values.items() if str(v).strip()}
+        self._changed()
+        return self._proforma_answers
 
     def _mode_changed(self) -> None:
         if self._loading:
@@ -693,7 +791,11 @@ class StudioPage(Page):
             "contact_fields": [] if contacts == list(mode.contact_fields) else contacts,
             "include_planned_education": self.planned.isChecked(), "redacted": self.redacted.isChecked(),
             "include_declaration": self.declaration.isChecked(),
-            "official_particulars": [k for k, cb in self.particulars.items() if cb.isChecked()] if mode.government else [],
+            "official_particulars": [k for k, cb in self.particulars.items() if cb.isChecked()
+                                     and (mode.proforma or k not in self.proforma_only)] if mode.government else [],
+            "include_employer_certificate": self.employer_cert.isChecked(),
+            "proforma": dict(getattr(self, "_proforma_answers", {})),
+            "charts": {k: cb.currentData() for k, cb in self.chart_combos.items() if cb.currentData()},
             "font_scale": round(self.font_scale.value(), 2), "spacing": self.spacing.currentData(),
             "accent_color": self.accent.text().strip(), "show_photo": self.photo.isChecked(),
         })

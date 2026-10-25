@@ -44,6 +44,9 @@ class OpportunitiesPage(Page):
         self.header.add_action(button("New vacancy", on_click=self.new_vacancy, tooltip="Paste a notice manually"))
         self.header.add_action(button("Import notice…", on_click=self.import_notice,
                                       tooltip="Read a notice from a PDF, DOCX or text file"))
+        self.header.add_action(button("Import openings list…", on_click=self.import_openings,
+                                      tooltip="Add the openings from your weekly Scientist F/G scan "
+                                              "(e-diary-jobs-feed-*.json)"))
         split = QSplitter(Qt.Orientation.Horizontal)
         left = QWidget()
         ll = QVBoxLayout(left)
@@ -129,8 +132,14 @@ class OpportunitiesPage(Page):
         arow.addStretch(1)
         arow.addWidget(button("Track this application", on_click=self.track))
         arow.addWidget(button("Draft cover letter", on_click=self.letter))
-        arow.addWidget(button("Create tailored resume", "primary", on_click=self.tailor))
+        arow.addWidget(button("Graphical profile", on_click=lambda: self.tailor(graphical=True),
+                              tooltip="A graphical profile for the interview board or networking"))
+        arow.addWidget(button("Create resume in recommended format", "primary", on_click=self.tailor))
         al.addLayout(arow)
+        self.format_box = QTextBrowser()
+        self.format_box.setAccessibleName("Recommended format")
+        self.format_box.setMaximumHeight(170)
+        al.addWidget(self.format_box)
         self.tabs.addTab(at, "Evidence && score")
         rl.addWidget(self.tabs, 1)
         split.addWidget(right)
@@ -192,6 +201,7 @@ class OpportunitiesPage(Page):
         if not keep_editor:
             self.editor.set_record(rec)
         self._fill_requirements(rec)
+        self.show_format_advice(rec)
         self.analyse()
 
     def focus_record(self, record_id: str) -> bool:
@@ -500,20 +510,68 @@ class OpportunitiesPage(Page):
             return None
         return self.ctx.repo.get(self.current_id)
 
-    def tailor(self) -> None:
+    def show_format_advice(self, rec) -> None:
+        from html import escape
+
+        from ris.intelligence.formats import recommend_for_vacancy
+
+        if rec is None:
+            self.format_box.setHtml("")
+            return
+        a = recommend_for_vacancy(rec.data)
+        parts = [f"<b>Recommended format:</b> {escape(a.title)}<br>{escape(a.reason)}"]
+        if a.own_form_warning:
+            parts.append(f"<br><b>{escape(a.own_form_warning)}</b>")
+        if a.checklist:
+            parts.append("<br><b>Checklist</b><ul>" + "".join(f"<li>{escape(c)}</li>" for c in a.checklist) + "</ul>")
+        parts.append("<i>Advice only: the notice and its prescribed form always prevail.</i>")
+        self.format_box.setHtml("".join(parts))
+
+    def import_openings(self, path: str | None = None) -> None:
+        from ris.services.openings_feed import import_feed
+
+        if path is None:
+            start = getattr(self.ctx.config, "openings_feed_path", "") or ""
+            path, _ = QFileDialog.getOpenFileName(self, "Import openings list", start,
+                                                  "Openings list (*.json)")
+            if not path:
+                return
+        try:
+            res = import_feed(self.ctx.repo, Path(path), today=self.ctx.today)
+        except RISError as exc:
+            error(self, "Import openings list", exc.user_message, exc.detail)
+            return
+        self.ctx.config.openings_feed_path = str(Path(path).parent)
+        try:
+            self.ctx.config.save()
+        except OSError:
+            pass
+        self.ctx.invalidate()
+        self.refresh()
+        info(self, "Openings imported", res.summary() + " Open each one to see the recommended format, and check "
+             "the official notice before applying.")
+        return res
+
+    def tailor(self, graphical: bool = False) -> None:
         v = self._vacancy()
         if v is None:
             return
-        target = self.ctx.repo.find(v.data.target_id) if v.data.target_id else None
-        mode = "government_biodata" if v.data.recruitment_mode in (RecruitmentMode.DEPUTATION.value,
-                                                                   RecruitmentMode.ABSORPTION.value) else \
-            (target.data.preferred_mode if target and target.data.preferred_mode else "defence_technical")
         from ris.composition.modes import get_mode
+        from ris.intelligence.formats import recommend_for_vacancy
 
+        target = self.ctx.repo.find(v.data.target_id) if v.data.target_id else None
+        advice = recommend_for_vacancy(v.data)
+        if graphical:
+            mode, template = "senior_graphical", "senior_graphical"
+        else:
+            mode, template = advice.mode, advice.template
+            if (target is not None and target.data.preferred_mode and mode == "senior_scientist"
+                    and v.data.recruitment_mode not in (RecruitmentMode.DIRECT.value, RecruitmentMode.LATERAL.value)):
+                mode = target.data.preferred_mode
+                template = target.data.preferred_template or get_mode(mode).default_template
         m = get_mode(mode)
-        template = (target.data.preferred_template if target and target.data.preferred_template
-                    and mode != "government_biodata" else m.default_template)
-        data = {"name": f"{v.data.title or 'Vacancy'}" + (f" — {v.data.employer}" if v.data.employer else ""),
+        data = {"name": f"{v.data.title or 'Vacancy'}" + (f" — {v.data.employer}" if v.data.employer else "")
+                        + (" (graphical)" if graphical else ""),
                 "mode": mode, "template_id": template, "vacancy_id": v.id, "target_id": v.data.target_id,
                 "length": m.default_length.value if hasattr(m.default_length, "value") else str(m.default_length)}
         rec = self.ctx.repo.create(RecordKind.VARIANT, data)

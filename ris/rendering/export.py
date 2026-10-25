@@ -159,7 +159,7 @@ class ExportService:
             approved_claims=claims_by_bullet(claim_recs),
             requirements_matrix=analysis.matrix() if analysis is not None else None,
             emphasis=analysis.emphasis if analysis is not None else {},
-            target=target, vacancy_title=vac.data.title if vac else "",
+            target=target, vacancy_title=vac.data.title if vac else "", vacancy=vac.data if vac else None,
             mandatory_gaps=analysis.mandatory_gaps() if analysis is not None else [],
             is_sample=bool(getattr(self.ws, "is_sample", False)),
             today=self.today or date.today(),

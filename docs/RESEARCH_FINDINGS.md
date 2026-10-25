@@ -66,6 +66,19 @@ Government CV (matching item 16(A) of the proforma), and the existing deputation
 | Typical PIQ-based questions (journey, home town, family, free time, previous attempts …). | Question bank category "From your questionnaire". | [SSBCrackExams — PIQ questions](https://ssbcrackexams.com/sure-shot-questions-asked-from-piq-form-in-ssb-interview/) |
 | Senior scientist interviews probe leadership, reproducibility, funding, IP, collaboration, technology transfer and communication. | Research, leadership and project question categories. | [InterviewPrep](https://interviewprep.org/senior-scientist-interview-questions/) |
 
+## 5. Scientist F/G applications (version 1.2)
+
+| Finding | Feature | Source |
+|---|---|---|
+| Central Government deputation, absorption and short-term contract circulars prescribe the Bio-data / CV proforma of DoPT OM dated 02.07.2015: items 1–18 (service dates, qualifications against the advertised requirements, employment in chronological order with pay and nature of duties, deputation and pay details, additional information and achievements, basis of application), the candidate's declaration, and a certificate by the employer / cadre controlling authority. | *Deputation application — DoPT bio-data proforma* mode and template. | [CAG copy of the proforma](https://cag.gov.in/uploads/subsite_whats_new/Proforma-for-Biodata-as-per-DoPT-OM-dated-02-07-2015-06231703a0fb5a8-59987840.pdf) |
+| NTRO's 2026 deputation circular uses that proforma (Annexure-I) and the employer's certificate (Annexure-II), and asks for APARs for five years, vigilance clearance and integrity certificate, a statement of penalties for ten years, and forwarding through proper channel; maximum age 56. | Proforma checklist in *Recommended format*; NTRO entry in the recruiter directory. | [NTRO circular, CGA copy (June 2026)](https://cga.nic.in//writereaddata/file/GRBHR15062026.pdf) |
+| DRDO RAC recruits by online application with uploaded certificates; candidates highlight experience matching essential and desirable requirements in a justification field; shortlisting uses higher qualifications, relevant experience and desirable qualifications; selection is by interview; serving government employees inform their cadre controlling authority and produce an NOC or acknowledgement at interview. | *Senior Scientist CV* with *Justification against the requirements of the post*; direct-recruitment checklist. | [RAC advertisement 148](https://www.drdo.gov.in/sites/default/files/career-vacancy-documents/advt148RAC26102023.pdf), [RAC advertisement 129](https://rac.gov.in/download/advt_129.pdf) |
+| The weekly Scientist F/G scan maintains a list of openings at Level 13A/14 (organisation, post, level, mode, closing date, eligibility, official link, verified flag). | *Import openings list* in Job Opportunities. | The user's scheduled scan (its list contains no personal data) |
+
+The RAC advertisements read for this were for Scientist C, D and E posts; no Scientist F/G advertisement was
+open at the time. The senior CV follows the same application pattern and should be checked against the actual
+notice.
+
 ## Limits of this research
 
 * Character limits for the Naukri headline and summary are recommendations from third-party guides, not

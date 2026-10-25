@@ -1065,3 +1065,60 @@ priority = "P1"
 area = "Release"
 text = "Automated builds and tests on Windows, macOS and Linux for every change; tagged versions produce installers, a signed update manifest, checksums and build provenance on GitHub Releases."
 modules = [".github/workflows/ci.yml", ".github/workflows/release.yml"]
+
+# ---------------------------------------------------------------- Scientist F/G formats (1.2)
+[[req]]
+id = "FMT-01"
+priority = "P0"
+area = "Scientist F/G formats"
+text = "Deputation application in the DoPT bio-data proforma (OM 02.07.2015): items 1–18, declaration and employer's certificate; private items printed only when opted in, the candidate's own statements never generated."
+modules = ["ris/composition/composer.py", "ris/composition/modes.py", "templates/dopt_proforma.json"]
+
+[[req]]
+id = "FMT-02"
+priority = "P1"
+area = "Scientist F/G formats"
+text = "ATS-safe Senior Scientist (F/G) CV with a justification against the linked vacancy's requirements, and a senior graphical profile."
+modules = ["ris/composition/modes.py", "templates/senior_scientist.json", "templates/senior_graphical.json"]
+
+[[req]]
+id = "FMT-03"
+priority = "P1"
+area = "Scientist F/G formats"
+text = "Recommended format and application checklist for each vacancy (deputation proforma, senior CV, graphical profile), with one-click creation from vacancies and recruiter routes."
+modules = ["ris/intelligence/formats.py", "ris/ui/pages/opportunities.py", "ris/ui/pages/portals.py"]
+
+[[req]]
+id = "CHT-01"
+priority = "P1"
+area = "Charts"
+text = "Each chart in a graphical resume can be switched off or given a suitable style per resume, with template defaults; unsuitable styles are not offered."
+modules = ["ris/domain/charts.py", "ris/ui/pages/studio.py", "ris/ui/template_designer.py"]
+
+[[req]]
+id = "CHT-02"
+priority = "P1"
+area = "Charts"
+text = "Bar, column, line, pie, donut and dot charts are drawn identically in DOCX and PDF from recorded data."
+modules = ["ris/rendering/graphics.py", "ris/rendering/layout.py"]
+
+[[req]]
+id = "CHT-03"
+priority = "P0"
+area = "Charts"
+text = "Chart facts always appear as text; ATS-safe templates never draw charts."
+modules = ["ris/rendering/layout.py"]
+
+[[req]]
+id = "FED-01"
+priority = "P1"
+area = "Openings feed"
+text = "The weekly openings list (e-diary-jobs-feed JSON) imports as vacancies: added, updated when changed, closed items skipped, unverified items flagged."
+modules = ["ris/services/openings_feed.py", "ris/ui/pages/opportunities.py"]
+
+[[req]]
+id = "FED-02"
+priority = "P1"
+area = "Openings feed"
+text = "Feed import is local and treats the file as data; malformed files are refused without changing the profile."
+modules = ["ris/services/openings_feed.py"]

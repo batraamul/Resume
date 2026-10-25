@@ -1,0 +1,78 @@
+{
+  "id": "senior_scientist",
+  "name": "Senior Scientist Dossier",
+  "version": "1.0.0",
+  "family": "single-column formal dossier",
+  "description": "Formal, single-column CV for Scientist F/G and equivalent posts: name and post line, ruled headings, positions with dates on the right, projects and publications in full, page numbers with your name. Contains no tables or graphics, so it reads correctly in recruitment portals and applicant tracking systems.",
+  "recommended_modes": [
+    "senior_scientist",
+    "defence_technical",
+    "scientific_research"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "page": {
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 19,
+    "margin_right_mm": 17
+  },
+  "fonts": {
+    "body": "Cambria",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10.5,
+    "heading_size": 11.5,
+    "name_size": 19,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.1
+  },
+  "colours": {
+    "text": "#141B24",
+    "muted": "#3F4A57",
+    "accent": "#1B3358",
+    "rule": "#1B3358",
+    "fill": "#EEF1F5",
+    "banner_fill": "#1B3358",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#FFFFFF",
+    "link": "#1B3358"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "separator": "  |  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "caps_rule",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.5,
+    "space_before": 11,
+    "space_after": 4,
+    "rule_weight": 0.6
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true,
+    "bullet_glyph": "•"
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "publications": {
+    "style": "numbered",
+    "highlight_name": true
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

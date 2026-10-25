@@ -57,6 +57,16 @@ One per workspace; fact (verification applies); default classification for manua
 | `date_of_entry_into_service` | Date of entry into service | partial date (YYYY, YYYY-MM, YYYY-MM-DD) | Private particulars | **private** |
 | `present_pay_level` | Present pay level | text | Private particulars | **private** |
 | `nature_of_employment` | Nature of present employment | text | Private particulars | **private**; e.g. Permanent / Quasi-permanent / Temporary — used only in government bio-data when you enable it. |
+| `date_of_retirement` | Date of retirement (as per rules) | partial date (YYYY, YYYY-MM, YYYY-MM-DD) | Deputation proforma particulars | **private** |
+| `employer_type` | Type of present employer | text | Deputation proforma particulars | **private**; Item 11: Central Government, State Government, Autonomous organisation, Government undertaking, University or Others. |
+| `present_deputation_details` | Present deputation / contract details | text | Deputation proforma particulars | **private**; Item 9, only if your present post is held on deputation or contract: date of initial appointment, period, parent organisation, and substantive post and pay in the parent organisation. Write 'Not applicable' if it does not apply. |
+| `past_deputation_details` | Previous deputation(s) | text | Deputation proforma particulars | **private**; Item 10: posts held on deputation in the past and the date of return from the last one, or 'Not applicable'. |
+| `feeder_grade_status` | Feeder grade status | text | Deputation proforma particulars | **private**; Item 12: whether you work in the same department and in the feeder or feeder-to-feeder grade. |
+| `pay_revision_details` | Revised pay scale details | text | Deputation proforma particulars | **private**; Item 13: whether you are in a revised scale of pay, the date of revision and the pre-revised scale. |
+| `basic_pay` | Basic pay (per month) | text | Deputation proforma particulars | **private**; Item 14, as on your latest pay slip. |
+| `total_emoluments` | Total emoluments (per month) | text | Deputation proforma particulars | **private**; Item 14, as on your latest pay slip. |
+| `non_central_pay_details` | Pay details if your employer does not follow Central pay scales | text | Deputation proforma particulars | **private**; Item 15 (enclose the latest salary slip), or 'Not applicable'. |
+| `sc_st_status` | Whether belongs to SC / ST | text | Deputation proforma particulars | **private**; Item 18, exactly as the form requires. |
 | `custom` | Custom fields | dict | Custom fields | Your own fields (name → value). They are stored with the record and can be shown in custom sections. |
 
 ## Professional summary (`summary`)
@@ -363,6 +373,9 @@ Working record (not a fact); default classification for manual entries: approved
 | `redacted` | Redacted (public items only) | yes/no | Details |  |
 | `include_planned_education` | Show planned qualifications | yes/no | Details |  |
 | `publication_scope` | Publications | text | Details |  |
+| `charts` | Charts | dict | Details | system-managed |
+| `proforma` | Proforma answers | dict | Details | system-managed |
+| `include_employer_certificate` | Include the employer's certificate (deputation proforma) | yes/no | Details |  |
 | `notes` | Notes | text | Details | **private** |
 | `last_generated_at` | Last generated | text | Details | system-managed |
 | `source_revisions` | Source revisions | dict | Details | system-managed |

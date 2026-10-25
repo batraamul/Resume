@@ -48,6 +48,7 @@ class AppConfig:
     update_channel: str = "stable"  # stable | beta
     update_last_check: str = ""
     update_skipped_version: str = ""
+    openings_feed_path: str = ""
     log_level: str = "INFO"
     ai_provider: str = "off"  # off | anthropic | openai_compatible
     ai_endpoint: str = ""

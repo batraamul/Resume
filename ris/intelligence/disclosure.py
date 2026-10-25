@@ -104,7 +104,8 @@ def scan_document(doc: ResumeDocument) -> list[Finding]:
                 own |= {v for k, v in e.meta if k in ("Email", "Telephone") and v}
     findings: list[Finding] = []
     for s in doc.sections:
-        skip = {"personal"} if s.key in ("particulars", "declaration") else set()
+        skip = {"personal"} if s.key in ("particulars", "declaration", "proforma_particulars", "proforma_service",
+                                         "proforma_basis", "proforma_statement", "employer_certificate") else set()
         if s.key in ("publications", "manuscripts"):
             skip |= {"frequency"}
         for p in s.paragraphs:

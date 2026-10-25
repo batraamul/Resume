@@ -1,0 +1,103 @@
+{
+  "id": "senior_graphical",
+  "name": "Senior Scientist Graphical",
+  "version": "1.0.0",
+  "family": "banner, sidebar bars, charts",
+  "description": "Graphical profile for senior scientists: navy banner with contact icons, boxed profile, areas of expertise with a years chart, career chart, research-at-a-glance tiles with publication charts, project cards and self-assessed competency bars in the sidebar. Every chart can be switched off or changed per resume. For interviews and networking, not for online portals.",
+  "recommended_modes": [
+    "senior_graphical",
+    "graphical_profile",
+    "research_portfolio"
+  ],
+  "summary_style": "boxed",
+  "page": {
+    "margin_top_mm": 12,
+    "margin_bottom_mm": 14,
+    "margin_left_mm": 14,
+    "margin_right_mm": 14
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 9.8,
+    "heading_size": 12,
+    "name_size": 22,
+    "headline_size": 10.5,
+    "small_size": 8.6,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#18202B",
+    "muted": "#4A5563",
+    "accent": "#1C3D6E",
+    "rule": "#A7B4C6",
+    "fill": "#E7ECF3",
+    "banner_fill": "#1C3D6E",
+    "banner_text": "#FFFFFF",
+    "banner_outer": "#121A26",
+    "sidebar_fill": "#F1F4F8",
+    "link": "#1C3D6E",
+    "tile_fill": "#E9EFF7",
+    "bar_track": "#CDD6E2"
+  },
+  "header": {
+    "style": "banner",
+    "name_case": "upper",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "contact_icons": true,
+    "separator": "     ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "plain_bold",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.4,
+    "space_before": 11,
+    "space_after": 4,
+    "rule_weight": 0.75
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true,
+    "bullet_glyph": "▸",
+    "project_style": "cards"
+  },
+  "skills": {
+    "style": "bars",
+    "competencies_style": "bullets"
+  },
+  "columns": {
+    "enabled": true,
+    "side": "right",
+    "width_frac": 0.3,
+    "gap_mm": 6,
+    "sidebar_sections": [
+      "skills",
+      "training",
+      "languages"
+    ]
+  },
+  "graphics": {
+    "enabled": true,
+    "palette": ["#1C3D6E", "#B5651D", "#2E7D6B", "#7A3E7D", "#8E1B1B", "#4F6D2A", "#3D5A80"],
+    "timeline_height_mm": 52,
+    "chart_height_mm": 46,
+    "tiles_per_row": 4,
+    "bar_width_mm": 28,
+    "chart_styles": {
+      "career_timeline": "bars",
+      "publications_by_year": "columns",
+      "publications_by_type": "donut",
+      "expertise_years": "bars"
+    }
+  },
+  "footer": {
+    "page_numbers": "x",
+    "show_name": true
+  }
+}

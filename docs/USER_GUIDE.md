@@ -54,7 +54,18 @@ possible duplicates, outdated resumes and upcoming deadlines. Double-click an it
     with the records used. The 0–100 alignment score shows its components (35/25/15/10/10/5 by default;
     change weights in Settings). **It is not a probability of selection**, and eligibility (age, pay level,
     service conditions) is always left to the recruiting authority.
-  * **Create tailored resume**, **Draft cover letter**, **Track this application**.
+  * **Recommended format** (below the score): which document suits the post — the DoPT deputation proforma
+    for deputation, absorption and short-term contract; the Senior Scientist CV for direct and lateral
+    recruitment — with a checklist of what to enclose, and a warning when the notice has its own form. It is
+    advice only; the notice always prevails.
+  * **Create resume in recommended format**, **Graphical profile** (for the interview board),
+    **Draft cover letter**, **Track this application**.
+* **Import openings list…** reads the list kept by your weekly Scientist F/G opening scan
+  (`e-diary-jobs-feed-YYYY-MM-DD.json`, for example from the *E-Diary Jobs* folder synced by Google Drive for
+  desktop). New openings are added as vacancies with organisation, post, pay level, mode, closing date,
+  eligibility and the link to the official notice; openings already imported are updated (for example an
+  extended closing date) and closed ones are skipped. Items marked unverified in the list carry a note to
+  check the notice. The application remembers the folder for next time.
 
 ## 4. Resume Studio
 
@@ -62,8 +73,10 @@ Pick or create a **variant** (a named set of choices). Settings save automatical
 
 * **Mode** — content strategy: Professional, Defence & Intelligence technical, Scientific research,
   Academic CV, Government bio-data, ATS-optimised, One-page executive, Technical specialist,
-  **Graphical career profile**, **Research portfolio**, **Project portfolio**.
-* **Template** — visual layout (15). ATS-safe templates are single-column without tables or images.
+  **Graphical career profile**, **Research portfolio**, **Project portfolio**, and for Scientist F/G posts
+  **Deputation application — DoPT bio-data proforma**, **Senior Scientist (F/G) — R&D leadership CV** and
+  **Senior scientist graphical profile** (see *Scientist F/G applications* below).
+* **Template** — visual layout (18). ATS-safe templates are single-column without tables or images.
 * **Target / vacancy** — drive ordering and emphasis; a vacancy adds the "required vs possessed" table to
   bio-data.
 * **Sections** — drag to reorder, untick to hide, **Add section ▾** to include any other section (for
@@ -78,6 +91,36 @@ Pick or create a **variant** (a named set of choices). Settings save automatical
 * **Export…** (Ctrl+E) — DOCX, PDF and/or TXT. Unconfirmed or unreviewed items open the review window, where
   you can confirm, approve, leave items out or open the record. Sensitive wording needs acknowledgement.
   Files are validated before success is reported, saved as a new version, and never overwrite older files.
+
+### Scientist F/G applications
+
+Three formats are built for senior scientific posts in defence, intelligence and scientific organisations:
+
+* **Deputation application — DoPT bio-data proforma** (template *DoPT Deputation Proforma*). Follows the
+  Bio-data / CV proforma of DoPT OM dated 02.07.2015 item by item: 1–3 name, address, date of birth and
+  service dates; 4 educational qualifications; 5 the essential and desirable requirements of the post against
+  what you possess (link the vacancy); 6 your own statement; 7 employment in chronological order with pay level
+  and nature of duties; 8–15 present employment, deputation and pay; 16 A additional information and
+  professional training; 16 B (i)–(vi) publications, special projects, awards, memberships, patents and other
+  information; 17–18 basis of application and category; the candidate's declaration; and the employer's
+  certificate for your office to complete and countersign.
+  * Private items (address, date of birth, pay, deputation details, category…) are printed **only when you
+    tick them** under *Official particulars*; unticked items are left blank for you to fill in by hand. Enter
+    them under *Master Profile → Personal details → Deputation proforma particulars*.
+  * **Proforma answers…** holds your own statements for item 5 (authority for an equivalent qualification),
+    item 6 (whether you meet the essential qualifications and experience) and item 17 (deputation, absorption,
+    re-employment or short-term contract). The application never answers these for you.
+  * If the circular encloses its own form, use that form; the proforma output is your source for it.
+* **Senior Scientist (F/G) — R&D leadership CV** (template *Senior Scientist Dossier*, ATS-safe). For direct
+  or lateral recruitment (for example DRDO RAC) and as the detailed CV sent with a deputation application:
+  profile, areas of specialisation, technical domains, a *Justification against the requirements of the post*
+  when a vacancy is linked (useful for the online form's justification field), positions, major R&D projects,
+  leadership, publications, patents, awards, grants, talks, training and education.
+* **Senior scientist graphical profile** (template *Senior Scientist Graphical*): a two-page visual summary
+  for the interview board and networking, with charts you can change (below).
+
+*Job Portals & Recruiters → Recruiters* also offers **Create resume in this format ▾** for each recruitment
+route.
 
 ### Graphical resumes
 
@@ -94,6 +137,22 @@ The three graphical templates (Graphical Career Profile, Research Showcase, Info
   grants, talks, and citations / h-index / i10-index with their source) and a publications-by-year chart;
 * **project cards** with Challenge, Approach, Outcome, My contribution, verified metrics and technologies.
   If a project has *approved external description*, only that text is shown.
+
+**Charts** (Resume Studio → *Charts*, enabled for graphical templates): each chart can be switched off or
+drawn in a style that suits its data:
+
+| Chart | Styles |
+|---|---|
+| Career timeline | timeline columns, horizontal bars, donut or pie (share of career years), off (text list) |
+| Publications by year | stacked columns by type, columns (totals), line, cumulative line, off |
+| Publications by type | off, donut, pie, horizontal bars |
+| Research metrics | tiles, one line of text, off |
+| Skill levels | segmented bars, dots, words (e.g. *Advanced*), off (names only) |
+| Areas of expertise | text only, bar chart of years |
+
+*Template default* uses the template's own choice (set in the template designer under Graphics). Styles that
+would misrepresent the data, such as a pie of publications per year, are not offered, and every chart's facts
+also appear as text.
 
 Graphical resumes are for people to read. For online portals use the ATS mode and template.
 

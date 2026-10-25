@@ -144,6 +144,15 @@ class GraphicsSpec(_Spec):
     chart_height_mm: float = Field(48, ge=30, le=80)
     tiles_per_row: int = Field(4, ge=2, le=6)
     bar_width_mm: float = Field(30, ge=15, le=60)
+    #: Default chart styles for this template (chart key → style, see ris/domain/charts.py); resumes may override.
+    chart_styles: dict[str, str] = Field(default_factory=dict)
+
+    @field_validator("chart_styles", mode="before")
+    @classmethod
+    def _chart_styles(cls, v):
+        from ris.domain.charts import clean_choices
+
+        return clean_choices(v if isinstance(v, dict) else {})
 
     @field_validator("palette")
     @classmethod

@@ -336,6 +336,46 @@ class PersonalInfo(RecordData):
         "", "Nature of present employment", group="Private particulars", private=True,
         help="e.g. Permanent / Quasi-permanent / Temporary — used only in government bio-data when you enable it.",
     )
+    # ---- deputation proforma particulars (DoPT bio-data proforma items 3, 9–15 and 18): private by default
+    date_of_retirement: PDate = F("", "Date of retirement (as per rules)", widget="date",
+                                  group="Deputation proforma particulars", private=True)
+    employer_type: str = F(
+        "", "Type of present employer", group="Deputation proforma particulars", private=True,
+        placeholder="Central Government",
+        help="Item 11: Central Government, State Government, Autonomous organisation, Government undertaking, "
+             "University or Others.",
+    )
+    present_deputation_details: str = F(
+        "", "Present deputation / contract details", widget="text", group="Deputation proforma particulars",
+        private=True,
+        help="Item 9, only if your present post is held on deputation or contract: date of initial appointment, "
+             "period, parent organisation, and substantive post and pay in the parent organisation. "
+             "Write 'Not applicable' if it does not apply.",
+    )
+    past_deputation_details: str = F(
+        "", "Previous deputation(s)", widget="text", group="Deputation proforma particulars", private=True,
+        help="Item 10: posts held on deputation in the past and the date of return from the last one, or "
+             "'Not applicable'.",
+    )
+    feeder_grade_status: str = F(
+        "", "Feeder grade status", group="Deputation proforma particulars", private=True,
+        help="Item 12: whether you work in the same department and in the feeder or feeder-to-feeder grade.",
+    )
+    pay_revision_details: str = F(
+        "", "Revised pay scale details", widget="text", group="Deputation proforma particulars", private=True,
+        help="Item 13: whether you are in a revised scale of pay, the date of revision and the pre-revised scale.",
+    )
+    basic_pay: str = F("", "Basic pay (per month)", group="Deputation proforma particulars", private=True,
+                       help="Item 14, as on your latest pay slip.")
+    total_emoluments: str = F("", "Total emoluments (per month)", group="Deputation proforma particulars",
+                              private=True, help="Item 14, as on your latest pay slip.")
+    non_central_pay_details: str = F(
+        "", "Pay details if your employer does not follow Central pay scales", widget="text",
+        group="Deputation proforma particulars", private=True,
+        help="Item 15 (enclose the latest salary slip), or 'Not applicable'.",
+    )
+    sc_st_status: str = F("", "Whether belongs to SC / ST", group="Deputation proforma particulars", private=True,
+                          help="Item 18, exactly as the form requires.")
 
     def display_title(self) -> str:
         return self.preferred_name or self.full_name or "Personal details"
@@ -354,6 +394,16 @@ PRIVATE_PERSONAL_FIELDS: tuple[str, ...] = (
     "date_of_entry_into_service",
     "present_pay_level",
     "nature_of_employment",
+    "date_of_retirement",
+    "employer_type",
+    "present_deputation_details",
+    "past_deputation_details",
+    "feeder_grade_status",
+    "pay_revision_details",
+    "basic_pay",
+    "total_emoluments",
+    "non_central_pay_details",
+    "sc_st_status",
 )
 
 
@@ -953,6 +1003,13 @@ class Variant(RecordData):
     redacted: bool = F(False, "Redacted (public items only)", widget="bool")
     include_planned_education: bool = F(False, "Show planned qualifications", widget="bool")
     publication_scope: str = F("relevant", "Publications", widget="choice_str")
+    #: Chart choices for graphical templates, e.g. {"career_timeline": "donut"} (see ris/domain/charts.py).
+    charts: dict[str, str] = F({}, "Charts", hidden=True)
+    #: Answers for the deputation proforma: meets_requirements (item 6), equivalence_authority (item 5),
+    #: application_basis (item 17).
+    proforma: dict[str, str] = F({}, "Proforma answers", hidden=True)
+    include_employer_certificate: bool = F(True, "Include the employer's certificate (deputation proforma)",
+                                           widget="bool")
     notes: str = F("", "Notes", widget="text", private=True)
     last_generated_at: str = F("", "Last generated", hidden=True)
     source_revisions: dict[str, int] = F({}, "Source revisions", hidden=True)
@@ -992,6 +1049,20 @@ class Variant(RecordData):
         if n < 1 or n > 50:
             raise ValueError("Maximum pages must be between 1 and 50")
         return n
+
+    @field_validator("charts", mode="before")
+    @classmethod
+    def _charts(cls, v: Any) -> dict[str, str]:
+        from ris.domain.charts import clean_choices
+
+        return clean_choices(v if isinstance(v, dict) else {})
+
+    @field_validator("proforma", mode="before")
+    @classmethod
+    def _proforma(cls, v: Any) -> dict[str, str]:
+        allowed = ("meets_requirements", "equivalence_authority", "application_basis")
+        v = v if isinstance(v, dict) else {}
+        return {k: str(v[k]).strip()[:2000] for k in allowed if str(v.get(k) or "").strip()}
 
     @field_validator("publication_scope", mode="before")
     @classmethod

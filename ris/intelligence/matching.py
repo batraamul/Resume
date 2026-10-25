@@ -76,6 +76,32 @@ class RequirementResult:
         return label(self.status)
 
 
+def _clip(text: str, limit: int = 180) -> str:
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(" ", 1)[0].rstrip(",;:")
+    return cut + "…"
+
+
+def possessed_phrase(r: Record) -> str:
+    """How one confirmed record reads in a 'qualifications / experience possessed' column."""
+    d = r.data
+    if r.kind == RecordKind.BULLET:
+        return _clip(d.text).rstrip(".")
+    if r.kind == RecordKind.POSITION:
+        return ", ".join(x for x in (d.designation, d.organisation) if x) or r.title
+    if r.kind == RecordKind.PROJECT:
+        return f"Project: {_clip(r.title, 120)}"
+    if r.kind == RecordKind.PUBLICATION:
+        return f"Publication: {_clip(r.title, 140)}"
+    if r.kind == RecordKind.SKILL:
+        return f"Skill: {r.title}"
+    if r.kind == RecordKind.TRAINING:
+        return f"Training: {_clip(r.title, 120)}"
+    return _clip(r.title, 140)
+
+
 class EvidenceMatcher:
     def __init__(self, snapshot: ProfileSnapshot, taxonomy: Taxonomy | None = None, today=None) -> None:
         self.snap = snapshot
@@ -332,7 +358,7 @@ class EvidenceMatcher:
         if note:
             expl += " " + note
         conf = [r for r in records if self.confirmed(r)][:3]
-        possessed = "; ".join(f"{r.title} ({label(r.kind).lower()})" for r in conf) if status != EvidenceStatus.NOT_FOUND else ""
+        possessed = "; ".join(possessed_phrase(r) for r in conf) if status != EvidenceStatus.NOT_FOUND else ""
         return RequirementResult(req, status, evidence, expl, possessed, [r.id for r in conf] if possessed else [])
 
     # ------------------------------------------------------------------ research

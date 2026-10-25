@@ -80,7 +80,18 @@ SECTION_TITLES: dict[str, str] = {
     "grants": "Research Grants & Funding",
     "service": "Professional Service",
     "references": "Referees",
+    "proforma_particulars": "Personal and Service Particulars (items 1–3)",
+    "proforma_requirements": "5. Whether Educational and Other Qualifications Required for the Post Are Satisfied",
+    "proforma_statement": "6. Statement on Essential Qualifications and Work Experience",
+    "proforma_service": "Present Employment and Pay (items 8–15)",
+    "proforma_additional": "16 A. Additional Information Relevant to the Post",
+    "proforma_basis": "Basis of Application (items 17–18)",
+    "employer_certificate": "Certification by the Employer / Cadre Controlling Authority",
 }
+
+#: Sections that only make sense in the deputation proforma.
+PROFORMA_SECTIONS = ("proforma_particulars", "proforma_requirements", "proforma_statement", "proforma_service",
+                     "proforma_additional", "proforma_basis", "employer_certificate")
 
 
 @dataclass(frozen=True)
@@ -98,6 +109,10 @@ class ResumeMode:
     show_tools: bool = False
     title_overrides: dict[str, str] = field(default_factory=dict)
     contact_fields: tuple[str, ...] = ("email", "phone", "location", "linkedin", "website")
+    #: Follows the DoPT bio-data proforma item by item.
+    proforma: bool = False
+    #: The line under the name names the post applied for (from the linked vacancy).
+    headline_from_vacancy: bool = False
 
     def title_for(self, key: str) -> str:
         return self.title_overrides.get(key) or SECTION_TITLES.get(key, key.replace("_", " ").title())
@@ -268,6 +283,92 @@ MODES.update({
             show_tools=True,
             title_overrides={"projects": "Project Portfolio", "skills": "Skills"},
             contact_fields=("email", "phone", "location", "github", "linkedin", "portfolio"),
+        ),
+    ]
+})
+
+
+MODES.update({
+    m.id: m
+    for m in [
+        ResumeMode(
+            id="deputation_proforma",
+            name="Deputation application — DoPT bio-data proforma",
+            description="Application on deputation, absorption or short-term contract in the Bio-data / CV proforma "
+                        "of DoPT OM No. AB.14017/28/2014-Estt.(RR) dated 02.07.2015 (items 1–18, declaration and "
+                        "the employer's certificate), the format Central Government deputation circulars commonly "
+                        "prescribe (NTRO's 2026 circulars, for example). Link the vacancy to fill item 5. If the "
+                        "circular encloses its own form, follow that form.",
+            section_order=("proforma_particulars", "education", "proforma_requirements", "proforma_statement",
+                           "experience", "proforma_service", "proforma_additional", "training", "publications",
+                           "manuscripts", "projects", "awards", "memberships", "patents", "leadership",
+                           "presentations", "proforma_basis", "declaration", "employer_certificate"),
+            default_template="dopt_proforma",
+            default_length=ResumeLength.FULL,
+            summary_focus=(SummaryFocus.GOVERNMENT_DEPUTATION, SummaryFocus.SCIENTIFIC_LEADERSHIP),
+            title_line="BIO-DATA / CURRICULUM VITAE PROFORMA",
+            government=True,
+            publication_scope="all",
+            proforma=True,
+            headline_from_vacancy=True,
+            title_overrides={
+                "education": "4. Educational Qualifications",
+                "experience": "7. Details of Employment, in Chronological Order",
+                "training": "16 A. Professional Training, Courses and Certifications",
+                "publications": "16 B (i). Research Publications and Reports",
+                "manuscripts": "16 B (i). Manuscripts Under Review / In Preparation",
+                "projects": "16 B (i). Special Projects",
+                "awards": "16 B (ii). Awards, Scholarships and Official Appreciation",
+                "memberships": "16 B (iii). Affiliation with Professional Bodies, Institutions and Societies",
+                "patents": "16 B (iv). Patents",
+                "leadership": "16 B (vi). Other Information: Responsibilities and Committees",
+                "presentations": "16 B (vi). Other Information: Talks and Presentations",
+                "declaration": "Declaration by the Candidate",
+            },
+            contact_fields=("email", "phone"),
+        ),
+        ResumeMode(
+            id="senior_scientist",
+            name="Senior Scientist (F/G) — R&D leadership CV",
+            description="Detailed CV for Scientist F/G and equivalent posts by direct recruitment (for example DRDO "
+                        "RAC) or as the detailed CV sent with a deputation application: specialisation, positions, "
+                        "major R&D projects, leadership, publications, patents and awards, with a justification "
+                        "against the post's requirements when a vacancy is linked. Single column and ATS-readable.",
+            section_order=("summary", "expertise", "competencies", "requirements_matrix", "experience", "projects",
+                           "leadership", "publications", "manuscripts", "patents", "awards", "grants",
+                           "presentations", "training_programmes", "certifications", "courses", "workshops",
+                           "education", "memberships", "service", "languages", "references"),
+            default_template="senior_scientist",
+            default_length=ResumeLength.FULL,
+            summary_focus=(SummaryFocus.SCIENTIFIC_LEADERSHIP, SummaryFocus.DEFENCE_TECHNOLOGY,
+                           SummaryFocus.TECHNICAL_MANAGEMENT),
+            publication_scope="all",
+            show_tools=True,
+            headline_from_vacancy=False,
+            title_overrides={"summary": "Professional Profile", "expertise": "Areas of Specialisation",
+                             "competencies": "Technical Domains",
+                             "requirements_matrix": "Justification Against the Requirements of the Post",
+                             "experience": "Positions Held",
+                             "projects": "Major R&D Projects and Technical Contributions",
+                             "leadership": "Leadership, Committees and Responsibilities",
+                             "training_programmes": "Training Programmes Attended"},
+            contact_fields=("email", "phone", "location", "linkedin", "orcid", "google_scholar"),
+        ),
+        ResumeMode(
+            id="senior_graphical",
+            name="Senior scientist graphical profile",
+            description="Designed profile for interview boards, presentations and networking: career timeline, "
+                        "areas of expertise, research at a glance and selected projects, with charts you can switch "
+                        "off or change. Use the proforma or the Senior Scientist CV for the formal application.",
+            section_order=("summary", "expertise", "career_timeline", "research_overview", "experience", "projects",
+                           "leadership", "publications", "patents", "awards", "training", "education", "skills",
+                           "languages"),
+            default_template="senior_graphical",
+            default_length=ResumeLength.TWO_PAGES,
+            summary_focus=(SummaryFocus.SCIENTIFIC_LEADERSHIP, SummaryFocus.DEFENCE_TECHNOLOGY, SummaryFocus.GENERAL),
+            title_overrides={"summary": "Profile", "projects": "Selected Projects", "skills": "Core Competency",
+                             "leadership": "Leadership & Responsibilities"},
+            contact_fields=("email", "phone", "location", "linkedin"),
         ),
     ]
 })

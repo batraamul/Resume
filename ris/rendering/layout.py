@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import re
 
-from ris.composition.ir import ContactItem, IREntry, IRSection, ResumeDocument
+from ris.composition.ir import ContactItem, IRChart, IREntry, IRSection, ResumeDocument
+from ris.domain import charts as chart_choices
+from ris.domain.charts import LEVEL_WORDS, OFF
 from ris.rendering import graphics
 from ris.rendering.blocks import (
     MM,
@@ -38,6 +40,15 @@ LINK_ICON = "➤"
 ICON_FONT = "DejaVu Sans"  # Word substitutes a symbol font when absent; avoids colour-emoji fallback in LibreOffice
 FACET_SOURCE_FIELDS = {"individual_contribution", "approach", "results", "metrics", "problem"}
 SELF_RATING_NOTE = "Bars show my own assessment of proficiency (five steps; five = expert)."
+SELF_RATING_NOTE_DOTS = "Dots show my own assessment of proficiency (five steps; five = expert)."
+SELF_RATING_NOTE_TEXT = "Levels are my own assessment of proficiency."
+TIMELINE_CAPTIONS = {
+    "timeline": "Bar height shows time in post, calculated from your recorded dates.",
+    "bars": "Bar length shows years in each organisation, calculated from your recorded dates.",
+    "donut": "Each segment shows an organisation's share of the total years in post, calculated from your recorded "
+             "dates.",
+    "pie": "Each slice shows an organisation's share of the total years in post, calculated from your recorded dates.",
+}
 
 
 class LayoutPlanner:
@@ -71,6 +82,10 @@ class LayoutPlanner:
 
     def _gap(self, pt: float) -> float:
         return round(pt * self.sp, 2)
+
+    def chart_style(self, key: str) -> str:
+        """The resume's choice for a chart, else the template's default, else the built-in default."""
+        return chart_choices.resolve(key, self.doc.chart_styles, self.spec.graphics.chart_styles)
 
     def styles(self) -> dict[str, ParaStyle]:
         f = self.spec.fonts
@@ -433,6 +448,13 @@ class LayoutPlanner:
             return self.list_blocks(s)
         if lay in ("table", "particulars"):
             return self.table_blocks(s)
+        if lay == "certificate":
+            out = [Para("Declaration", [Run(text)]) for text in s.paragraphs]
+            out.extend(Para("Declaration", [Run(item)]) for item in s.items)
+            out.append(Spacer(self._gap(22)))
+            out.append(Para("Body", [Run("Place:")], right_runs=[Run("(Signature)")]))
+            out.append(Para("Body", [Run("Date:")], right_runs=[Run(s.note or "", bold=True)]))
+            return out
         if lay == "declaration":
             out = [Para("Declaration", [Run(t)]) for t in s.paragraphs]
             items = list(s.items) + ["", "", ""]
@@ -472,7 +494,11 @@ class LayoutPlanner:
         sk = self.spec.skills
         out: list = []
         if sk.style == "bars" and self.spec.tables_allowed and any(lv > 0 for g in s.skill_groups for lv in g.levels):
-            return self.skill_bar_blocks(s)
+            style = self.chart_style("skill_levels")
+            if style in ("bars", "dots"):
+                return self.skill_bar_blocks(s, dots=style == "dots")
+            if style == "text":
+                return self.skill_level_text_blocks(s)
         if self.in_sidebar:
             for g in s.skill_groups:
                 out.append(Para("SidebarTitle", [Run(g.label)]))
@@ -526,6 +552,13 @@ class LayoutPlanner:
             return []
         if not self.spec.tables_allowed:
             out: list = []
+            if s.key == "requirements_matrix" and len(t.header) == 3:
+                for row in t.rows:
+                    _, req, possessed = (row + ["", "", ""])[:3]
+                    out.append(Para("EntryTitle", [Run(req, bold=True)], keep_with_next=True, space_before=self._gap(3)))
+                    if possessed:
+                        out.append(Para("Body", [Run("Evidence: ", bold=True), Run(possessed)]))
+                return out
             for row in t.rows:
                 if t.header:
                     runs: list[Run] = []
@@ -567,6 +600,19 @@ class LayoutPlanner:
         t = s.table
         if t is None or not t.rows:
             return []
+        lead: list = []
+        ch = s.chart
+        if (ch is not None and ch.points and self._graphics_on() and not self.in_sidebar
+                and self.chart_style("expertise_years") == "bars"):
+            img = graphics.hbars([(p.label, p.value, f"{p.value:g} yr" + ("" if p.value == 1 else "s"))
+                                  for p in ch.points], self.cur_width, self.palette, font=self.spec.fonts.body,
+                                 text=self.text, muted=self.muted, single_colour=True)
+            lead = [ImageBlock("", self.cur_width, align="center", data=img, alt=ch.alt_text,
+                               space_after=self._gap(2)),
+                    Para("Meta", [Run(ch.caption, italic=True)]), Spacer(self._gap(3))]
+        return lead + self._definition_body(s, t)
+
+    def _definition_body(self, s: IRSection, t) -> list:
         if self.in_columns and not self.in_sidebar and self.spec.tables_allowed:
             out = []
             for row in t.rows:
@@ -616,27 +662,49 @@ class LayoutPlanner:
             return [Para("Bullet", [Run(line)], bullet=self.spec.entry.bullet_glyph) for line in s.items]
         g = self.spec.graphics
         width = self.cur_width
+        caption = ch.caption
+        swatches = ch.kind == "timeline"
         if ch.kind == "timeline":
-            data = graphics.timeline([(p.label, p.start, p.end, p.is_current, p.value) for p in ch.points],
-                                     width, g.timeline_height_mm * MM, self.palette, font=self.spec.fonts.body,
-                                     text=self.text, axis=self.spec.colours.rule)
+            style = self.chart_style("career_timeline")
+            if style == OFF:
+                return [Para("Bullet", [Run(line)], bullet=self.spec.entry.bullet_glyph) for line in s.items]
+            caption = TIMELINE_CAPTIONS.get(style, caption)
+            data = self._career_chart(ch, style, width)
         else:
             data = graphics.stacked_years([(p.label, p.group, p.value) for p in ch.points], ch.series, width,
                                           g.chart_height_mm * MM, self.palette, font=self.spec.fonts.body,
                                           text=self.text, muted=self.muted)
         out: list = [ImageBlock("", width, align="center", data=data, alt=ch.alt_text, space_after=self._gap(3),
                                 keep_with_next=True)]
-        out.extend(self._legend(s, with_swatches=ch.kind == "timeline"))
-        if ch.caption:
-            out.append(Para("Meta", [Run(ch.caption, italic=True)]))
+        out.extend(self._legend(s, with_swatches=swatches))
+        if caption:
+            out.append(Para("Meta", [Run(caption, italic=True)]))
         out.append(Spacer(self._gap(3)))
         return out
 
+    def _career_chart(self, ch: IRChart, style: str, width: float) -> bytes:
+        g = self.spec.graphics
+        font = self.spec.fonts.body
+        if style == "bars":
+            return graphics.hbars([(p.label, p.value, f"{p.value:g} year" + ("" if p.value == 1 else "s"))
+                                   for p in ch.points], width, self.palette, font=font, text=self.text,
+                                  muted=self.muted)
+        if style in ("pie", "donut"):
+            total = sum(p.value for p in ch.points)
+            return graphics.pie([(p.label, p.value) for p in ch.points], width,
+                                min(g.chart_height_mm, 26 + 4 * len(ch.points)) * MM, self.palette, font=font,
+                                text=self.text, muted=self.muted, donut=style == "donut",
+                                centre=f"{total:g} yrs" if style == "donut" else "", unit="yrs")
+        return graphics.timeline([(p.label, p.start, p.end, p.is_current, p.value) for p in ch.points],
+                                 width, g.timeline_height_mm * MM, self.palette, font=font, text=self.text,
+                                 axis=self.spec.colours.rule)
+
     def overview_blocks(self, s: IRSection) -> list:
-        tiles = s.tiles
+        metrics_style = self.chart_style("research_metrics") if self._graphics_on() else "text"
+        tiles = s.tiles if metrics_style != OFF else []
         out: list = []
         if tiles:
-            if not self._graphics_on() or self.in_sidebar or self.in_columns:
+            if metrics_style == "text" or not self._graphics_on() or self.in_sidebar or self.in_columns:
                 runs: list[Run] = []
                 for i, t in enumerate(tiles):
                     if i:
@@ -665,20 +733,83 @@ class LayoutPlanner:
                 out.append(Spacer(self._gap(4)))
         ch = s.chart
         if ch is not None and ch.points and self._graphics_on() and not self.in_sidebar:
-            g = self.spec.graphics
-            width = self.cur_width
-            data = graphics.stacked_years([(p.label, p.group, p.value) for p in ch.points], ch.series, width,
-                                          g.chart_height_mm * MM, self.palette, font=self.spec.fonts.body,
-                                          text=self.text, muted=self.muted)
+            out.extend(self._publication_charts(ch))
+        return out
+
+    def _publication_charts(self, ch: IRChart) -> list:
+        g = self.spec.graphics
+        width = self.cur_width
+        font = self.spec.fonts.body
+        height = g.chart_height_mm * MM
+        out: list = []
+        years = sorted({p.label for p in ch.points}, key=int)
+        totals = [(y, sum(p.value for p in ch.points if p.label == y)) for y in years]
+        style = self.chart_style("publications_by_year")
+        data = None
+        caption = ch.caption
+        if style == "stacked":
+            data = graphics.stacked_years([(p.label, p.group, p.value) for p in ch.points], ch.series, width, height,
+                                          self.palette, font=font, text=self.text, muted=self.muted)
+        elif style == "columns":
+            data = graphics.columns(totals, width, height, self.accent, font=font, text=self.text, muted=self.muted)
+        elif style in ("line", "cumulative"):
+            pts = totals
+            if style == "cumulative":
+                run = 0.0
+                pts = []
+                for y, v in totals:
+                    run += v
+                    pts.append((y, run))
+                caption = "Cumulative published and accepted outputs (from your publication records)."
+            data = graphics.line(pts, width, height, self.accent, font=font, text=self.text, muted=self.muted)
+        if data is not None:
             out.append(ImageBlock("", width, align="center", data=data, alt=ch.alt_text, space_after=self._gap(2)))
-            if ch.caption:
-                out.append(Para("Meta", [Run(ch.caption, italic=True)]))
+            if caption:
+                out.append(Para("Meta", [Run(caption, italic=True)]))
+            out.append(Spacer(self._gap(2)))
+        by_type = [(grp, sum(p.value for p in ch.points if p.group == grp)) for grp in ch.series]
+        by_type = [(grp, v) for grp, v in by_type if v]
+        type_style = self.chart_style("publications_by_type")
+        if type_style != OFF and len(by_type) >= 2:
+            labels = {"Journal": "Journal articles", "Conference": "Conference papers", "Other": "Other outputs"}
+            pts = [(labels.get(grp, grp), v) for grp, v in by_type]
+            img_w = width * 0.75
+            if type_style == "bars":
+                img = graphics.hbars([(lab, v, f"{v:g}") for lab, v in pts], img_w, self.palette, font=font,
+                                     text=self.text, muted=self.muted)
+            else:
+                total = sum(v for _, v in pts)
+                img = graphics.pie(pts, img_w, 30.0 * MM, self.palette,
+                                   font=font, text=self.text, muted=self.muted, donut=type_style == "donut",
+                                   centre=f"{total:g}" if type_style == "donut" else "")
+            alt = "Publications by type: " + "; ".join(f"{lab}: {v:g}" for lab, v in pts)
+            out.append(ImageBlock("", img_w, align="center", data=img, alt=alt, space_after=self._gap(2)))
+            out.append(Para("Meta", [Run(alt + ".", italic=True)]))
             out.append(Spacer(self._gap(2)))
         return out
 
-    def skill_bar_blocks(self, s: IRSection) -> list:
-        c = self.spec.colours
+    def skill_level_text_blocks(self, s: IRSection) -> list:
+        """Skill names with the self-assessed level in words (the 'text' style of the skill-level chart)."""
         out: list = []
+        style = "SidebarText" if self.in_sidebar else "Body"
+        for grp in s.skill_groups:
+            out.append(Para("SidebarTitle" if self.in_sidebar else "BarLabel", [Run(grp.label, color=self.accent)]))
+            parts = [f"{item} ({LEVEL_WORDS[lvl]})" if lvl > 0 else item
+                     for item, lvl in zip(grp.items, grp.levels or [0] * len(grp.items), strict=False)]
+            out.append(Para(style, [Run(", ".join(parts))]))
+        out.append(Para(style if self.in_sidebar else "Meta",
+                        [Run(SELF_RATING_NOTE_TEXT, italic=True, color=self.muted)]))
+        return out
+
+    def _level_image(self, lvl: int, width: float, dots: bool) -> bytes:
+        c = self.spec.colours
+        if dots:
+            return graphics.rating_dots(lvl, round(width, 1), 5.0, self.accent, c.bar_track)
+        return graphics.rating_bar(lvl, round(width, 1), 4.0, self.accent, c.bar_track)
+
+    def skill_bar_blocks(self, s: IRSection, dots: bool = False) -> list:
+        out: list = []
+        note = SELF_RATING_NOTE_DOTS if dots else SELF_RATING_NOTE
         if self.in_sidebar:
             bar_w = min(self.cur_width - 4, self.spec.graphics.bar_width_mm * MM * 1.6)
             for grp in s.skill_groups:
@@ -690,12 +821,11 @@ class LayoutPlanner:
                         continue
                     out.append(Para("BarLabel", [Run(item)]))
                     out.append(ImageBlock("", bar_w, align="left", alt=f"{item}: {lvl} of 5 (self-assessed)",
-                                          data=graphics.rating_bar(lvl, round(bar_w, 1), 4.0, self.accent,
-                                                                   c.bar_track), space_after=3.5))
+                                          data=self._level_image(lvl, bar_w, dots), space_after=3.5))
                 if unrated:
                     out.append(Para("SidebarText", [Run(", ".join(unrated))]))
                 out.append(Spacer(self._gap(3)))
-            out.append(Para("SidebarText", [Run(SELF_RATING_NOTE, italic=True, color=self.muted, size=self._s(6.8))]))
+            out.append(Para("SidebarText", [Run(note, italic=True, color=self.muted, size=self._s(6.8))]))
             return out
         bar_w = self.spec.graphics.bar_width_mm * MM
         if self.in_columns:
@@ -708,11 +838,10 @@ class LayoutPlanner:
                         continue
                     out.append(Para("TableText", [Run(item)], keep_with_next=True))
                     out.append(ImageBlock("", bar_w, align="left", alt=f"{item}: {lvl} of 5 (self-assessed)",
-                                          data=graphics.rating_bar(lvl, round(bar_w, 1), 4.0, self.accent,
-                                                                   c.bar_track), space_after=3))
+                                          data=self._level_image(lvl, bar_w, dots), space_after=3))
                 if unrated:
                     out.append(Para("Body", [Run(", ".join(unrated))]))
-            out.append(Para("Meta", [Run(SELF_RATING_NOTE, italic=True)]))
+            out.append(Para("Meta", [Run(note, italic=True)]))
             return out
         for grp in s.skill_groups:
             rated = [(i, lv) for i, lv in zip(grp.items, grp.levels or [0] * len(grp.items), strict=False) if lv > 0]
@@ -724,8 +853,7 @@ class LayoutPlanner:
                 for item, lvl in rated[k:k + 2]:
                     cells.append(Cell([Para("TableText", [Run(item)])]))
                     cells.append(Cell([ImageBlock("", bar_w, align="left", alt=f"{item}: {lvl} of 5 (self-assessed)",
-                                                  data=graphics.rating_bar(lvl, round(bar_w, 1), 4.0, self.accent,
-                                                                           c.bar_track))]))
+                                                  data=self._level_image(lvl, bar_w, dots))]))
                 while len(cells) < 4:
                     cells.append(Cell([Para("TableText", [Run("")])]))
                 rows.append(cells)
@@ -736,7 +864,7 @@ class LayoutPlanner:
             if unrated:
                 out.append(Para("Body", [Run(", ".join(unrated))]))
             out.append(Spacer(self._gap(2)))
-        out.append(Para("Meta", [Run(SELF_RATING_NOTE, italic=True)]))
+        out.append(Para("Meta", [Run(note, italic=True)]))
         return out
 
     def card_blocks(self, e: IREntry) -> list:

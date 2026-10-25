@@ -25,6 +25,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from ris.composition.modes import get_mode
 from ris.domain.enums import RecordKind
 from ris.intelligence import portal_kit as pk
 from ris.intelligence.ats import ATSCheck, ats_readiness
@@ -99,6 +100,12 @@ class PortalsPage(Page):
         self.b_target = button("Create a career target", "primary", on_click=self._make_target)
         row.addWidget(self.b_site)
         row.addStretch(1)
+        self.b_format = button("Create resume in this format ▾", on_click=None,
+                               tooltip="Start a resume in a format that suits this recruiter")
+        from PySide6.QtWidgets import QMenu
+
+        self.b_format.setMenu(QMenu(self.b_format))
+        row.addWidget(self.b_format)
         row.addWidget(self.b_target)
         rl.addLayout(row)
         split.addWidget(right)
@@ -142,9 +149,27 @@ class PortalsPage(Page):
             + lst("Where vacancies are advertised", r.get("advertised_in", []))
             + lst("Documents usually asked for", r.get("documents", []))
             + lst("What interviews tend to focus on", r.get("interview_focus", []))
+            + lst("Document formats that suit each route", [
+                f"{f['route']}: {get_mode(f['mode']).name}" for f in r.get("formats", [])])
             + _sources_html(r.get("sources", [])))
         self.b_site.setEnabled(bool(r.get("website")))
+        menu = self.b_format.menu()
+        menu.clear()
+        for f in r.get("formats", []):
+            menu.addAction(f"{f['route']} — {get_mode(f['mode']).name}",
+                           lambda f=f, r=r: self.create_resume_in_format(r, f))
+        self.b_format.setEnabled(bool(r.get("formats")))
         self.b_target.setEnabled(bool(r.get("org_profile")) and self.ctx.presets.org(r["org_profile"]) is not None)
+
+    def create_resume_in_format(self, r: dict, f: dict):
+        m = get_mode(f["mode"])
+        rec = self.ctx.repo.create(RecordKind.VARIANT, {
+            "name": f"{r['name']} — {f['route']}", "mode": m.id, "template_id": f.get("template") or m.default_template,
+            "length": m.default_length.value})
+        self.ctx.invalidate()
+        self.ctx.say(f"Resume created in the {m.name} format. Link the vacancy in Resume Studio when you apply.")
+        self.ctx.navigate.emit("studio", rec.id)
+        return rec
 
     def _open_site(self) -> None:
         r = self._current_recruiter()

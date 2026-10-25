@@ -48,10 +48,17 @@ def main() -> int:
             base = next(v for v in ws.repo.list(RecordKind.VARIANT) if v.data.mode == "defence_technical")
             for spec in lib.list():
                 mode = spec.recommended_modes[0] if spec.recommended_modes else "general_professional"
-                full = mode in ("academic_cv", "government_biodata", "research_portfolio", "project_portfolio")
+                full = mode in ("academic_cv", "government_biodata", "research_portfolio", "project_portfolio",
+                                "deputation_proforma", "senior_scientist")
+                particulars = {"government_biodata": ["present_pay_level"],
+                               "deputation_proforma": ["present_pay_level", "nature_of_employment",
+                                                       "date_of_entry_into_service"]}.get(mode, [])
+                vacancies = ws.repo.list(RecordKind.VACANCY)
                 data = {**base.payload(), "name": f"Example — {spec.name}", "template_id": spec.id, "mode": mode,
                         "length": "full" if full else "two_pages", "max_pages": None,
-                        "official_particulars": ["present_pay_level"] if mode == "government_biodata" else [],
+                        "official_particulars": particulars, "section_order": [], "hidden_sections": [],
+                        "vacancy_id": vacancies[0].id if (vacancies and mode in ("deputation_proforma",
+                                                                                 "senior_scientist")) else "",
                         "publication_scope": "all" if mode == "research_portfolio" else "relevant"}
                 rec = ws.repo.create(RecordKind.VARIANT, Variant.model_validate(data))
                 res = svc.export_variant(rec.id, ExportOptions(formats=("docx", "pdf"), folder=out,

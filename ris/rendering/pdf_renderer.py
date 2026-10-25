@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import io
 from dataclasses import dataclass, field
+from dataclasses import replace as dc_replace
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -21,6 +22,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas as rl_canvas
 from reportlab.platypus import (
     BaseDocTemplate,
+    CondPageBreak,
     Flowable,
     Frame,
     Image,
@@ -385,7 +387,14 @@ class PdfRenderer:
 
     def _blocks(self, blocks: list, avail: float) -> list[Flowable]:
         out: list[Flowable] = []
-        for b in blocks:
+        for i, b in enumerate(blocks):
+            nxt = blocks[i + 1] if i + 1 < len(blocks) else None
+            if isinstance(b, Para) and b.heading_level and isinstance(nxt, TableBlock):
+                # Keeping a heading with a long table moves the whole table to the next page and leaves a gap.
+                # Start a new page only when little room is left, then let the table split across pages.
+                out.append(CondPageBreak(96))
+                out.extend(self._para(dc_replace(b, keep_with_next=False), avail))
+                continue
             out.extend(self._block(b, avail))
         return out
 
@@ -438,8 +447,16 @@ class PdfRenderer:
                 for ci, cell in enumerate(row):
                     if cell.fill:
                         cmds.append(("BACKGROUND", (ci, ri), (ci, ri), colors.HexColor(cell.fill)))
-            t = Table(data, colWidths=widths, repeatRows=b.header_rows, splitInRow=1, hAlign="LEFT")
+            t = Table(data, colWidths=widths, repeatRows=b.header_rows, splitInRow=0, hAlign="LEFT")
             t.setStyle(self._tstyle(cmds))
+            # Rows move to the next page whole, so a short cell is never cut in two; only a row taller than
+            # the page itself is split inside.
+            try:
+                t.wrap(avail, 10 ** 6)
+                if max(t._rowHeights or [0]) > self.layout.page.text_height * 0.92:
+                    t.splitInRow = 1
+            except Exception:  # noqa: BLE001 - fall back to splitting inside rows
+                t.splitInRow = 1
             return [t]
         if isinstance(b, ColumnsBlock):
             lw = avail * b.left_frac

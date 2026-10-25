@@ -157,7 +157,7 @@ def test_presets_and_org_profiles():
     from ris.intelligence.presets import default_presets
 
     lib = default_presets()
-    assert len(lib.presets) == 10
+    assert len(lib.presets) == 12
     for pid in ["defence_electronics_avionics", "scientific_technical_officer", "radar_sensors_instrumentation",
                 "aiml_computer_vision", "drone_autonomous", "embedded_edge", "scientific_rnd",
                 "technical_programme_leadership", "government_technical_deputation", "intelligence_technology"]:

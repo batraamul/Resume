@@ -51,7 +51,7 @@ from ris.domain.enums import (
     Verification,
     label,
 )
-from ris.domain.models import Variant
+from ris.domain.models import Vacancy, Variant
 from ris.intelligence.relevance import RelevanceModel
 from ris.intelligence.text import first_sentence
 from ris.services.profile import ProfileSnapshot
@@ -112,6 +112,29 @@ PRIVATE_LABELS = {
     "nationality": "Nationality",
     "home_address": "Address for correspondence",
 }
+#: Deputation-proforma particulars: printed only in the proforma, and only when the resume opts in.
+PROFORMA_PARTICULARS = {
+    "date_of_retirement": "Date of retirement",
+    "employer_type": "Type of present employer",
+    "present_deputation_details": "Present deputation / contract details",
+    "past_deputation_details": "Previous deputation(s)",
+    "feeder_grade_status": "Feeder grade status",
+    "pay_revision_details": "Revised pay scale details",
+    "basic_pay": "Basic pay",
+    "total_emoluments": "Total emoluments",
+    "non_central_pay_details": "Pay details (non-Central pay scales)",
+    "sc_st_status": "Whether belongs to SC / ST",
+}
+DATE_PARTICULARS = {"date_of_birth", "date_of_entry_into_service", "date_of_retirement"}
+#: Wording of the candidate's declaration in the DoPT bio-data proforma (OM dated 02.07.2015).
+PROFORMA_DECLARATION = (
+    "I have carefully gone through the vacancy circular / advertisement and I am well aware that the information "
+    "furnished in the Curriculum Vitae duly supported by the documents in respect of Essential Qualification / Work "
+    "Experience submitted by me will also be assessed by the Selection Committee at the time of selection for the "
+    "post. The information / details provided by me are correct and true to the best of my knowledge and no material "
+    "fact having a bearing on my selection has been suppressed / withheld."
+)
+BASIS_FROM_MODE = {"deputation": "Deputation", "absorption": "Absorption", "contract": "Short-term contract"}
 GENERIC_CATEGORIES = {SkillCategory.OTHER.value, SkillCategory.LANGUAGES.value}
 
 
@@ -129,6 +152,7 @@ class ComposeContext:
     emphasis: dict[str, float] = field(default_factory=dict)
     target: Record | None = None
     vacancy_title: str = ""
+    vacancy: Vacancy | None = None
     mandatory_gaps: list[str] = field(default_factory=list)
     is_sample: bool = False
     today: date = field(default_factory=date.today)
@@ -421,9 +445,17 @@ class ResumeComposer:
         return IRSection(key=key, title=self.mode.title_for(key), layout="entries", entries=entries)
 
     def _experience_table(self, key: str, positions: list[Record]) -> IRSection:
-        show_pay = "present_pay_level" in self.v.official_particulars
-        header = ["Office / Organisation", "Post held", "From", "To", *(["Pay level"] if show_pay else []),
-                  "Nature of duties"]
+        proforma = self.mode.proforma
+        pay_opted = "present_pay_level" in self.v.official_particulars
+        # The proforma always has the pay column; it is filled only when the resume opts in to pay details.
+        show_pay = pay_opted or proforma
+        if proforma:
+            header = ["Office / Institution", "Post held on regular basis", "From", "To",
+                      "Pay level / pay scale of the post", "Nature of duties (in detail), highlighting experience "
+                      "required for the post applied for"]
+        else:
+            header = ["Office / Organisation", "Post held", "From", "To", *(["Pay level"] if show_pay else []),
+                      "Nature of duties"]
         rows: list[list[str]] = []
         ids: list[str] = []
         # Bio-data proformas list employment in chronological order (oldest first).
@@ -433,7 +465,15 @@ class ResumeComposer:
             ids.append(pos.id)
             duties = d.nature_of_duties or d.approved_external_wording or d.summary
             bullets = [b for b in self.snap.kids(pos.id, RecordKind.BULLET) if self.eligible(b) and b.data.text]
-            if not duties and bullets:
+            if proforma and bullets:
+                limit = None if self.length == ResumeLength.FULL else 4
+                ranked = self._rank(bullets) if not self.rel.is_empty else bullets
+                lines = ["• " + self._bullet(b).text for b in (ranked if limit is None else ranked[:limit])]
+                for b in bullets:
+                    self._use(b)
+                    ids.append(b.id)
+                duties = "\n".join(([duties] if duties else []) + lines)
+            elif not duties and bullets:
                 duties = "; ".join(self._bullet(b).text.rstrip(".") for b in bullets[:4]) + "."
             assignments = [a for a in self.snap.kids(pos.id, RecordKind.ASSIGNMENT) if self.eligible(a)]
             for a in assignments:
@@ -447,9 +487,11 @@ class ResumeComposer:
             frm = _bio_date(d.start)
             to = "Till date" if d.is_current else _bio_date(d.end)
             org = ", ".join(x for x in (d.division, d.organisation) if x)
-            row = [org, d.designation, frm, to, *([d.pay_level] if show_pay else []), duties or ""]
+            row = [org, d.designation, frm, to, *([d.pay_level if pay_opted else ""] if show_pay else []), duties or ""]
             rows.append(row)
         widths = [0.22, 0.17, 0.09, 0.09, *([0.09] if show_pay else []), 0.43 - (0.09 if show_pay else 0)]
+        if proforma:
+            widths = [0.18, 0.17, 0.09, 0.09, 0.10, 0.37]
         return IRSection(key=key, title=self.mode.title_for(key), layout="table",
                          table=IRTable(header=header, rows=rows, col_widths=widths, source_ids=ids), source_ids=ids)
 
@@ -915,7 +957,16 @@ class ResumeComposer:
                 yrs = r.data.years_experience
                 area += f"\n{yrs:g} year{'s' if yrs != 1 else ''}"
             rows.append([area, r.data.description])
-        return IRSection(key=key, title=self.mode.title_for(key), layout="definitions",
+        rated = [r for r in recs if r.data.years_experience]
+        chart = None
+        if len(rated) >= 2:
+            chart = IRChart(kind="years_bars",
+                            points=[IRChartPoint(label=r.data.area, value=float(r.data.years_experience),
+                                                 source_ids=[r.id]) for r in rated],
+                            alt_text="Years of experience by area: " + "; ".join(
+                                f"{r.data.area} {r.data.years_experience:g} years" for r in rated),
+                            caption="Years of experience in each area, as you recorded them; areas overlap in time.")
+        return IRSection(key=key, title=self.mode.title_for(key), layout="definitions", chart=chart,
                          table=IRTable(header=[], rows=rows, col_widths=[0.32, 0.68], source_ids=ids), source_ids=ids)
 
     def section_career_timeline(self, key: str) -> IRSection | None:
@@ -1112,11 +1163,164 @@ class ResumeComposer:
         if not self.v.include_declaration:
             return None
         p = self.snap.personal_data
+        text = PROFORMA_DECLARATION if self.mode.proforma else (
+            "I hereby declare that the particulars furnished above are true, complete and correct to the best of my "
+            "knowledge and belief.")
         return IRSection(
-            key=key, title=self.mode.title_for(key), layout="declaration",
-            paragraphs=["I hereby declare that the particulars furnished above are true, complete and correct to "
-                        "the best of my knowledge and belief."],
+            key=key, title=self.mode.title_for(key), layout="declaration", paragraphs=[text],
             items=[f"Place: {p.city}" if p.city else "Place:", "Date:", p.full_name or p.display_name()],
+        )
+
+    # ------------------------------------------------------------------ deputation proforma (DoPT OM 02.07.2015)
+    def _particular(self, fname: str) -> str:
+        """A private particular, only when this resume opts in to it; otherwise empty (left blank on the form)."""
+        if fname not in self.v.official_particulars:
+            return ""
+        val = str(getattr(self.snap.personal_data, fname, "") or "").strip()
+        if fname in DATE_PARTICULARS and val:
+            pd = dates.parse_or_none(val)
+            if pd is not None:
+                val = pd.earliest().strftime("%d/%m/%Y") if pd.day else pd.format("month_year")
+        if val and self.snap.personal is not None:
+            self._use(self.snap.personal)
+        return val
+
+    def _rows_section(self, key: str, rows: list[list[str]], widths: tuple[float, float] = (0.46, 0.54)) -> IRSection:
+        ids = [self.snap.personal.id] if self.snap.personal else []
+        return IRSection(key=key, title=self.mode.title_for(key), layout="particulars",
+                         table=IRTable(header=[], rows=rows, col_widths=list(widths), source_ids=ids),
+                         source_ids=ids)
+
+    def section_proforma_particulars(self, key: str) -> IRSection | None:
+        p = self.snap.personal_data
+        name = (p.full_name or p.display_name()).upper()
+        if self.snap.personal is not None and name:
+            self._use(self.snap.personal)
+        address = self._particular("home_address").upper()
+        return self._rows_section(key, [
+            ["1. Name and address (in block letters)", "\n".join(x for x in (name, address) if x)],
+            ["2. Date of birth (in Christian era)", self._particular("date_of_birth")],
+            ["3. (i) Date of entry into service", self._particular("date_of_entry_into_service")],
+            ["3. (ii) Date of retirement under Central / State Government rules",
+             self._particular("date_of_retirement")],
+        ])
+
+    def section_proforma_requirements(self, key: str) -> IRSection | None:
+        rows: list[list[str]] = []
+        ids: list[str] = []
+        for req, possessed, src in self.ctx.requirements_matrix or []:
+            kind, _, text = req.partition(": ")
+            rows.append([kind or "Requirement", text or req, possessed])
+            ids.extend(src)
+            for sid in src:
+                rec = self.snap.get(sid)
+                if rec is not None:
+                    self._use(rec)
+        vac = self.ctx.vacancy
+        if not rows and vac is not None:
+            if vac.essential_qualifications:
+                rows.append(["Essential", vac.essential_qualifications, ""])
+            if vac.experience_criteria:
+                rows.append(["Essential (experience)", vac.experience_criteria, ""])
+            if vac.desirable_qualifications:
+                rows.append(["Desirable", vac.desirable_qualifications, ""])
+        if not rows:
+            rows = [["Essential", "", ""], ["Desirable", "", ""]]
+        authority = self.v.proforma.get("equivalence_authority", "")
+        if authority:
+            rows.append(["Equivalence", "Authority for treating a qualification as equivalent", authority])
+        return IRSection(key=key, title=self.mode.title_for(key), layout="table",
+                         table=IRTable(header=["", "Qualifications / experience required as mentioned in the "
+                                               "advertisement / vacancy circular",
+                                               "Qualifications / experience possessed by the officer"],
+                                       rows=rows, col_widths=[0.16, 0.42, 0.42], source_ids=ids), source_ids=ids)
+
+    def section_proforma_statement(self, key: str) -> IRSection | None:
+        return self._rows_section(key, [[
+            "6. Please state clearly whether, in the light of the entries made above, you meet the requisite "
+            "essential qualifications and work experience of the post",
+            self.v.proforma.get("meets_requirements", "")]])
+
+    def section_proforma_service(self, key: str) -> IRSection | None:
+        current = next((x for x in self._positions_sorted() if x.data.is_current), None)
+        org = ""
+        if current is not None:
+            org = ", ".join(x for x in (current.data.division, current.data.organisation) if x)
+        etype = self._particular("employer_type")
+        employer = f"{etype} ({org})" if (etype and org) else etype
+        pay_bits = [f"{lbl}: {v}" for lbl, v in (("Pay level", self._particular("present_pay_level")),
+                                                  ("Basic pay", self._particular("basic_pay")),
+                                                  ("Total emoluments", self._particular("total_emoluments"))) if v]
+        return self._rows_section(key, [
+            ["8. Nature of present employment, i.e. ad hoc, temporary, quasi-permanent or permanent",
+             self._particular("nature_of_employment")],
+            ["9. If the present employment is held on deputation / contract basis: (a) date of initial appointment, "
+             "(b) period of appointment on deputation / contract, (c) parent office / organisation, (d) name and pay "
+             "of the post held in substantive capacity in the parent organisation",
+             self._particular("present_deputation_details")],
+            ["10. If any post was held on deputation in the past: date of return from the last deputation and "
+             "other details", self._particular("past_deputation_details")],
+            ["11. Present employer: Central Government, State Government, autonomous organisation, government "
+             "undertaking, university or others", employer],
+            ["12. Whether working in the same department and in the feeder or feeder-to-feeder grade",
+             self._particular("feeder_grade_status")],
+            ["13. Whether in a revised scale of pay; if so, the date of revision and the pre-revised scale",
+             self._particular("pay_revision_details")],
+            ["14. Total emoluments per month now drawn", "; ".join(pay_bits)],
+            ["15. If the employer does not follow Central Government pay scales: details of the latest salary "
+             "slip (enclosed)", self._particular("non_central_pay_details")],
+        ])
+
+    def section_proforma_additional(self, key: str) -> IRSection | None:
+        paragraphs: list[str] = []
+        ids: list[str] = []
+        summary = self.section_summary("summary")
+        if summary is not None:
+            paragraphs.extend(summary.paragraphs)
+            ids.extend(summary.source_ids)
+        areas = [r for r in self.snap.of(RecordKind.EXPERTISE) if self.eligible(r) and r.data.area]
+        if areas:
+            bits = []
+            for r in self._rank(areas) if not self.rel.is_empty else areas:
+                self._use(r)
+                ids.append(r.id)
+                yrs = r.data.years_experience
+                bits.append(r.data.area + (f" ({yrs:g} year{'s' if yrs != 1 else ''})" if yrs else ""))
+            paragraphs.append("Areas of specialisation: " + "; ".join(bits) + ".")
+        if not paragraphs:
+            return None
+        return IRSection(key=key, title=self.mode.title_for(key), layout="paragraph", paragraphs=paragraphs,
+                         source_ids=ids)
+
+    def section_proforma_basis(self, key: str) -> IRSection | None:
+        basis = self.v.proforma.get("application_basis", "")
+        if not basis and self.ctx.vacancy is not None:
+            basis = BASIS_FROM_MODE.get(str(self.ctx.vacancy.recruitment_mode), "")
+        return self._rows_section(key, [
+            ["17. Whether applying on deputation (ISTC / STC), absorption or re-employment basis", basis],
+            ["18. Whether belongs to SC / ST", self._particular("sc_st_status")],
+        ])
+
+    def section_employer_certificate(self, key: str) -> IRSection | None:
+        if not self.v.include_employer_certificate:
+            return None
+        name = self.snap.personal_data.full_name or self.snap.personal_data.display_name() or "the applicant"
+        return IRSection(
+            key=key, title=self.mode.title_for(key), layout="certificate",
+            paragraphs=["The information / details provided in the above application by the applicant are true and "
+                        "correct as per the facts available on records. The applicant possesses the educational "
+                        "qualifications and experience mentioned in the vacancy circular. If selected, the applicant "
+                        "will be relieved immediately.",
+                        "Also certified that:"],
+            items=[f"(i) There is no vigilance or disciplinary case pending / contemplated against {name}.",
+                   "(ii) The applicant's integrity is certified.",
+                   "(iii) The APAR dossier in original is enclosed / photocopies of the APARs for the last five "
+                   "years, duly attested by an officer of the rank of Under Secretary to the Government of India or "
+                   "above, are enclosed.",
+                   "(iv) No major / minor penalty has been imposed on the applicant during the last ten years / a "
+                   "list of major / minor penalties imposed during the last ten years is enclosed (as the case may "
+                   "be)."],
+            note="Countersigned (Employer / Cadre Controlling Authority, with seal)",
         )
 
     # ------------------------------------------------------------------ main
@@ -1150,6 +1354,13 @@ class ResumeComposer:
             "particulars": self.section_particulars,
             "requirements_matrix": self.section_requirements_matrix,
             "declaration": self.section_declaration,
+            "proforma_particulars": self.section_proforma_particulars,
+            "proforma_requirements": self.section_proforma_requirements,
+            "proforma_statement": self.section_proforma_statement,
+            "proforma_service": self.section_proforma_service,
+            "proforma_additional": self.section_proforma_additional,
+            "proforma_basis": self.section_proforma_basis,
+            "employer_certificate": self.section_employer_certificate,
             "expertise": self.section_expertise,
             "career_timeline": self.section_career_timeline,
             "research_overview": self.section_research_overview,
@@ -1191,9 +1402,15 @@ class ResumeComposer:
         for gap in self.ctx.mandatory_gaps:
             self.warnings.append(f"Mandatory requirement not found in your profile: {gap}")
         subject = self.ctx.vacancy_title or (self.ctx.target.data.name if self.ctx.target is not None else "")
+        headline = p.professional_title
+        if self.mode.headline_from_vacancy and self.ctx.vacancy is not None and self.ctx.vacancy.title:
+            vac = self.ctx.vacancy
+            headline = "Application for the post of " + vac.title + (f", {vac.employer}" if vac.employer else "")
+            if vac.reference:
+                headline += f" (Advt. / Circular No. {vac.reference})"
         keywords = ", ".join(self.rel.taxonomy.label(c) for c in list(self.rel.concept_weights)[:12])
         return ResumeDocument(
-            doc_type="resume", name=name, headline=p.professional_title, title_line=self.mode.title_line,
+            doc_type="resume", name=name, headline=headline, title_line=self.mode.title_line,
             contacts=self._contacts(), photo_path=photo, sections=sections, template_id=self.ctx.template_id,
             template_version=self.ctx.template_version, mode=self.mode.id, length=self.length.value,
             max_pages=self.v.max_pages, page_size=self.v.page_size, font_scale=self.v.font_scale,
@@ -1201,6 +1418,7 @@ class ResumeComposer:
             is_sample=self.ctx.is_sample,
             footer_note="Fictional sample profile — not a real person" if self.ctx.is_sample else "",
             warnings=self.warnings, trimmed=self.trimmed, source_revisions=dict(sorted(self.used.items())),
+            chart_styles=dict(self.v.charts),
             metadata={"title": f"{name} — {self.mode.name}" if name else self.mode.name,
                       "subject": subject, "keywords": keywords, "creator": f"Resume Intelligence Studio {__version__}"},
         )

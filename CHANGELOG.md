@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.2.0 — 2026-10-25
+
+### Added
+* **Scientist F/G formats** for defence, intelligence and scientific posts:
+  * *Deputation application — DoPT bio-data proforma*: items 1–18 of the proforma of DoPT OM dated 02.07.2015,
+    the candidate's declaration and the employer's certificate, with the post applied for under the name.
+    Private items print only when ticked; your own statements for items 5, 6 and 17 are entered under
+    *Proforma answers*.
+  * *Senior Scientist (F/G) — R&D leadership CV*: ATS-safe detailed CV with a justification against each
+    requirement of the linked vacancy.
+  * *Senior scientist graphical profile* for interview boards and networking.
+  * New templates: DoPT Deputation Proforma, Senior Scientist Dossier, Senior Scientist Graphical (18 in all).
+* **Chart choices** for graphical resumes: switch each chart off or choose its style — career timeline
+  (timeline, bars, donut, pie), publications by year (stacked, columns, line, cumulative), publications by
+  type (donut, pie, bars), research metrics (tiles, text), skill levels (bars, dots, words) and areas of
+  expertise (bar chart of years). Templates set defaults in the template designer.
+* **Import openings list**: Job Opportunities reads the list kept by the weekly Scientist F/G opening scan
+  (`e-diary-jobs-feed-*.json`), adding or updating vacancies and skipping closed ones.
+* **Recommended format** for each vacancy, with an application checklist (APARs, vigilance and integrity
+  clearance, penalties statement, proper channel; or online application and NOC), and one-click creation.
+  Recruiters list the formats that suit each route.
+* Career presets *Scientist F/G — defence and intelligence R&D* and *Scientist F/G — deputation*.
+
+### Changed
+* Built-in PDF engine: table rows are no longer cut in the middle unless taller than a page, and a heading
+  before a long table no longer pushes the whole table to the next page.
+* The "possessed" column of requirement tables quotes full statements instead of shortened titles.
+* DOCX/PDF consistency check ignores table headers that the PDF repeats on continuation pages.
+
 ## 1.1.0 — 2026-10-25
 
 ### Added

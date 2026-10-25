@@ -337,6 +337,12 @@ def validate_outputs(
     if "docx" in texts and "pdf" in texts:
         d = Counter(t for t in extract.tokens(texts["docx"]) if len(t) > 1)
         p = Counter(t for t in extract.tokens(texts["pdf"]) if len(t) > 1)
+        # The PDF repeats table header rows on every page a table continues onto; Word marks them as
+        # repeating rows but stores them once. Do not count those repeats as differences.
+        header_tokens = {tok for s in doc.sections if s.table for h in s.table.header for tok in extract.tokens(h)}
+        for tok in header_tokens:
+            if p[tok] > d[tok] > 0:
+                p[tok] = d[tok]
         common = sum((d & p).values())
         recall_d = common / max(sum(d.values()), 1)
         recall_p = common / max(sum(p.values()), 1)

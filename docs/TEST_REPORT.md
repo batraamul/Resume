@@ -1,8 +1,8 @@
-# Test report — version 1.1.0
+# Test report — version 1.2.0
 
 Date of the final run: 25 October 2026. This report states what was actually run, what passed, and what
 was **not** verified. Programmatic validation of a document is not the same as looking at it; the pages that
-were inspected visually are listed separately. The version 1.0.0 report is kept in the Git history.
+were inspected visually are listed separately. Earlier reports are kept in the Git history.
 
 ## Environment (local development run)
 
@@ -22,17 +22,19 @@ were inspected visually are listed separately. The version 1.0.0 report is kept 
 QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q
 ```
 
-**Result: 319 passed, 0 failed, 0 skipped in 788 s (13 min 8 s).**
+**Result: 345 passed, 0 failed, 0 skipped in 971 s (16 min 11 s).**
 
 | Suite | Folder | Tests |
 |---|---|---|
-| Unit | `tests/unit` | 139 |
+| Unit | `tests/unit` | 150 |
 | Integration | `tests/integration` | 49 |
-| Documents (all templates × profiles, DOCX + PDF, LibreOffice) | `tests/documents` | 72 |
+| Documents (all templates × profiles, DOCX + PDF, LibreOffice) | `tests/documents` | 84 |
 | Security, privacy and documentation accuracy | `tests/security` | 20 |
 | Synchronisation | `tests/sync` | 12 |
-| Desktop interface (pytest-qt, offscreen) | `tests/gui` | 26 |
+| Desktop interface (pytest-qt, offscreen) | `tests/gui` | 29 |
 | End-to-end workflow | `tests/e2e` | 1 |
+
+New in 1.2 (26 tests): the deputation proforma (items, blank private items unless opted in, own answers, employer's certificate), export and validation of the three new formats, format recommendations, chart choice validation and drawing, chart styles changing or removing images while the facts stay in text, the openings-list import (mapping, add/update/skip, malformed files), the three new templates with every test profile, and GUI tests for the Studio chart and proforma controls, the openings import and the recruiter formats.
 
 New in 1.1 (62 tests): training records and sections, interview question bank, personalisation, STAR analysis
 and questionnaires, job-portal kit and file checks, ATS readiness, appearance presets and overrides, update
@@ -44,7 +46,7 @@ files, the tutorial's own five tests pass, and every path and function the guide
 Lint: `ruff check ris tests scripts docs/tutorial` — no findings.
 
 Requirement traceability (`python scripts/trace_requirements.py` → [REQUIREMENTS.md](REQUIREMENTS.md)):
-of 149 requirements, 143 have passing automated tests and 6 have none (PRF-19, STU-03, UX-03, UX-07, REL-02,
+of 157 requirements, 151 have passing automated tests and 6 have none (PRF-19, STU-03, UX-03, UX-07, REL-02,
 REL-05); none are failing.
 
 ## Continuous integration (GitHub Actions)
@@ -62,17 +64,24 @@ The CI workflow (`.github/workflows/ci.yml`) ran lint, the full suite and `--sel
 
 ## Document checks beyond the test suite
 
-* `python scripts/generate_examples.py` (built-in PDF engine) and `--engine libreoffice`: all **15
-  templates** exported from the fictional sample and passed export validation with both engines. Page counts
-  are in `examples/README.md`; the Government CV, Academic Extended CV and Research Showcase grew by one page
-  because the sample now has training, course, certification and workshop records.
+* `python scripts/generate_examples.py` (built-in PDF engine) and `--engine libreoffice`: all **18
+  templates** exported from the fictional sample and passed export validation with both engines (page counts
+  in `examples/README.md`). The Government CV is one page shorter than in 1.1 with the built-in engine
+  because table rows are now kept whole and headings no longer push long tables to the next page.
 
 ### Visually inspected (rendered to images and looked at)
+
+* Version 1.2, built-in engine: the deputation proforma (all seven pages: items 1–18, declaration and the
+  employer's certificate), the Senior Scientist Dossier (first four pages) and the Senior Scientist Graphical
+  profile in its default chart styles and with donut / line / pie / dots / text styles; the Senior Scientist
+  Graphical first page with the LibreOffice engine. These checks found and led to fixes for a page left almost
+  empty before a long table, a table row cut in the middle, shortened evidence text in the requirements table
+  and oversized pie charts.
 
 * Government CV (built-in engine), pages 4–5: the new *Training programmes*, *Professional courses* and
   *Workshops, seminars & conferences attended* tables and the *Certifications & licences* entries (credential,
   validity, expired language test marked "Expired").
-* Contact sheet of the first page of all 15 templates (`examples/overview_first_pages.png`) at thumbnail
+* Contact sheet of the first page of all templates (`examples/overview_first_pages.png`) at thumbnail
   resolution.
 * The 1.0 visual checks (graphical templates, screenshots of the pages) were not repeated page by page for
   1.1; the new pages and dialogs were exercised by the GUI tests, which check behaviour, not appearance.
