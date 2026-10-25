@@ -39,6 +39,10 @@ One per workspace; fact (verification applies); default classification for manua
 | `orcid` | ORCID iD | text | Online profiles |  |
 | `google_scholar` | Google Scholar | text | Online profiles |  |
 | `researchgate` | ResearchGate | text | Online profiles |  |
+| `naukri` | Naukri profile | text | Online profiles |  |
+| `indeed` | Indeed profile | text | Online profiles |  |
+| `scopus_id` | Scopus Author ID | text | Online profiles |  |
+| `researcher_id` | Web of Science ResearcherID | text | Online profiles |  |
 | `other_profiles` | Other research profiles | list of text | Online profiles | One per line as 'Label / URL', e.g. 'Scopus / https://www.scopus.com/authid/...'. |
 | `languages` | Languages | list of text | Contact | Comma separated, e.g. English, Hindi. |
 | `citations` | Total citations | text | Research metrics | Enter only a figure you have checked, e.g. from your Google Scholar profile. |
@@ -475,6 +479,104 @@ A referee. Exported only when you confirm the person agreed to be named.
 | `address` | Address | text | Contact |  |
 | `permission_confirmed` | This person has agreed to be named as a referee | yes/no | Permission | Referees are never included in documents until you tick this box. |
 | `show_contact_details` | Show their email and telephone in documents | yes/no | Permission |  |
+| `notes` | Private notes | text | Private notes | **private** |
+| `custom` | Custom fields | dict | Custom fields | Your own fields (name → value). They are stored with the record and can be shown in custom sections. |
+
+## Training & certification (`training`)
+
+Fact (verification applies); default classification for manual entries: approved for professional use.
+
+A training programme, professional course, certification, workshop, seminar or other qualification.
+
+| Field | Title | Type / choices | Group | Notes |
+|---|---|---|---|---|
+| `training_type` | Type | one of: `training_programme`, `mandatory_training`, `professional_course`, `online_course`, `certification`, `licence`, `language_test`, `workshop`, `seminar`, `faculty_development`, `other_qualification` | Programme |  |
+| `title` | Title | text | Programme | As on the certificate, e.g. 'Mid-Career Training Programme' or 'AWS Certified Machine Learning – Specialty'. |
+| `provider` | Institute / issuing body | text | Programme | e.g. 'ISTM, New Delhi', 'NPTEL (IIT Madras)', 'IEEE', 'Amazon Web Services'. |
+| `sponsor` | Sponsored / nominated by | text | Programme | The organisation that nominated or funded you, if different from the provider. |
+| `mode` | Mode | one of: `classroom`, `online`, `blended`, `on_the_job`, `abroad` | Programme |  |
+| `location` | Location | text | Programme |  |
+| `start` | Start | partial date (YYYY, YYYY-MM, YYYY-MM-DD) | Dates & duration |  |
+| `end` | End / issue date | partial date (YYYY, YYYY-MM, YYYY-MM-DD) | Dates & duration |  |
+| `is_current` | Ongoing | yes/no | Dates & duration |  |
+| `duration_hours` | Duration (hours) | float | None | Dates & duration |  |
+| `duration_days` | Duration (days) | float | None | Dates & duration |  |
+| `status` | Status | one of: `completed`, `ongoing`, `planned` | Dates & duration | Planned items are hidden from documents unless you choose to show them. |
+| `valid_until` | Valid until (certifications) | partial date (YYYY, YYYY-MM, YYYY-MM-DD) | Credential | Expired certifications are labelled as expired and left out of one- and two-page resumes. |
+| `grade` | Grade / score / result | text | Credential | e.g. 'Elite + Gold (NPTEL)', 'Band 8.0'. |
+| `credential_id` | Certificate / credential number | text | Credential |  |
+| `credential_url` | Verification URL | text | Credential |  |
+| `skills` | Skills covered | list of text | Content | Used to match vacancy requirements and to suggest LinkedIn skills. |
+| `topics` | Topics covered | list of text | Content |  |
+| `outcome` | How you applied it | text | Content | One sentence on what you did with what you learned (optional). |
+| `evidence` | Supporting evidence | text | Disclosure | e.g. certificate number, office order nominating you. |
+| `notes` | Private notes | text | Private notes | **private** |
+| `custom` | Custom fields | dict | Custom fields | Your own fields (name → value). They are stored with the record and can be shown in custom sections. |
+
+## Interview story (STAR) (`interview_story`)
+
+Working record (not a fact); default classification for manual entries: approved for professional use.
+
+A STAR story (Situation, Task, Action, Result) prepared for interviews. Never printed in resumes.
+
+| Field | Title | Type / choices | Group | Notes |
+|---|---|---|---|---|
+| `title` | Story title | text | Story | A short name, e.g. 'Rescuing the radiosonde trial'. |
+| `competencies` | Competencies it shows | list of text | Story | e.g. leadership, problem-solving, teamwork, integrity, initiative. |
+| `situation` | Situation | text | STAR | Context in two or three sentences: where, when, what was at stake. |
+| `task` | Task | text | STAR | What you personally were responsible for. |
+| `action` | Action | text | STAR | The steps you took and why. Say 'I', not 'we'. This should be the longest part. |
+| `result` | Result | text | STAR | The outcome, with verified numbers if you have them, and what you learned. |
+| `linked_ids` | Linked profile records | reference to `position,assignment,project,activity,training`s | Links | Positions, projects or activities this story comes from. |
+| `notes` | Private notes | text | Private notes | **private** |
+| `custom` | Custom fields | dict | Custom fields | Your own fields (name → value). They are stored with the record and can be shown in custom sections. |
+
+## Interview answer (`interview_answer`)
+
+Working record (not a fact); default classification for manual entries: approved for professional use.
+
+Your notes for one interview question, with practice history.
+
+| Field | Title | Type / choices | Group | Notes |
+|---|---|---|---|---|
+| `question` | Question | text | Question |  |
+| `category` | Category | one of: `personal`, `motivation`, `technical`, `research`, `projects`, `leadership`, `behavioural`, `situational`, `government`, `organisation`, `questionnaire`, `closing` | Question |  |
+| `answer` | Answer notes | text | Answer | Key points, not a script: interviewers notice memorised answers. |
+| `story_ids` | STAR stories to use | reference to `interview_story`s | Answer |  |
+| `confidence` | Confidence (0–5) | integer | Practice |  |
+| `times_practised` | Times practised | integer | Practice |  |
+| `last_practised` | Last practised | text | Details | system-managed |
+| `source` | Where the question came from | text | Details | system-managed |
+| `custom` | Custom fields | dict | Custom fields | Your own fields (name → value). They are stored with the record and can be shown in custom sections. |
+
+## Personal questionnaire (`questionnaire`)
+
+Working record (not a fact); default classification for manual entries: approved for professional use.
+
+A personal questionnaire you fill for an interview board (SSB PIQ, DAF-style forms).
+
+| Field | Title | Type / choices | Group | Notes |
+|---|---|---|---|---|
+| `form_type` | Form | one of: `ssb_piq`, `interview_daf`, `organisation`, `other` | Form |  |
+| `title` | Name of this form | text | Form | e.g. 'SSB 2026 PIQ' or 'DRDO interview DAF'. |
+| `place_of_birth` | Place of birth | text | Personal | **private** |
+| `home_town` | Home town / district / state | text | Personal | **private** |
+| `permanent_address` | Permanent address | text | Personal | **private** |
+| `present_address` | Present address | text | Personal | **private** |
+| `father` | Father's name, education and occupation | text | Family | **private**; Be specific about the post held, e.g. 'Retired Senior Section Engineer, Indian Railways'. |
+| `mother` | Mother's name, education and occupation | text | Family | **private** |
+| `siblings` | Siblings (education, occupation) | text | Family | **private** |
+| `education` | Education | list | Details | system-managed |
+| `ncc` | NCC (certificate, wing, rank) | text | Activities |  |
+| `sports` | Sports | list | Details | system-managed |
+| `extracurricular` | Extra-curricular activities | list | Details | system-managed |
+| `hobbies` | Hobbies and interests | list of text | Activities | List only genuine interests: the interviewer will ask about them in detail. |
+| `responsibilities` | Positions of responsibility held | list of text | Activities |  |
+| `languages` | Languages known | list of text | Activities |  |
+| `previous_attempts` | Previous attempts / interviews | list | Details | system-managed |
+| `service_choice` | Choice of service / arm / post | text | Preferences |  |
+| `reasons` | Why you want to join | text | Preferences |  |
+| `self_description` | Self-description notes | text | Preferences | **private** |
 | `notes` | Private notes | text | Private notes | **private** |
 | `custom` | Custom fields | dict | Custom fields | Your own fields (name → value). They are stored with the record and can be shown in custom sections. |
 

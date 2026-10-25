@@ -61,9 +61,11 @@ def plan_install(installer: Path, asset: UpdateAsset, *, pid: int | None = None,
     kind = kind or install_kind()
     installer = Path(installer)
     if kind == "windows-installer" and asset.kind == "windows-installer":
+        # The installer's [Run] section starts the new version after a silent install; Restart Manager restarts
+        # are turned off so the application cannot be started twice.
         return InstallPlan("The installer will update Resume Intelligence Studio and restart it.",
                            [str(installer), "/SP-", "/SILENT", "/NOCANCEL", "/NORESTART", "/CLOSEAPPLICATIONS",
-                            "/RESTARTAPPLICATIONS"], True)
+                            "/NORESTARTAPPLICATIONS"], True)
     if kind == "macos-app" and asset.kind == "macos-dmg":
         bundle = app_bundle()
         if bundle is not None and os.access(bundle.parent, os.W_OK):

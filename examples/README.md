@@ -13,11 +13,11 @@ Generated from the **fictional** sample profile (Dr. Anika Sharma is not a real 
 | Avionics & Drone Systems | defence_technical | 2 | builtin | `example_avionics_drone.docx`, `example_avionics_drone.pdf` |
 | Government CV | government_biodata | 5 | builtin | `example_government_cv.docx`, `example_government_cv.pdf` |
 | Modern Professional | general_professional | 2 | builtin | `example_modern_professional.docx`, `example_modern_professional.pdf` |
-| Academic Extended CV | academic_cv | 4 | builtin | `example_academic_extended.docx`, `example_academic_extended.pdf` |
+| Academic Extended CV | academic_cv | 5 | builtin | `example_academic_extended.docx`, `example_academic_extended.pdf` |
 | Compact Two-Page Resume | general_professional | 2 | builtin | `example_compact_two_page.docx`, `example_compact_two_page.pdf` |
 | Custom Diary Edition | general_professional | 2 | builtin | `example_diary_edition.docx`, `example_diary_edition.pdf` |
 | Graphical Career Profile | graphical_profile | 2 | builtin | `example_graphical_profile.docx`, `example_graphical_profile.pdf` |
-| Research Showcase | research_portfolio | 4 | builtin | `example_research_showcase.docx`, `example_research_showcase.pdf` |
+| Research Showcase | research_portfolio | 5 | builtin | `example_research_showcase.docx`, `example_research_showcase.pdf` |
 | Infographic Timeline | project_portfolio | 3 | builtin | `example_infographic_timeline.docx`, `example_infographic_timeline.pdf` |
 
 `overview_first_pages.png` shows the first page of every template side by side.
@@ -35,13 +35,13 @@ The same 15 templates were also exported with `--engine libreoffice` (LibreOffic
 | Engineering Professional | 2 |
 | AI/ML Specialist | 2 |
 | Avionics & Drone Systems | 2 |
-| Government CV | 4 |
+| Government CV | 5 |
 | Modern Professional | 2 |
-| Academic Extended CV | 4 |
+| Academic Extended CV | 5 |
 | Compact Two-Page Resume | 2 |
 | Custom Diary Edition | 2 |
 | Graphical Career Profile | 2 |
-| Research Showcase | 4 |
+| Research Showcase | 5 |
 | Infographic Timeline | 3 |
 
 `overview_first_pages_libreoffice.png` shows their first pages.

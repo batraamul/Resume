@@ -218,6 +218,7 @@ def test_install_plans(tmp_path, monkeypatch):
     exe.write_bytes(b"x")
     win = installer.plan_install(exe, _asset(name="a.exe", kind="windows-installer"), kind="windows-installer")
     assert win.command[0] == str(exe) and "/SILENT" in win.command and win.quit_app
+    assert "/NORESTARTAPPLICATIONS" in win.command and "/RESTARTAPPLICATIONS" not in win.command
     deb = installer.plan_install(tmp_path / "a.deb", _asset(name="a.deb", kind="linux-deb"), kind="linux-deb")
     assert deb.command[0] == "xdg-open" and not deb.quit_app
     src = installer.plan_install(exe, _asset(), kind="source")

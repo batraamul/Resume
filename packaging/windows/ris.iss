@@ -13,6 +13,13 @@
   #define OutputDir "..\..\dist\installer"
 #endif
 
+; Windows version resources must be numeric: 1.3.0-beta.1 -> 1.3.0
+#if Pos("-", AppVersion) > 0
+  #define NumericVersion Copy(AppVersion, 1, Pos("-", AppVersion) - 1)
+#else
+  #define NumericVersion AppVersion
+#endif
+
 #define AppName "Resume Intelligence Studio"
 #define AppExe "ResumeIntelligenceStudio.exe"
 
@@ -42,8 +49,9 @@ Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
 CloseApplications=yes
-RestartApplications=yes
-VersionInfoVersion={#AppVersion}
+; The [Run] entry below restarts the application after a silent update (not Restart Manager, to avoid two copies).
+RestartApplications=no
+VersionInfoVersion={#NumericVersion}
 VersionInfoProductName={#AppName}
 
 [Languages]

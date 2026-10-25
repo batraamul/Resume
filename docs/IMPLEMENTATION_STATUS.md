@@ -5,12 +5,14 @@ Evidence for each statement is in [TEST_REPORT.md](TEST_REPORT.md) and [REQUIREM
 
 ## Current phase
 
-Version 1.0.0 — all planned phases complete. Release ZIP built by `scripts/make_release.py`.
+Version 1.1.0 — installers for Windows, macOS and Linux built by GitHub Actions, signed automatic updates,
+training sections, interview preparation, job-portal kit, appearance and template customisation, developer
+guide. Source code at <https://github.com/batraamul/Resume>.
 
 ## Completed (with tests)
 
-- Phase 1: architecture, requirements register (`docs/requirements.toml`, 126 requirements), PRD, threat model.
-- Phase 2a: domain models (`ris/domain`, 20 record kinds; awards, patents, talks, grants, peer review and similar
+- Phase 1: architecture, requirements register (`docs/requirements.toml`, 126 requirements in 1.0, 149 in 1.1), PRD, threat model.
+- Phase 2a: domain models (`ris/domain`, 20 record kinds in 1.0, 24 in 1.1; awards, patents, talks, grants, peer review and similar
   items are typed activities), SQLite record store with migrations, FTS5 search,
   revisions, audit, settings, workspaces and relocation, profile services (snapshot, completeness,
   chronology, duplicates).
@@ -38,9 +40,34 @@ Version 1.0.0 — all planned phases complete. Release ZIP built by `scripts/mak
 - Phase 5: GUI, security, sync, end-to-end and performance tests; documentation; PyInstaller spec and Linux
   one-folder build; self-test; screenshot mode; examples; release script with secret/personal-data scan.
 
+- Version 1.1 (all with tests):
+  - Training & Certifications: `training` record kind (programmes, mandatory training, professional and online
+    courses, certifications and licences with expiry, language tests, workshops, seminars, faculty development,
+    other qualifications); dedicated resume sections in every relevant mode; government bio-data tables.
+  - Interview Preparation page: sourced question bank (about 70 questions), questions personalised from
+    records, timed practice, saved answers, STAR story editor with live analysis, personal questionnaire
+    (PIQ/DAF) with fill-from-profile and consistency check, interview pack and questionnaire export.
+  - Job Portals & Recruiters page: recruiter directory with routes and sources, portal guidance, LinkedIn /
+    Naukri / Indeed profile kit from confirmed facts with live limits, ATS readiness and file checks; new
+    profile links (Naukri, Indeed, Scopus, ResearcherID). Research notes in RESEARCH_FINDINGS.md.
+  - Appearance: six colour presets (light and dark, WCAG AA), per-colour overrides with automatic contrast
+    correction, fonts, text size, density, corner radius, navigation style/side, editor layout, start page;
+    import/export of settings. Template designer generated from the template schema with live preview,
+    readability and ATS checks.
+  - Studio "Add section" menu; migration 0002 (new document kinds).
+  - Distribution: application icons; PyInstaller spec for all platforms; Windows Inno Setup installer and
+    portable zip; macOS DMG (optional signing/notarisation); Linux tar.gz and .deb; CI on Windows, macOS and
+    Linux; release workflow with frozen self-tests, signed manifest and build provenance.
+  - Secure automatic updates (`ris/update`): Ed25519-signed manifest, GitHub-only HTTPS, verified downloads,
+    per-platform installation, channels, skip/remind, privacy note.
+  - DEVELOPER_GUIDE.md with the tested Resume Lite tutorial.
+
 ## Outstanding (see BACKLOG.md)
 
-- Builds and launchers have not been run on macOS or Windows; no code signing or notarisation.
+- No Apple or Microsoft code-signing certificate is configured, so the operating systems warn on first install.
+- The macOS build is for Apple silicon (arm64); Intel Macs run from source.
+- Interactive installation and the update flow on real Windows and macOS desktops are verified by the release
+  workflow's automated self-tests only, not by a person (see TEST_REPORT.md).
 - Google Drive sync and external AI providers verified only against mocked services.
 - Built-in PDF engine: no complex-script shaping (Devanagari) — LibreOffice required for those.
 - Charts are raster (300 dpi) images rather than vector drawings.
@@ -61,6 +88,9 @@ Version 1.0.0 — all planned phases complete. Release ZIP built by `scripts/mak
 
 ## Exact next steps
 
-1. Run `--selftest` and the PyInstaller build on macOS and Windows; sign the builds.
-2. Live test Google Drive sync with a real OAuth client and an external AI provider with a real key.
-3. Vector charts and complex-script shaping in the built-in PDF engine.
+1. Add the `RIS_UPDATE_SIGNING_KEY` repository secret so releases are signed and published automatically.
+2. Install each 1.1.0 package on a real Windows, macOS and Linux desktop; when 1.1.1 or 1.2.0 is released,
+   test the update from 1.1.0 end to end.
+3. Code-sign the Windows installer and notarise the macOS app when certificates are available.
+4. Live test Google Drive sync with a real OAuth client and an external AI provider with a real key.
+5. Vector charts and complex-script shaping in the built-in PDF engine.
