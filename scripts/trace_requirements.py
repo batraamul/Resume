@@ -20,7 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTES = {
-    "REL-05": "Verified manually on Linux (frozen --selftest, .deb install); the release workflow builds and self-tests the frozen application on Windows, macOS and Linux (see docs/TEST_REPORT.md).",
+    "REL-05": "Verified: release-workflow dry run built and self-tested the frozen application on Windows, macOS and Linux; local Linux build and .deb install (see docs/TEST_REPORT.md).",
     "SYN-02": "Google Drive OAuth/API tested with a mocked HTTP session only; no live account was used.",
     "AI-02": "External providers tested with an injected transport only; no live API calls were made.",
     "UX-06": "Contrast is checked automatically; full screen-reader testing has not been performed.",

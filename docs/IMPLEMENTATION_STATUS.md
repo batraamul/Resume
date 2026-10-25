@@ -89,6 +89,8 @@ guide. Source code at <https://github.com/batraamul/Resume>.
 ## Exact next steps
 
 1. Add the `RIS_UPDATE_SIGNING_KEY` repository secret so releases are signed and published automatically.
+   Then publish 1.1.0: *Actions → Release → Run workflow* with tag `v1.1.0` (the release workflow's build
+   jobs already passed in a dry run; tag pushes are not possible from the development session).
 2. Install each 1.1.0 package on a real Windows, macOS and Linux desktop; when 1.1.1 or 1.2.0 is released,
    test the update from 1.1.0 end to end.
 3. Code-sign the Windows installer and notarise the macOS app when certificates are available.

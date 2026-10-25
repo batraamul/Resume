@@ -87,16 +87,29 @@ Other generated documents were validated programmatically only. No DOCX file was
   the container (only `libxcb-cursor0` had to be added) and the installed program passed `--selftest`; the
   tar.gz self-update (folder swap and restart by the helper script) was run end to end with a locally signed
   manifest.
-* Windows installer, portable zip and macOS disk image: built and self-tested only by the release workflow
-  (`.github/workflows/release.yml`) on GitHub's Windows and macOS runners. That workflow runs after this
-  report is committed; its outcome is shown on the
-  [Actions page](https://github.com/batraamul/Resume/actions) and the
-  [release page](https://github.com/batraamul/Resume/releases).
+* **Release workflow dry run** (`.github/workflows/release.yml`, branch `release-dry-run`, commit `2f20bc4`,
+  nothing published). Each job ran the unit, integration and security suites, built the application with
+  PyInstaller, ran the frozen program's `--selftest`, and packaged it. Results as reported by the jobs'
+  annotations:
+
+  | Runner | Tests | Frozen self-test | Packages |
+  |---|---|---|---|
+  | Windows Server 2025, Python 3.12.10 | 208 passed, 0 failed | passed (8 checks) | `…-windows-x64-setup.exe` (55 MB), `…-windows-x64-portable.zip` (80 MB) |
+  | macOS 26.6 (Apple silicon), Python 3.12.10 | 208 passed, 0 failed | passed (8 checks) | `…-macos-arm64.dmg` (73 MB) |
+  | Ubuntu 22.04 (glibc 2.35), Python 3.12.15 | 208 passed, 0 failed | passed (8 checks) | `…-linux-x86_64.tar.gz` (112 MB), `…_amd64.deb` (88 MB) |
+
+  The eight checks are: Python packages, SQLite with FTS5, templates, embedded fonts, LibreOffice (optional;
+  reported as absent on the runners), credential store, a validated DOCX + PDF sample export, and Qt.
+  The publish step (manifest, signature, provenance, GitHub Release) was not part of the dry run; the manifest
+  build, signing and verification commands were tested locally and by `tests/unit/test_updates.py`.
 
 ## Not verified
 
 * Installing and using the Windows and macOS builds interactively on a physical computer (including
-  SmartScreen and Gatekeeper prompts, Start-menu and Applications shortcuts, and uninstalling).
+  SmartScreen and Gatekeeper prompts, Start-menu and Applications shortcuts, and uninstalling). The packages
+  were built and the frozen programs self-tested on GitHub's runners, but the installers themselves were not
+  run.
+* The publish job of the release workflow (it runs for the first time with the first real release).
 * An update from one published release to the next on a real installation (1.1.0 is the first release that
   contains the updater; the first real update will be to the following version).
 * Google Drive synchronisation and external AI providers against real accounts or keys.
