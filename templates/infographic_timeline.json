@@ -1,0 +1,96 @@
+{
+  "id": "infographic_timeline",
+  "name": "Infographic Timeline",
+  "version": "1.0.0",
+  "family": "banner, left sidebar, project cards, timeline",
+  "description": "Modern infographic layout: slate banner header, light left sidebar with contact icons, skill bars, education and languages; main column with expertise, project cards and a career timeline chart.",
+  "recommended_modes": [
+    "project_portfolio",
+    "graphical_profile",
+    "technical_specialist"
+  ],
+  "summary_style": "italic",
+  "page": {
+    "margin_top_mm": 12,
+    "margin_bottom_mm": 13,
+    "margin_left_mm": 12,
+    "margin_right_mm": 12
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 9.8,
+    "heading_size": 11.5,
+    "name_size": 24,
+    "headline_size": 11,
+    "small_size": 8.6,
+    "line_spacing": 1.07
+  },
+  "colours": {
+    "text": "#1E2328",
+    "muted": "#525C66",
+    "accent": "#24476B",
+    "rule": "#24476B",
+    "fill": "#E8EEF4",
+    "banner_fill": "#24476B",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#EEF2F6",
+    "link": "#24476B",
+    "tile_fill": "#F1F4F8",
+    "bar_track": "#D2DBE4"
+  },
+  "header": {
+    "style": "banner",
+    "name_case": "normal",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "contact_icons": true,
+    "separator": "    ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "left_bar",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 10,
+    "space_after": 4,
+    "rule_weight": 3
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true,
+    "bullet_glyph": "•",
+    "project_style": "cards"
+  },
+  "skills": {
+    "style": "bars",
+    "competencies_style": "bullets"
+  },
+  "columns": {
+    "enabled": true,
+    "side": "left",
+    "width_frac": 0.3,
+    "gap_mm": 6,
+    "sidebar_sections": [
+      "skills",
+      "education",
+      "training",
+      "languages",
+      "competencies"
+    ]
+  },
+  "graphics": {
+    "enabled": true,
+    "palette": ["#24476B", "#C77D1A", "#3D7A5E", "#8C3B4A", "#5A5F9E", "#6E7D8C"],
+    "timeline_height_mm": 50,
+    "bar_width_mm": 28
+  },
+  "footer": {
+    "page_numbers": "x",
+    "show_name": false
+  }
+}

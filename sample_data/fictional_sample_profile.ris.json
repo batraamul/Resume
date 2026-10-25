@@ -1,0 +1,1360 @@
+{
+ "format": "resume-intelligence-studio/profile",
+ "format_version": 1,
+ "app_version": "1.0.0",
+ "exported_at": "2026-10-24T00:00:00Z",
+ "label": "FICTIONAL SAMPLE PROFILE — not a real person. Organisations, publications, identifiers and vacancies are invented for demonstration and testing.",
+ "records": [
+  {
+   "id": "personal",
+   "kind": "personal",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "full_name": "Anika Sharma",
+    "preferred_name": "Dr. Anika Sharma",
+    "professional_title": "Scientist E — Atmospheric Instrumentation & Applied AI",
+    "author_name_variants": [
+     "A. Sharma",
+     "Anika Sharma"
+    ],
+    "city": "New Delhi",
+    "state": "Delhi",
+    "country": "India",
+    "phone": "+91 00000 12345",
+    "email": "anika.sharma@example.org",
+    "linkedin": "https://www.linkedin.com/in/anika-sharma-example",
+    "github": "https://github.com/anika-sharma-example",
+    "orcid": "0000-0002-1825-0097",
+    "website": "https://anika-sharma.example.org",
+    "languages": [
+     "English",
+     "Hindi"
+    ],
+    "home_address": "12 Example Street, New Delhi 110001",
+    "date_of_birth": "1981-05-12",
+    "nationality": "Indian",
+    "date_of_entry_into_service": "2016-07-01",
+    "present_pay_level": "Level 12 (7th CPC)",
+    "nature_of_employment": "Permanent",
+    "citations": "142",
+    "h_index": "6",
+    "i10_index": "4",
+    "metrics_source": "Google Scholar (fictional example)",
+    "metrics_as_of": "2026-10"
+   }
+  },
+  {
+   "id": "sum-general",
+   "kind": "summary",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "focus": "general",
+    "title": "General — two lines",
+    "text": "Scientist and electronics engineer with twenty years across avionics integration, scientific instrumentation and applied machine learning. Leads upper-air instrumentation work, an IoT monitoring network and a small AI/ML group, with peer-reviewed research on real-time image enhancement for UAV imagery."
+   }
+  },
+  {
+   "id": "sum-defence",
+   "kind": "summary",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "focus": "defence_technology",
+    "title": "Defence technology",
+    "text": "Electronics and avionics engineer with twelve years of airborne-systems integration and qualification testing, followed by ten years leading scientific instrumentation and edge-AI development in government service. Experienced in MIL-STD-1553 test rigs, UAV payload electronics, sensor telemetry, embedded GPU deployment and technical procurement."
+   }
+  },
+  {
+   "id": "sum-research",
+   "kind": "summary",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "focus": "aiml_research",
+    "title": "AI/ML research",
+    "text": "Applied AI researcher working on lightweight deep networks for real-time enhancement of aerial imagery: structured pruning, knowledge distillation and TensorRT deployment on embedded GPUs, evaluated with detection-oriented quality measures."
+   }
+  },
+  {
+   "id": "pos-kail",
+   "kind": "position",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "designation": "Scientist E",
+    "organisation": "Kestrel Atmospheric Instrumentation Laboratory",
+    "division": "Upper Air Instrumentation Division",
+    "employment_type": "permanent",
+    "sector": "central_government",
+    "location": "New Delhi",
+    "start": "2016-07",
+    "is_current": true,
+    "summary": "Responsible for upper-air observation instruments, the division workshop and the laboratory's IoT and AI/ML activities.",
+    "nature_of_duties": "Planning, testing and maintenance of radiosonde ground systems and upper-air instruments; management of the division workshop; leadership of IoT monitoring and AI/ML development; technical evaluation and procurement of instruments under GFR; guidance of project staff and interns.",
+    "tools": [
+     "Python",
+     "PyTorch",
+     "MQTT",
+     "Node-RED",
+     "InfluxDB",
+     "Grafana",
+     "Docker"
+    ],
+    "evidence": "Appointment order KAIL/EST/2016/114 (fictional)",
+    "pay_level": "Level 12",
+    "short_name": "Kestrel Lab",
+    "highlight": "Upper-air instruments, workshop, IoT and edge-AI programmes"
+   }
+  },
+  {
+   "id": "b-kail-1",
+   "kind": "bullet",
+   "parent_id": "pos-kail",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Led acceptance testing and commissioning of radiosonde ground-receiving systems at three observing stations, writing the test protocol and the defect-tracking procedure.",
+    "bullet_type": "achievement",
+    "involvement": "leading",
+    "metrics": [
+     "3 stations commissioned"
+    ],
+    "keywords": [
+     "radiosonde",
+     "acceptance testing",
+     "telemetry"
+    ]
+   }
+  },
+  {
+   "id": "b-kail-2",
+   "kind": "bullet",
+   "parent_id": "pos-kail",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Designed and deployed an IoT monitoring network for laboratory infrastructure (ESP32 sensor nodes, MQTT, Node-RED, InfluxDB and Grafana dashboards) covering temperature, humidity and power quality.",
+    "bullet_type": "achievement",
+    "involvement": "leading",
+    "tools": [
+     "ESP32",
+     "MQTT",
+     "Node-RED",
+     "InfluxDB",
+     "Grafana"
+    ]
+   }
+  },
+  {
+   "id": "b-kail-3",
+   "kind": "bullet",
+   "parent_id": "pos-kail",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Lead a four-member AI/ML group developing lightweight super-resolution and detection models for UAV imagery, deployed on NVIDIA Jetson devices with TensorRT.",
+    "bullet_type": "responsibility",
+    "involvement": "leading",
+    "metrics": [
+     "4-member group"
+    ]
+   }
+  },
+  {
+   "id": "b-kail-4",
+   "kind": "bullet",
+   "parent_id": "pos-kail",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Prepared technical specifications and served on bid-evaluation committees for instrument procurement through the Government e-Marketplace in line with the General Financial Rules.",
+    "bullet_type": "responsibility",
+    "involvement": "participating"
+   }
+  },
+  {
+   "id": "b-kail-5",
+   "kind": "bullet",
+   "parent_id": "pos-kail",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Authored standard operating procedures for pre-flight checks and calibration of upper-air instruments used across the division.",
+    "bullet_type": "deliverable",
+    "involvement": "individual"
+   }
+  },
+  {
+   "id": "asg-workshop",
+   "kind": "assignment",
+   "parent_id": "pos-kail",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Workshop In-charge",
+    "assignment_type": "additional_charge",
+    "unit": "Upper Air Division Workshop",
+    "start": "2019-04",
+    "is_current": true,
+    "description": "Additional charge of the division workshop supporting instrument repair, fabrication and calibration."
+   }
+  },
+  {
+   "id": "b-ws-1",
+   "kind": "bullet",
+   "parent_id": "asg-workshop",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Introduced a job-card and spares-inventory system for instrument repairs and calibration work.",
+    "bullet_type": "achievement",
+    "involvement": "leading"
+   }
+  },
+  {
+   "id": "b-ws-2",
+   "kind": "bullet",
+   "parent_id": "asg-workshop",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Supervise technicians and plan preventive maintenance for workshop test equipment.",
+    "bullet_type": "responsibility",
+    "involvement": "leading"
+   }
+  },
+  {
+   "id": "asg-nodal",
+   "kind": "assignment",
+   "parent_id": "pos-kail",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Nodal Officer, IoT and AI/ML Initiatives",
+    "assignment_type": "nodal_officer",
+    "start": "2021-01",
+    "is_current": true
+   }
+  },
+  {
+   "id": "pos-hadb",
+   "kind": "position",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "designation": "Senior Design Engineer",
+    "organisation": "Halcyon Avionics Design Bureau",
+    "division": "Avionics Integration Group",
+    "employment_type": "permanent",
+    "sector": "psu",
+    "location": "Bengaluru",
+    "start": "2004-06",
+    "end": "2016-06",
+    "summary": "Integration and qualification testing of airborne electronics and UAV payloads.",
+    "nature_of_duties": "Design, integration and environmental qualification of avionics line-replaceable units; development of automated test rigs; support to flight trials of UAV payloads.",
+    "tools": [
+     "MIL-STD-1553",
+     "ARINC 429",
+     "LabVIEW",
+     "C",
+     "MATLAB"
+    ],
+    "short_name": "Halcyon ADB",
+    "highlight": "Mission-computer integration and environmental qualification"
+   }
+  },
+  {
+   "id": "b-hadb-1",
+   "kind": "bullet",
+   "parent_id": "pos-hadb",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Integrated mission-computer and display units on MIL-STD-1553 avionics buses and built the automated test rig used for bench validation.",
+    "bullet_type": "achievement",
+    "involvement": "coordinating",
+    "tools": [
+     "MIL-STD-1553",
+     "LabVIEW"
+    ]
+   }
+  },
+  {
+   "id": "b-hadb-2",
+   "kind": "bullet",
+   "parent_id": "pos-hadb",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Developed payload interface electronics for a fixed-wing UAV electro-optical sensor and supported its ground and flight trials.",
+    "bullet_type": "achievement",
+    "involvement": "participating"
+   }
+  },
+  {
+   "id": "b-hadb-3",
+   "kind": "bullet",
+   "parent_id": "pos-hadb",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Planned environmental qualification (MIL-STD-810 vibration, temperature and humidity) for line-replaceable units and documented the test results.",
+    "bullet_type": "responsibility",
+    "involvement": "coordinating"
+   }
+  },
+  {
+   "id": "b-hadb-4",
+   "kind": "bullet",
+   "parent_id": "pos-hadb",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Mentored graduate engineer trainees on avionics bus protocols and test documentation.",
+    "bullet_type": "activity",
+    "involvement": "supporting"
+   }
+  },
+  {
+   "id": "edu-be",
+   "kind": "education",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "qualification_type": "degree",
+    "level": "bachelors",
+    "degree": "B.E.",
+    "discipline": "Electronics and Communication Engineering",
+    "institution": "Northfield Institute of Science and Technology",
+    "university": "Northfield University",
+    "location": "Pune",
+    "start": "2000",
+    "end": "2004",
+    "status": "completed",
+    "grade": "First Class with Distinction"
+   }
+  },
+  {
+   "id": "edu-mtech",
+   "kind": "education",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "qualification_type": "degree",
+    "level": "masters",
+    "degree": "M.Tech.",
+    "discipline": "Avionics",
+    "institution": "Coastal Institute of Aeronautical Engineering",
+    "location": "Chennai",
+    "start": "2008",
+    "end": "2010",
+    "status": "completed",
+    "grade": "CGPA 8.6/10",
+    "thesis_title": "Fault-tolerant data acquisition for airborne test instrumentation"
+   }
+  },
+  {
+   "id": "edu-phd",
+   "kind": "education",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "qualification_type": "degree",
+    "level": "doctorate",
+    "degree": "Ph.D.",
+    "discipline": "Electrical and Electronics Engineering",
+    "institution": "Northfield Institute of Science and Technology",
+    "start": "2021-08",
+    "status": "ongoing",
+    "thesis_title": "Lightweight deep networks for real-time enhancement of aerial imagery",
+    "supervisor": "Prof. R. Iyer (fictional)"
+   }
+  },
+  {
+   "id": "edu-plan",
+   "kind": "education",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "qualification_type": "course",
+    "level": "certificate",
+    "degree": "Executive Programme in Technology Management",
+    "institution": "Example School of Management",
+    "start": "2027",
+    "status": "planned"
+   }
+  },
+  {
+   "id": "edu-dl",
+   "kind": "education",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "qualification_type": "certification",
+    "level": "certificate",
+    "degree": "Deep Learning for Edge Devices (40-hour course)",
+    "issuer": "Example Academy of Applied Computing",
+    "end": "2022-03",
+    "status": "completed"
+   }
+  },
+  {
+   "id": "edu-gfr",
+   "kind": "education",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "qualification_type": "training",
+    "level": "certificate",
+    "degree": "Public Procurement and GFR 2017 (5-day programme)",
+    "issuer": "Example Institute of Public Administration",
+    "end": "2019-11",
+    "status": "completed"
+   }
+  },
+  {
+   "id": "pub-1",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "title": "Channel-pruned residual networks for real-time aerial image enhancement on embedded GPUs",
+    "authors": "A. Sharma and R. Iyer",
+    "venue": "Journal of Embedded Vision Systems",
+    "pub_type": "journal",
+    "status": "published",
+    "date": "2024-03",
+    "volume": "12",
+    "issue": "3",
+    "pages": "45-58",
+    "doi": "10.5555/jevs.2024.0123",
+    "indexing": "Example index (fictional)",
+    "contribution": "Proposed the pruning criterion, ran all experiments and wrote the manuscript.",
+    "metrics": [
+     "3.1× faster inference on Jetson Xavier NX after INT8 conversion (as reported in the paper)"
+    ]
+   }
+  },
+  {
+   "id": "pub-2",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "title": "An IoT telemetry framework for upper-air ground stations",
+    "authors": "A. Sharma, P. Rao and S. Gill",
+    "venue": "Proceedings of the Example Conference on Instrumentation (ECI 2023)",
+    "pub_type": "conference",
+    "status": "published",
+    "date": "2023-09",
+    "pages": "112-117"
+   }
+  },
+  {
+   "id": "pub-3",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Detection-aware quality assessment of super-resolved drone images",
+    "authors": "A. Sharma, M. Khan and R. Iyer",
+    "venue": "Example Transactions on Geoscience Imaging",
+    "pub_type": "journal",
+    "status": "under_review",
+    "date": "2025-11"
+   }
+  },
+  {
+   "id": "pub-4",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Simulation study of balloon-released gliding sondes",
+    "authors": "A. Sharma",
+    "pub_type": "journal",
+    "status": "draft"
+   }
+  },
+  {
+   "id": "pub-5",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "An early study that was withdrawn",
+    "authors": "A. Sharma",
+    "venue": "Example Letters",
+    "pub_type": "journal",
+    "status": "withdrawn",
+    "date": "2019"
+   }
+  },
+  {
+   "id": "prj-edge",
+   "kind": "project",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Edge super-resolution pipeline for UAV imagery",
+    "role": "Principal investigator",
+    "involvement": "leading",
+    "organisation": "Kestrel Atmospheric Instrumentation Laboratory",
+    "status": "prototype",
+    "start": "2021-09",
+    "is_current": true,
+    "problem": "Low-resolution frames from small UAV cameras limit downstream object detection in field conditions.",
+    "approach": "Trained lightweight residual super-resolution networks, applied structured channel pruning and knowledge distillation, and deployed INT8 TensorRT engines on Jetson devices.",
+    "hardware": [
+     "NVIDIA Jetson Xavier NX",
+     "NVIDIA Jetson Orin Nano"
+    ],
+    "software": [
+     "PyTorch",
+     "TensorRT",
+     "ONNX",
+     "Docker"
+    ],
+    "algorithms": [
+     "Structured pruning",
+     "Knowledge distillation",
+     "INT8 quantisation"
+    ],
+    "results": "Real-time enhancement of 720p video on the embedded GPU with improved detection recall on the internal validation set.",
+    "metrics": [
+     "3.1× faster inference after TensorRT INT8 conversion (Jetson Xavier NX)"
+    ],
+    "individual_contribution": "Defined the research plan, implemented the pruning method and supervised two project assistants.",
+    "approved_external_description": "Research prototype that enhances low-resolution UAV video in real time on embedded GPUs using pruned and distilled deep networks.",
+    "keywords": [
+     "super-resolution",
+     "edge AI",
+     "UAV"
+    ]
+   }
+  },
+  {
+   "id": "b-edge-1",
+   "kind": "bullet",
+   "parent_id": "prj-edge",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Implemented structured channel pruning and knowledge distillation to shrink the super-resolution network for embedded deployment.",
+    "bullet_type": "achievement",
+    "involvement": "individual"
+   }
+  },
+  {
+   "id": "b-edge-2",
+   "kind": "bullet",
+   "parent_id": "prj-edge",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Converted models through ONNX to INT8 TensorRT engines, achieving 3.1× faster inference on Jetson Xavier NX.",
+    "bullet_type": "outcome",
+    "involvement": "individual",
+    "metrics": [
+     "3.1× faster inference"
+    ]
+   }
+  },
+  {
+   "id": "prj-iot",
+   "kind": "project",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "IoT monitoring of laboratory infrastructure",
+    "role": "Project lead",
+    "involvement": "leading",
+    "status": "operational",
+    "start": "2020-02",
+    "end": "2022-06",
+    "problem": "Instrument rooms lacked continuous environmental and power-quality monitoring.",
+    "approach": "Deployed ESP32 sensor nodes publishing over MQTT to a Node-RED flow, InfluxDB time-series storage and Grafana dashboards with threshold alerts.",
+    "hardware": [
+     "ESP32",
+     "Environmental sensors"
+    ],
+    "software": [
+     "MQTT",
+     "Node-RED",
+     "InfluxDB",
+     "Grafana"
+    ],
+    "results": "Continuous monitoring with automated alerts replaced manual twice-daily readings."
+   }
+  },
+  {
+   "id": "prj-ats",
+   "kind": "project",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Radiosonde ground-station acceptance test protocol",
+    "role": "Coordinator",
+    "involvement": "coordinating",
+    "status": "completed",
+    "start": "2018-01",
+    "end": "2019-03",
+    "problem": "Station acceptance testing varied between sites.",
+    "results": "A common acceptance protocol and checklist adopted for new ground-receiving systems."
+   }
+  },
+  {
+   "id": "prj-secret",
+   "kind": "project",
+   "verification": "confirmed",
+   "confidentiality": "confidential",
+   "data": {
+    "title": "Mission computer upgrade — Project SAMPLE-X (restricted)",
+    "role": "Integration lead",
+    "involvement": "leading",
+    "status": "completed",
+    "start": "2012",
+    "end": "2014",
+    "problem": "CONFIDENTIAL-MARKER-7Q: restricted programme details that must never appear in any exported document."
+   }
+  },
+  {
+   "id": "prj-glide",
+   "kind": "project",
+   "verification": "unconfirmed",
+   "confidentiality": "review",
+   "data": {
+    "title": "Glide-sonde concept study",
+    "role": "Investigator",
+    "involvement": "individual",
+    "status": "concept",
+    "start": "2025-06",
+    "is_current": true,
+    "problem": "Balloon-borne sondes drift; a gliding sonde could return along a planned path.",
+    "approach": "Simulation-first study of release-to-glide transition."
+   }
+  },
+  {
+   "id": "sk-1",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Avionics integration",
+    "category": "avionics",
+    "proficiency": "advanced",
+    "years_experience": 12,
+    "last_used": "2016"
+   }
+  },
+  {
+   "id": "sk-2",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "MIL-STD-1553 / ARINC 429",
+    "category": "avionics",
+    "proficiency": "advanced",
+    "aliases": [
+     "1553",
+     "ARINC"
+    ]
+   }
+  },
+  {
+   "id": "sk-3",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Environmental qualification testing",
+    "category": "instrumentation",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-4",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Radiosonde and upper-air systems",
+    "category": "instrumentation",
+    "proficiency": "advanced",
+    "aliases": [
+     "radiosonde",
+     "upper air"
+    ]
+   }
+  },
+  {
+   "id": "sk-5",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Sensor calibration",
+    "category": "instrumentation",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-6",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Embedded C",
+    "category": "embedded",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-7",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "ESP32 / STM32 microcontrollers",
+    "category": "embedded",
+    "proficiency": "working"
+   }
+  },
+  {
+   "id": "sk-8",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "MQTT and Node-RED",
+    "category": "iot",
+    "proficiency": "advanced"
+   }
+  },
+  {
+   "id": "sk-9",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "InfluxDB and Grafana",
+    "category": "iot",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-10",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "PyTorch",
+    "category": "aiml",
+    "proficiency": "advanced"
+   }
+  },
+  {
+   "id": "sk-11",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Deep learning",
+    "category": "aiml",
+    "proficiency": "advanced",
+    "aliases": [
+     "DL",
+     "neural networks"
+    ]
+   }
+  },
+  {
+   "id": "sk-12",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Image super-resolution",
+    "category": "computer_vision",
+    "proficiency": "advanced"
+   }
+  },
+  {
+   "id": "sk-13",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Object detection",
+    "category": "computer_vision",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-14",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "NVIDIA Jetson deployment",
+    "category": "edge_ai",
+    "proficiency": "advanced"
+   }
+  },
+  {
+   "id": "sk-15",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "TensorRT and ONNX",
+    "category": "model_optimisation",
+    "proficiency": "advanced"
+   }
+  },
+  {
+   "id": "sk-16",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Pruning and knowledge distillation",
+    "category": "model_optimisation",
+    "proficiency": "advanced"
+   }
+  },
+  {
+   "id": "sk-17",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "CUDA / GPU computing",
+    "category": "gpu_computing",
+    "proficiency": "working"
+   }
+  },
+  {
+   "id": "sk-18",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "UAV payload integration",
+    "category": "drones",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-19",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Python",
+    "category": "software",
+    "proficiency": "advanced"
+   }
+  },
+  {
+   "id": "sk-20",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Docker and Linux",
+    "category": "software",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-21",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Technical procurement (GeM, GFR)",
+    "category": "procurement_admin",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "sk-22",
+   "kind": "skill",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Team leadership",
+    "category": "leadership",
+    "proficiency": "proficient"
+   }
+  },
+  {
+   "id": "act-tec",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "activity_type": "committee",
+    "title": "Chair, Technical Evaluation Committee for radiosonde procurement",
+    "role": "Chair",
+    "involvement": "leading",
+    "organisation": "Kestrel Atmospheric Instrumentation Laboratory",
+    "start": "2023-04",
+    "end": "2024-02",
+    "description": "Chaired technical evaluation of bids for upper-air sounding systems.",
+    "outcome": "Evaluation report accepted by the competent authority."
+   }
+  },
+  {
+   "id": "act-mentor",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "activity_type": "mentoring",
+    "title": "Supervisor, M.Tech. interns in applied machine learning",
+    "involvement": "leading",
+    "organisation": "Kestrel Atmospheric Instrumentation Laboratory",
+    "start": "2022",
+    "is_current": true,
+    "description": "Supervise summer and dissertation interns on edge-AI projects."
+   }
+  },
+  {
+   "id": "act-award",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "activity_type": "award",
+    "title": "Best Paper Award",
+    "organisation": "Example Conference on Instrumentation (ECI 2023)",
+    "start": "2023-09",
+    "end": "2023-09",
+    "involvement": "individual"
+   }
+  },
+  {
+   "id": "act-member",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "activity_type": "membership",
+    "title": "Member, Institution of Example Engineers",
+    "organisation": "Institution of Example Engineers",
+    "start": "2010",
+    "is_current": true,
+    "involvement": "participating"
+   }
+  },
+  {
+   "id": "act-talk",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "activity_type": "presentation",
+    "title": "Invited talk: Edge AI for atmospheric observation",
+    "organisation": "Example Symposium on Applied AI",
+    "start": "2024-11",
+    "end": "2024-11",
+    "involvement": "individual"
+   }
+  },
+  {
+   "id": "act-sop",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "activity_type": "technical_writing",
+    "title": "Lead author, upper-air instrument maintenance manual (internal)",
+    "involvement": "leading",
+    "organisation": "Kestrel Atmospheric Instrumentation Laboratory",
+    "start": "2020",
+    "end": "2021"
+   }
+  },
+  {
+   "id": "cs-pd",
+   "kind": "custom_section",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Professional Development",
+    "layout": "bullets",
+    "include_by_default": false
+   }
+  },
+  {
+   "id": "ce-pd-1",
+   "kind": "custom_entry",
+   "parent_id": "cs-pd",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Reviewer for the Journal of Embedded Vision Systems",
+    "start": "2024",
+    "is_current": true
+   }
+  },
+  {
+   "id": "tgt-defence",
+   "kind": "career_target",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Defence R&D — avionics and sensors",
+    "preset_id": "defence_electronics_avionics",
+    "org_profile_id": "drdo",
+    "organisation": "Defence R&D laboratories",
+    "sector": "Defence",
+    "keywords": [
+     "avionics",
+     "embedded systems",
+     "sensors",
+     "UAV",
+     "edge AI",
+     "test and evaluation"
+    ],
+    "preferred_mode": "defence_technical",
+    "preferred_template": "defence_technical",
+    "summary_focus": "defence_technology"
+   }
+  },
+  {
+   "id": "vac-edrl",
+   "kind": "vacancy",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "title": "Scientist 'E' — Avionics and Sensor Systems (deputation)",
+    "employer": "Example Defence Research Laboratory",
+    "reference": "EDRL/RECT/2026/07",
+    "recruitment_mode": "deputation",
+    "pay_level": "Level 12",
+    "deadline": "2026-11-30",
+    "target_id": "tgt-defence",
+    "raw_text": "EXAMPLE DEFENCE RESEARCH LABORATORY (FICTIONAL)\nAdvertisement No. EDRL/RECT/2026/07\nFilling up of one post of Scientist 'E' (Avionics and Sensor Systems) on deputation basis.\n\nEssential Qualifications:\n1. Master's degree in Electronics / Electronics and Communication / Avionics Engineering from a recognised university.\n2. At least 10 years of experience in design, integration or testing of avionics, embedded or sensor systems.\n\nDesirable:\n1. Ph.D. in Electronics, Electrical or Computer Engineering.\n2. Experience in machine learning, computer vision or edge AI deployment for airborne or UAV platforms.\n3. Publications in peer-reviewed journals.\n4. Experience of leading technical teams and project coordination.\n\nDuties:\nDesign and evaluation of airborne sensor and avionics subsystems; development of embedded processing for UAV payloads; preparation of technical specifications and test plans; guidance of junior scientists.\n\nEligibility:\nOfficers of the Central Government holding analogous posts on a regular basis, or with 5 years of regular service in Level 11. Age not exceeding 56 years on the closing date.\n\nDocuments to be enclosed:\nBio-data in the prescribed proforma, copies of APAR for the last five years, vigilance clearance, integrity certificate and no-objection certificate from the parent department.\n",
+    "requirements": []
+   }
+  },
+  {
+   "id": "var-defence",
+   "kind": "variant",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "EDRL Scientist E — avionics (two pages)",
+    "mode": "defence_technical",
+    "template_id": "defence_technical",
+    "target_id": "tgt-defence",
+    "vacancy_id": "vac-edrl",
+    "length": "two_pages",
+    "max_pages": 2,
+    "page_size": "A4",
+    "exclude_ids": [
+     "prj-glide"
+    ]
+   }
+  },
+  {
+   "id": "app-edrl",
+   "kind": "application",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "organisation": "Example Defence Research Laboratory",
+    "vacancy_title": "Scientist 'E' — Avionics and Sensor Systems",
+    "vacancy_id": "vac-edrl",
+    "reference_number": "EDRL/RECT/2026/07",
+    "deadline": "2026-11-30",
+    "status": "preparing",
+    "variant_id": "var-defence",
+    "eligibility_notes": "Check analogous-post condition and age limit with the establishment section before applying."
+   }
+  },
+  {
+   "id": "pos-mel",
+   "kind": "position",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "designation": "Graduate Engineer",
+    "organisation": "Meridian Electronics Limited",
+    "division": "Test Systems Group",
+    "employment_type": "permanent",
+    "sector": "private",
+    "location": "Bengaluru",
+    "start": "2002-08",
+    "end": "2004-05",
+    "summary": "Built automated test equipment for avionics line-replaceable units.",
+    "short_name": "Meridian",
+    "highlight": "Automated test equipment for avionics units",
+    "tools": [
+     "LabVIEW",
+     "C"
+    ]
+   }
+  },
+  {
+   "id": "bul-mel-1",
+   "kind": "bullet",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "text": "Developed LabVIEW test sequences for power-supply and interface boards of avionics units.",
+    "bullet_type": "responsibility",
+    "involvement": "individual"
+   },
+   "parent_id": "pos-mel"
+  },
+  {
+   "id": "pub-6",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "title": "A low-cost GNSS receiver chain for radiosonde tracking",
+    "authors": "A. Sharma, P. Menon and R. Iyer",
+    "venue": "Example Journal of Atmospheric Instrumentation",
+    "pub_type": "journal",
+    "status": "published",
+    "date": "2021-06",
+    "volume": "8",
+    "issue": "2",
+    "pages": "101-112",
+    "doi": "10.5555/ejai.2021.0042"
+   }
+  },
+  {
+   "id": "pub-7",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "title": "Edge telemetry dashboards for upper-air ground stations",
+    "authors": "A. Sharma and S. Verma",
+    "venue": "Proceedings of the Example Conference on Instrumentation",
+    "pub_type": "conference",
+    "status": "published",
+    "date": "2022-02",
+    "pages": "Paper 17"
+   }
+  },
+  {
+   "id": "pub-8",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "title": "Knowledge-distilled lightweight networks for drone image super-resolution",
+    "authors": "A. Sharma and R. Iyer",
+    "venue": "Example Transactions on Aerial Imaging",
+    "pub_type": "journal",
+    "status": "accepted",
+    "date": "2025-08"
+   }
+  },
+  {
+   "id": "pub-9",
+   "kind": "publication",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "title": "Benchmarking embedded GPUs for real-time image enhancement",
+    "authors": "A. Sharma, K. Rao and R. Iyer",
+    "venue": "Example Symposium on Applied AI",
+    "pub_type": "conference",
+    "status": "published",
+    "date": "2025-01",
+    "pages": "88-93"
+   }
+  },
+  {
+   "id": "exp-avionics",
+   "kind": "expertise",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "area": "R&D in avionics systems",
+    "description": "Twelve years of mission-computer and sensor integration, interface testing (MIL-STD-1553, ARINC 429) and environmental qualification for airborne platforms at Halcyon Avionics Design Bureau.",
+    "years_experience": 12,
+    "keywords": [
+     "avionics",
+     "MIL-STD-1553",
+     "qualification testing"
+    ],
+    "related_position_ids": [
+     "pos-hadb"
+    ]
+   }
+  },
+  {
+   "id": "exp-upperair",
+   "kind": "expertise",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "area": "Upper-air instrumentation",
+    "description": "Planning, testing and maintenance of radiosonde ground systems and upper-air instruments; division workshop management; technical evaluation of procurements.",
+    "years_experience": 10,
+    "keywords": [
+     "radiosonde",
+     "instrumentation",
+     "calibration"
+    ],
+    "related_position_ids": [
+     "pos-kail"
+    ]
+   }
+  },
+  {
+   "id": "exp-edgeai",
+   "kind": "expertise",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "area": "Edge AI for aerial imagery",
+    "description": "Research on super-resolution and model compression (pruning, knowledge distillation) for real-time deployment on NVIDIA Jetson devices; publications and a deployed telemetry prototype.",
+    "years_experience": 5,
+    "keywords": [
+     "edge AI",
+     "super-resolution",
+     "TensorRT",
+     "Jetson"
+    ]
+   }
+  },
+  {
+   "id": "exp-iot",
+   "kind": "expertise",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "area": "IoT monitoring systems",
+    "description": "Design of MQTT, Node-RED, InfluxDB and Grafana pipelines for monitoring ground-station equipment.",
+    "years_experience": 4,
+    "keywords": [
+     "IoT",
+     "MQTT",
+     "Grafana"
+    ]
+   }
+  },
+  {
+   "id": "act-grant",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "activity_type": "research_grant",
+    "title": "Seed grant: edge-AI enhancement of aerial imagery",
+    "role": "Principal investigator",
+    "involvement": "leading",
+    "organisation": "Example Science Foundation (fictional)",
+    "start": "2023-04",
+    "end": "2025-03",
+    "status": "Completed",
+    "description": "Two-year seed project on lightweight super-resolution networks for embedded GPUs.",
+    "identifier": "ESF/SEED/2023/017"
+   }
+  },
+  {
+   "id": "act-review",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "public",
+   "data": {
+    "activity_type": "peer_review",
+    "title": "Reviewer, Example Journal of Atmospheric Instrumentation",
+    "organisation": "Example Journal of Atmospheric Instrumentation",
+    "start": "2022",
+    "is_current": true,
+    "involvement": "individual"
+   }
+  },
+  {
+   "id": "act-cosup",
+   "kind": "activity",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "activity_type": "supervision",
+    "title": "Co-supervisor, two M.Tech. dissertations in embedded vision",
+    "organisation": "Example Institute of Technology (fictional)",
+    "start": "2024",
+    "end": "2025",
+    "involvement": "advising"
+   }
+  },
+  {
+   "id": "ref-iyer",
+   "kind": "reference",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Dr. R. Iyer (fictional)",
+    "designation": "Professor of Electronics",
+    "organisation": "Example Institute of Technology",
+    "relationship": "Research collaborator and co-author",
+    "email": "r.iyer@example.org",
+    "phone": "+91 00000 54321",
+    "permission_confirmed": true
+   }
+  },
+  {
+   "id": "ref-rao",
+   "kind": "reference",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Prof. K. Rao (fictional)",
+    "designation": "Head, Avionics Group",
+    "organisation": "Halcyon Avionics Design Bureau",
+    "relationship": "Former group head",
+    "email": "k.rao@example.org",
+    "permission_confirmed": false
+   }
+  },
+  {
+   "id": "var-graphical",
+   "kind": "variant",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Graphical career profile (sample)",
+    "mode": "graphical_profile",
+    "template_id": "graphical_profile",
+    "target_id": "tgt-defence",
+    "length": "two_pages",
+    "page_size": "A4",
+    "exclude_ids": [
+     "prj-glide"
+    ]
+   }
+  },
+  {
+   "id": "var-research",
+   "kind": "variant",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "name": "Research portfolio (sample)",
+    "mode": "research_portfolio",
+    "template_id": "research_showcase",
+    "length": "full",
+    "page_size": "A4",
+    "publication_scope": "all",
+    "exclude_ids": [
+     "prj-glide"
+    ]
+   }
+  }
+ ]
+}

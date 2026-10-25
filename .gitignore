@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Build output
+build/
+dist/
+*.spec.bak
+
+# Local data never belongs in the repository
+*.db
+*.sqlite
+*.risbackup
+*.risbackup.enc
+*.log
+*.key
+*.pem
+personal/
+private/
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

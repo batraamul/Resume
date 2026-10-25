@@ -1,0 +1,83 @@
+{
+  "id": "aiml_specialist",
+  "name": "AI/ML Specialist",
+  "version": "1.0.0",
+  "family": "two-column sidebar",
+  "description": "Technical specialists: tinted left sidebar for contact, domains, skills and education; main column for summary, projects and experience with accent-bar headings.",
+  "recommended_modes": [
+    "technical_specialist",
+    "general_professional"
+  ],
+  "page": {
+    "margin_top_mm": 13,
+    "margin_bottom_mm": 13,
+    "margin_left_mm": 13,
+    "margin_right_mm": 13
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 10,
+    "heading_size": 11,
+    "name_size": 24,
+    "headline_size": 11.5,
+    "small_size": 8.8,
+    "line_spacing": 1.06
+  },
+  "colours": {
+    "text": "#1D232A",
+    "muted": "#53606C",
+    "accent": "#2D3E50",
+    "rule": "#2D3E50",
+    "fill": "#E9EEF3",
+    "banner_fill": "#2D3E50",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#EEF2F6",
+    "link": "#2D3E50"
+  },
+  "header": {
+    "style": "sidebar",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "contact_style": "stacked",
+    "separator": "  |  ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "left_bar",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 9,
+    "space_after": 4,
+    "rule_weight": 3
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "bullets",
+    "competencies_style": "bullets"
+  },
+  "columns": {
+    "enabled": true,
+    "side": "left",
+    "width_frac": 0.31,
+    "gap_mm": 6,
+    "sidebar_sections": [
+      "competencies",
+      "skills",
+      "education",
+      "training",
+      "languages"
+    ]
+  },
+  "footer": {
+    "page_numbers": "x",
+    "show_name": false
+  }
+}

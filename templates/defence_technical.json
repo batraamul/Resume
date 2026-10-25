@@ -1,0 +1,69 @@
+{
+  "id": "defence_technical",
+  "name": "Defence Technical",
+  "version": "1.0.0",
+  "family": "shaded-bar organisation-first",
+  "description": "Defence and technical-intelligence applications: shaded section bars, organisation-first entries, technical domains grid and skills matrix.",
+  "recommended_modes": [
+    "defence_technical"
+  ],
+  "page": {
+    "margin_top_mm": 14,
+    "margin_bottom_mm": 15,
+    "margin_left_mm": 16,
+    "margin_right_mm": 16
+  },
+  "fonts": {
+    "body": "Arial",
+    "heading": "Arial",
+    "name": "Arial",
+    "body_size": 9.8,
+    "heading_size": 10.5,
+    "name_size": 19,
+    "headline_size": 10.5,
+    "small_size": 8.6,
+    "line_spacing": 1.1
+  },
+  "colours": {
+    "text": "#1B1F24",
+    "muted": "#4B5560",
+    "accent": "#1E2A38",
+    "rule": "#1E2A38",
+    "fill": "#E3E8EE",
+    "banner_fill": "#1E2A38",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F0F3F6",
+    "link": "#1E2A38"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "upper",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "separator": "  |  ",
+    "rule": "thick"
+  },
+  "heading": {
+    "style": "shaded_bar",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 9,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "org_first",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "table",
+    "competencies_style": "columns",
+    "columns": 3
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "_comment": "Plain-engineering explanations for domain terms. Used only when you ask the rewriting assistant to translate a statement, and only adopted after your approval. Explanations must describe the term generally — never add facts about your own work. Add or override entries in Settings.",
+  "terms": {
+    "radiosonde": "radiosonde (balloon-borne atmospheric sensor and telemetry package)",
+    "radiosondes": "radiosondes (balloon-borne atmospheric sensor and telemetry packages)",
+    "upper-air": "upper-air (high-altitude atmospheric)",
+    "upper air": "upper air (high-altitude atmospheric)",
+    "ground-receiving system": "ground-receiving system (telemetry receiver and decoder)",
+    "ground receiving system": "ground receiving system (telemetry receiver and decoder)",
+    "pilot balloon": "pilot balloon (optically tracked wind-measurement balloon)",
+    "automatic weather station": "automatic weather station (networked environmental sensor node)",
+    "doppler weather radar": "Doppler weather radar (pulse-Doppler radar for precipitation and wind measurement)",
+    "wind profiler": "wind profiler (radar for vertical wind measurement)",
+    "ceilometer": "ceilometer (laser cloud-height sensor)",
+    "nowcasting": "nowcasting (short-range prediction from real-time observations)",
+    "sounding": "sounding (vertical atmospheric profiling)",
+    "observatory": "observatory (field observation station)",
+    "hydrogen generator": "hydrogen generator (gas generation plant for balloon inflation)",
+    "dropsonde": "dropsonde (air-launched atmospheric sensor and telemetry package)",
+    "visibility": "visibility (optical range measurement)"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "id": "engineering_professional",
+  "name": "Engineering Professional",
+  "version": "1.0.0",
+  "family": "split header with skills matrix",
+  "description": "Engineering roles: split header (name left, contacts right), full-width coloured rules under headings and a category-by-skill matrix.",
+  "recommended_modes": [
+    "general_professional",
+    "technical_specialist"
+  ],
+  "page": {
+    "margin_top_mm": 15,
+    "margin_bottom_mm": 15,
+    "margin_left_mm": 17,
+    "margin_right_mm": 17
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 10.5,
+    "heading_size": 12,
+    "name_size": 22,
+    "headline_size": 11.5,
+    "small_size": 9,
+    "line_spacing": 1.06
+  },
+  "colours": {
+    "text": "#1C1C1C",
+    "muted": "#4D5A60",
+    "accent": "#0F4C5C",
+    "rule": "#0F4C5C",
+    "fill": "#E8F0F2",
+    "banner_fill": "#0F4C5C",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#EFF4F5",
+    "link": "#0F4C5C"
+  },
+  "header": {
+    "style": "split",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "contact_style": "stacked",
+    "separator": "  |  ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "rule_below",
+    "case": "title",
+    "colour": "accent",
+    "letter_spacing": 0,
+    "space_before": 10,
+    "space_after": 4,
+    "rule_weight": 1.0
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "table",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

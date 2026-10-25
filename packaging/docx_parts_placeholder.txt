@@ -1,0 +1,1 @@
+Placeholder so python-docx can resolve docx/parts/../templates inside the frozen app.

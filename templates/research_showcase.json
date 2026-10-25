@@ -1,0 +1,88 @@
+{
+  "id": "research_showcase",
+  "name": "Research Showcase",
+  "version": "1.0.0",
+  "family": "single column, metric tiles, charts, project cards",
+  "description": "Research results first: verified metric tiles, a publications-by-year chart, numbered publications with exact status, research projects as cards with challenge, approach and outcome, and skill bars.",
+  "recommended_modes": [
+    "research_portfolio",
+    "scientific_research",
+    "academic_cv"
+  ],
+  "summary_style": "plain",
+  "page": {
+    "margin_top_mm": 14,
+    "margin_bottom_mm": 15,
+    "margin_left_mm": 17,
+    "margin_right_mm": 17
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10,
+    "heading_size": 12,
+    "name_size": 23,
+    "headline_size": 11,
+    "small_size": 8.8,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1B2030",
+    "muted": "#4E566B",
+    "accent": "#1F3A68",
+    "rule": "#1F3A68",
+    "fill": "#EEF1F7",
+    "banner_fill": "#1F3A68",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#1F3A68",
+    "tile_fill": "#EDF1F8",
+    "bar_track": "#D3DAE6"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "contact_style": "inline",
+    "contact_icons": true,
+    "separator": "    ",
+    "rule": "thick"
+  },
+  "heading": {
+    "style": "rule_below",
+    "case": "small_caps",
+    "colour": "accent",
+    "letter_spacing": 0.6,
+    "space_before": 11,
+    "space_after": 4,
+    "rule_weight": 0.6
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true,
+    "bullet_glyph": "▸",
+    "project_style": "cards"
+  },
+  "skills": {
+    "style": "bars",
+    "competencies_style": "inline"
+  },
+  "publications": {
+    "style": "numbered",
+    "highlight_name": true
+  },
+  "graphics": {
+    "enabled": true,
+    "palette": ["#1F3A68", "#9C2A3E", "#C58B2A", "#2E7D6B", "#5B4A8B", "#7A8597"],
+    "chart_height_mm": 46,
+    "tiles_per_row": 4,
+    "bar_width_mm": 32
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

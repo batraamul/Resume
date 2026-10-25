@@ -1,0 +1,76 @@
+{
+  "id": "ats_minimal",
+  "name": "ATS Minimal",
+  "version": "1.0.0",
+  "family": "single-column plain",
+  "description": "Default for online portals: single column, conventional headings, no tables, images, columns or text boxes. Dates aligned with tab stops.",
+  "ats_safe": true,
+  "tables_allowed": false,
+  "recommended_modes": [
+    "ats_plain",
+    "general_professional"
+  ],
+  "page": {
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 18,
+    "margin_right_mm": 18
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 10.5,
+    "heading_size": 11.5,
+    "name_size": 18,
+    "headline_size": 11,
+    "small_size": 9.5,
+    "line_spacing": 1.06
+  },
+  "colours": {
+    "text": "#000000",
+    "muted": "#333333",
+    "accent": "#000000",
+    "rule": "#000000",
+    "fill": "#FFFFFF",
+    "banner_fill": "#000000",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#FFFFFF",
+    "link": "#000000"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "separator": " | ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "plain_bold",
+    "case": "upper",
+    "colour": "text",
+    "letter_spacing": 0,
+    "space_before": 10,
+    "space_after": 3
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": false,
+    "bullet_glyph": "•"
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "publications": {
+    "style": "numbered",
+    "highlight_name": false
+  },
+  "footer": {
+    "page_numbers": "none",
+    "show_name": false
+  }
+}

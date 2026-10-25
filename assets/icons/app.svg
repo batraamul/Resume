@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Resume Intelligence Studio</title>
+  <!-- Original design: a bound diary with a ribbon bookmark and ruled page lines. -->
+  <rect x="40" y="24" width="176" height="208" rx="18" fill="#701C35"/>
+  <rect x="40" y="24" width="26" height="208" rx="10" fill="#561429"/>
+  <rect x="78" y="44" width="122" height="168" rx="8" fill="#FFF3DF"/>
+  <g stroke="#C9AE85" stroke-width="5" stroke-linecap="round">
+    <line x1="96" y1="84" x2="182" y2="84"/>
+    <line x1="96" y1="108" x2="182" y2="108"/>
+    <line x1="96" y1="132" x2="166" y2="132"/>
+    <line x1="96" y1="156" x2="174" y2="156"/>
+    <line x1="96" y1="180" x2="150" y2="180"/>
+  </g>
+  <path d="M168 24 v72 l14 -12 l14 12 v-72 z" fill="#C8963E"/>
+  <circle cx="110" cy="64" r="8" fill="#192B4B"/>
+</svg>

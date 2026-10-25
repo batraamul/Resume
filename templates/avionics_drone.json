@@ -1,0 +1,70 @@
+{
+  "id": "avionics_drone",
+  "name": "Avionics & Drone Systems",
+  "version": "1.0.0",
+  "family": "banner header stacked entries",
+  "description": "Aerospace and UAV roles: full-width navy banner header, letter-spaced headings with rules and stacked entries (title, then organisation, location and dates).",
+  "recommended_modes": [
+    "defence_technical",
+    "technical_specialist"
+  ],
+  "page": {
+    "margin_top_mm": 13,
+    "margin_bottom_mm": 15,
+    "margin_left_mm": 16,
+    "margin_right_mm": 16
+  },
+  "fonts": {
+    "body": "Arial",
+    "heading": "Arial",
+    "name": "Arial",
+    "body_size": 9.8,
+    "heading_size": 10.5,
+    "name_size": 21,
+    "headline_size": 11,
+    "small_size": 8.6,
+    "line_spacing": 1.1
+  },
+  "colours": {
+    "text": "#1A1F26",
+    "muted": "#4F5B66",
+    "accent": "#12355B",
+    "rule": "#12355B",
+    "fill": "#E7EDF4",
+    "banner_fill": "#12355B",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#EEF2F7",
+    "link": "#12355B"
+  },
+  "header": {
+    "style": "banner",
+    "name_case": "upper",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "separator": "  |  ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "caps_rule",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 1.2,
+    "space_before": 10,
+    "space_after": 4,
+    "rule_weight": 0.75
+  },
+  "entry": {
+    "style": "stacked",
+    "date_style": "mon_year",
+    "subtitle_italic": false
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

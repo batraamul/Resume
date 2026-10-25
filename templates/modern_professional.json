@@ -1,0 +1,70 @@
+{
+  "id": "modern_professional",
+  "name": "Modern Professional",
+  "version": "1.0.0",
+  "family": "margin-label",
+  "description": "Contemporary layout: oversized name, section labels in a left margin column beside the content, generous white space.",
+  "recommended_modes": [
+    "general_professional",
+    "technical_specialist"
+  ],
+  "page": {
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 16,
+    "margin_right_mm": 16
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 10.2,
+    "heading_size": 9.5,
+    "name_size": 26,
+    "headline_size": 12,
+    "small_size": 8.8,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#20262D",
+    "muted": "#5F6B76",
+    "accent": "#3C5A78",
+    "rule": "#C9D2DB",
+    "fill": "#EEF2F6",
+    "banner_fill": "#3C5A78",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F5F8",
+    "link": "#3C5A78"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "separator": "  ·  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "margin_label",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 1.0,
+    "space_before": 9,
+    "space_after": 2,
+    "label_width_mm": 33
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": false
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

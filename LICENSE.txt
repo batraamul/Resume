@@ -1,0 +1,16 @@
+Resume Intelligence Studio — licence for personal use
+
+Copyright (c) 2026 the Resume Intelligence Studio contributors.
+
+Permission is granted to install, run and modify this software for your own personal and professional
+use. Redistribution of modified or unmodified copies requires the permission of the copyright holders.
+The software is provided "as is", without warranty of any kind. You are responsible for what you store
+in it and for what you disclose in documents you produce with it.
+
+Third-party components keep their own licences:
+
+* Carlito, Caladea and Liberation fonts — SIL Open Font License 1.1 (assets/fonts/LICENSES).
+* DejaVu fonts — Bitstream Vera / DejaVu licence (assets/fonts/LICENSES).
+* PySide6 / Qt — LGPL v3 (dynamically linked; you may replace the Qt libraries in a built application).
+* python-docx (MIT), ReportLab (BSD), pypdf (BSD), Pydantic (MIT), cryptography (Apache 2.0 / BSD),
+  keyring (MIT), Pillow (MIT-CMU), lxml (BSD); optional google-auth libraries (Apache 2.0).

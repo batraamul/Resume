@@ -1,0 +1,73 @@
+{
+  "id": "diary_edition",
+  "name": "Custom Diary Edition",
+  "version": "1.0.0",
+  "family": "diary signature",
+  "description": "The studio's own signature: deep-maroon small-capital headings with hairline rules, ink-navy text and an ivory summary panel.",
+  "recommended_modes": [
+    "general_professional",
+    "scientific_research",
+    "defence_technical"
+  ],
+  "summary_style": "boxed",
+  "page": {
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 18,
+    "margin_right_mm": 18
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10.5,
+    "heading_size": 12,
+    "name_size": 24,
+    "headline_size": 11.5,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#192B4B",
+    "muted": "#4F5D78",
+    "accent": "#701C35",
+    "rule": "#701C35",
+    "fill": "#FFF3DF",
+    "banner_fill": "#701C35",
+    "banner_text": "#FFFAF0",
+    "sidebar_fill": "#FFF3DF",
+    "link": "#701C35"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "small_caps",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "separator": "  ·  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "rule_below",
+    "case": "small_caps",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 11,
+    "space_after": 4,
+    "rule_weight": 0.5
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true,
+    "bullet_glyph": "–"
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

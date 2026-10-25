@@ -1,0 +1,904 @@
+# Requirements register — source of truth.
+# docs/REQUIREMENTS.md is generated from this file plus pytest results by
+#   python scripts/trace_requirements.py
+# Tests declare the requirement they provide evidence for with @pytest.mark.req("ID").
+# Priority: P0 essential to a safe, usable first release; P1 important; P2 enhancement; P3 optional future work.
+
+# ---------------------------------------------------------------- Master profile
+[[req]]
+id = "PRF-01"
+priority = "P0"
+area = "Master profile"
+text = "One structured master profile; facts stored once and reused by resumes, cover letters and applications."
+modules = ["ris/storage/repository.py", "ris/services/profile.py"]
+
+[[req]]
+id = "PRF-02"
+priority = "P0"
+area = "Master profile"
+text = "Personal and contact fields: full and preferred name, title, city, country, telephone, email, LinkedIn, GitHub, portfolio, website, ORCID, other research profiles."
+modules = ["ris/domain/models.py"]
+
+[[req]]
+id = "PRF-03"
+priority = "P0"
+area = "Master profile"
+text = "Home address, date of birth, identity numbers and official particulars are excluded from resumes by default."
+modules = ["ris/composition/composer.py"]
+
+[[req]]
+id = "PRF-04"
+priority = "P1"
+area = "Master profile"
+text = "Contact-information visibility can differ per resume variant."
+modules = ["ris/composition/composer.py", "ris/ui/pages/studio.py"]
+
+[[req]]
+id = "PRF-05"
+priority = "P1"
+area = "Master profile"
+text = "Multiple professional summaries with focus tags (scientific leadership, defence technology, AI/ML, etc.)."
+modules = ["ris/domain/models.py"]
+
+[[req]]
+id = "PRF-06"
+priority = "P0"
+area = "Master profile"
+text = "Employment history: organisation, division, designation, type, dates, current status, location, responsibilities, projects, outcomes, tools, evidence, approved external wording."
+modules = ["ris/domain/models.py"]
+
+[[req]]
+id = "PRF-07"
+priority = "P0"
+area = "Master profile"
+text = "Concurrent responsibilities (additional charges) are nested under the parent position and never rendered as separate full-time positions."
+modules = ["ris/composition/composer.py"]
+
+[[req]]
+id = "PRF-08"
+priority = "P0"
+area = "Master profile"
+text = "Education and qualifications distinguish completed, ongoing and planned status in data and in documents."
+modules = ["ris/domain/models.py", "ris/composition/composer.py"]
+
+[[req]]
+id = "PRF-09"
+priority = "P0"
+area = "Master profile"
+text = "Publications support draft, submitted, under review, accepted, published, withdrawn; a non-published item is never described as published or accepted."
+modules = ["ris/composition/composer.py", "ris/intelligence/claims.py"]
+
+[[req]]
+id = "PRF-10"
+priority = "P0"
+area = "Master profile"
+text = "Projects store problem, role, approach, architecture, hardware, software, algorithms, dataset, results, limitations, individual and team contribution, evidence, dates, classification and approved description."
+modules = ["ris/domain/models.py"]
+
+[[req]]
+id = "PRF-11"
+priority = "P1"
+area = "Master profile"
+text = "Skills have category, user-set proficiency, last used, experience duration, associated projects and evidence; expertise is never inferred automatically."
+modules = ["ris/domain/models.py", "ris/intelligence/matching.py"]
+
+[[req]]
+id = "PRF-12"
+priority = "P1"
+area = "Master profile"
+text = "Leadership and additional activities record involvement as leading, coordinating, participating, advising or supporting."
+modules = ["ris/domain/models.py", "ris/intelligence/rewriting.py"]
+
+[[req]]
+id = "PRF-13"
+priority = "P1"
+area = "Master profile"
+text = "Custom fields on every record and user-defined custom sections, without modifying source code."
+modules = ["ris/domain/models.py", "ris/composition/composer.py"]
+
+[[req]]
+id = "PRF-14"
+priority = "P0"
+area = "Master profile"
+text = "The profile is searchable (full-text)."
+modules = ["ris/storage/repository.py"]
+
+[[req]]
+id = "PRF-15"
+priority = "P0"
+area = "Master profile"
+text = "Every fact has a verification status: awaiting confirmation, confirmed, confirmed with evidence."
+modules = ["ris/domain/enums.py", "ris/services/profile.py"]
+
+[[req]]
+id = "PRF-16"
+priority = "P1"
+area = "Master profile"
+text = "Profile completeness indicators are computed from real data."
+modules = ["ris/services/completeness.py"]
+
+[[req]]
+id = "PRF-17"
+priority = "P1"
+area = "Master profile"
+text = "Duplicate detection on manual entry and import."
+modules = ["ris/services/duplicates.py"]
+
+[[req]]
+id = "PRF-18"
+priority = "P0"
+area = "Master profile"
+text = "Chronology validation: date order, current roles, overlapping primary positions."
+modules = ["ris/services/chronology.py"]
+
+[[req]]
+id = "PRF-19"
+priority = "P0"
+area = "Master profile"
+text = "Preliminary profile supplied as a reviewable import file; every item awaits confirmation; it is not part of the release archive."
+modules = ["scripts/make_release.py"]
+
+# ---------------------------------------------------------------- Import / export
+[[req]]
+id = "IMP-01"
+priority = "P1"
+area = "Import/export"
+text = "JSON import with preview, field mapping, duplicate detection; imported facts remain unconfirmed."
+modules = ["ris/services/importers.py"]
+
+[[req]]
+id = "IMP-02"
+priority = "P1"
+area = "Import/export"
+text = "CSV import with column mapping."
+modules = ["ris/services/importers.py"]
+
+[[req]]
+id = "IMP-03"
+priority = "P2"
+area = "Import/export"
+text = "Text, DOCX and PDF text extraction produce reviewable candidate records."
+modules = ["ris/services/importers.py"]
+
+[[req]]
+id = "IMP-04"
+priority = "P0"
+area = "Import/export"
+text = "Portable JSON export of the profile with a schema version."
+modules = ["ris/services/exporters.py"]
+
+[[req]]
+id = "IMP-05"
+priority = "P1"
+area = "Import/export"
+text = "Malformed or hostile files are rejected safely (size limits, archive path traversal, parse errors)."
+modules = ["ris/services/importers.py", "ris/backup/backup.py"]
+
+# ---------------------------------------------------------------- Provenance and claims
+[[req]]
+id = "PRV-01"
+priority = "P0"
+area = "Provenance"
+text = "Every substantive generated bullet traces to one or more source record identifiers."
+modules = ["ris/composition/ir.py", "ris/composition/composer.py"]
+
+[[req]]
+id = "PRV-02"
+priority = "P0"
+area = "Provenance"
+text = "Claims store source ids, original, generated and approved wording, material facts, status, confidentiality, approval date and assumptions."
+modules = ["ris/domain/models.py", "ris/intelligence/claims.py"]
+
+[[req]]
+id = "PRV-03"
+priority = "P0"
+area = "Provenance"
+text = "Original and rewritten text are shown side by side."
+modules = ["ris/ui/widgets/claim_dialog.py"]
+
+[[req]]
+id = "PRV-04"
+priority = "P0"
+area = "Provenance"
+text = "Material changes that introduce new claims require approval; pending or rejected rewrites are never exported."
+modules = ["ris/intelligence/claims.py", "ris/composition/composer.py"]
+
+[[req]]
+id = "PRV-05"
+priority = "P0"
+area = "Provenance"
+text = "Invented metrics, unsupported outcomes, unverified degrees, exaggerated expertise or involvement, and chronology errors are flagged."
+modules = ["ris/intelligence/claims.py"]
+
+[[req]]
+id = "PRV-06"
+priority = "P0"
+area = "Provenance"
+text = "Generated prose is never written back to the master profile automatically."
+modules = ["ris/intelligence/claims.py"]
+
+# ---------------------------------------------------------------- Vacancy analysis
+[[req]]
+id = "VAC-01"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Vacancy entry: title, employer, URL, reference, description, essential and desirable qualifications, skills, experience, deadline, notes."
+modules = ["ris/domain/models.py", "ris/ui/pages/opportunities.py"]
+
+[[req]]
+id = "VAC-02"
+priority = "P1"
+area = "Vacancy analysis"
+text = "Vacancy import from pasted text and TXT/DOCX/PDF files; no automated web access."
+modules = ["ris/services/importers.py"]
+
+[[req]]
+id = "VAC-03"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Requirements extracted into eight categories (mandatory, desirable, technical, research, leadership, experience, documentation, eligibility)."
+modules = ["ris/intelligence/vacancy.py"]
+
+[[req]]
+id = "VAC-04"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Each requirement shows: verified evidence, awaiting confirmation, partial, not found, not applicable, requires official verification."
+modules = ["ris/intelligence/matching.py"]
+
+[[req]]
+id = "VAC-05"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Document quality, evidence-based relevance and formal eligibility are assessed separately."
+modules = ["ris/intelligence/scoring.py"]
+
+[[req]]
+id = "VAC-06"
+priority = "P0"
+area = "Vacancy analysis"
+text = "A missing mandatory qualification is never overridden by a high relevance score."
+modules = ["ris/intelligence/scoring.py"]
+
+[[req]]
+id = "VAC-07"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Transparent scoring with default weights 35/25/15/10/10/5, custom weights normalised, explanation per component."
+modules = ["ris/intelligence/scoring.py"]
+
+[[req]]
+id = "VAC-08"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Results are deterministic for identical profile, vacancy and settings."
+modules = ["ris/intelligence/scoring.py"]
+
+[[req]]
+id = "VAC-09"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Scores are never presented as a probability of recruitment, selection, appointment or clearance."
+modules = ["ris/intelligence/scoring.py", "ris/strings.py"]
+
+[[req]]
+id = "VAC-10"
+priority = "P1"
+area = "Vacancy analysis"
+text = "Achievement rewriting shows original, revision, source facts, assumptions and missing metrics; approval required."
+modules = ["ris/intelligence/rewriting.py"]
+
+[[req]]
+id = "VAC-11"
+priority = "P1"
+area = "Vacancy analysis"
+text = "Sections are selected and ordered for the vacancy, target, mode and length; no universal fixed order."
+modules = ["ris/composition/ordering.py"]
+
+[[req]]
+id = "VAC-12"
+priority = "P1"
+area = "Vacancy analysis"
+text = "Career-readiness analysis separates missing profile data from genuine qualification gaps."
+modules = ["ris/intelligence/readiness.py"]
+
+[[req]]
+id = "VAC-13"
+priority = "P0"
+area = "Vacancy analysis"
+text = "Imported vacancy text is untrusted data and cannot change settings or trigger actions."
+modules = ["ris/intelligence/vacancy.py", "ris/ai/payload.py"]
+
+# ---------------------------------------------------------------- Defence & Intelligence mode
+[[req]]
+id = "DEF-01"
+priority = "P0"
+area = "Defence & Intelligence"
+text = "Ten configurable career presets (defence electronics/avionics ... intelligence technology)."
+modules = ["config/career_presets.json", "ris/intelligence/presets.py"]
+
+[[req]]
+id = "DEF-02"
+priority = "P1"
+area = "Defence & Intelligence"
+text = "Organisation profiles (DRDO, NTRO, ARC and others) usable as targets without assumptions about internal recruitment."
+modules = ["config/career_presets.json"]
+
+[[req]]
+id = "DEF-03"
+priority = "P1"
+area = "Defence & Intelligence"
+text = "User-editable glossary translates meteorological terms into engineering language, applied only with approval."
+modules = ["config/glossary.json", "ris/intelligence/rewriting.py"]
+
+[[req]]
+id = "DEF-04"
+priority = "P0"
+area = "Defence & Intelligence"
+text = "Four classification levels; uncertain information defaults to Requires review."
+modules = ["ris/domain/enums.py", "ris/services/profile.py"]
+
+[[req]]
+id = "DEF-05"
+priority = "P0"
+area = "Defence & Intelligence"
+text = "Confidential records excluded from exports, previews, logs, AI requests and sync/cloud data."
+modules = ["ris/composition/composer.py", "ris/ai/payload.py", "ris/sync/engine.py"]
+
+[[req]]
+id = "DEF-06"
+priority = "P0"
+area = "Defence & Intelligence"
+text = "Pre-export disclosure review with warnings for sensitive content and unnecessary identifiers."
+modules = ["ris/intelligence/disclosure.py"]
+
+[[req]]
+id = "DEF-07"
+priority = "P0"
+area = "Defence & Intelligence"
+text = "The user is told they are responsible for compliant storage and disclosure."
+modules = ["ris/strings.py", "docs/SECURITY_PRIVACY.md"]
+
+# ---------------------------------------------------------------- Templates
+[[req]]
+id = "TPL-01"
+priority = "P0"
+area = "Templates"
+text = "Twelve templates that are distinct layout systems, not colour variants."
+modules = ["templates/*.json", "ris/rendering/layout.py"]
+
+[[req]]
+id = "TPL-02"
+priority = "P0"
+area = "Templates"
+text = "The default ATS template is single-column with conventional headings and no tables, images or text boxes."
+modules = ["templates/ats_minimal.json", "ris/intelligence/ats.py"]
+
+[[req]]
+id = "TPL-03"
+priority = "P1"
+area = "Templates"
+text = "Margins, typography, headings, spacing, bullets, headers/footers, page numbers, hyperlinks, accent colour, optional photo, section order are configurable."
+modules = ["ris/rendering/specs.py"]
+
+[[req]]
+id = "TPL-04"
+priority = "P1"
+area = "Templates"
+text = "Templates can be created or modified through JSON specifications and a user template folder."
+modules = ["ris/rendering/specs.py"]
+
+[[req]]
+id = "TPL-05"
+priority = "P1"
+area = "Templates"
+text = "Templates are versioned; the version is recorded in saved resumes; layout regression tests exist."
+modules = ["ris/rendering/specs.py", "tests/documents"]
+
+[[req]]
+id = "TPL-06"
+priority = "P0"
+area = "Templates"
+text = "Every template is tested with short, long and incomplete profiles, long titles, many publications, missing photo, Unicode and large skill lists."
+modules = ["tests/documents"]
+
+# ---------------------------------------------------------------- Resume Studio
+[[req]]
+id = "STU-01"
+priority = "P0"
+area = "Resume Studio"
+text = "Studio with vacancy, target, mode and template selectors, section order and visibility, length, typography, editable bullets, preview and page count."
+modules = ["ris/ui/pages/studio.py"]
+
+[[req]]
+id = "STU-02"
+priority = "P0"
+area = "Resume Studio"
+text = "Studio shows missing-information warnings, verification indicators, ATS checks and the confidentiality review."
+modules = ["ris/ui/pages/studio.py", "ris/rendering/export.py"]
+
+[[req]]
+id = "STU-03"
+priority = "P1"
+area = "Resume Studio"
+text = "Guided and Advanced modes; resume-specific overrides are clearly distinguished from master-profile edits."
+modules = ["ris/ui/pages/studio.py"]
+
+[[req]]
+id = "STU-04"
+priority = "P0"
+area = "Resume Studio"
+text = "Named variants, immutable version history and version comparison."
+modules = ["ris/services/variants.py"]
+
+[[req]]
+id = "STU-05"
+priority = "P1"
+area = "Resume Studio"
+text = "Saved resumes that may be outdated after profile changes are identified."
+modules = ["ris/services/variants.py"]
+
+[[req]]
+id = "STU-06"
+priority = "P0"
+area = "Resume Studio"
+text = "Previously exported documents are never modified or overwritten silently."
+modules = ["ris/rendering/export.py"]
+
+# ---------------------------------------------------------------- Document engine
+[[req]]
+id = "DOC-01"
+priority = "P0"
+area = "Document engine"
+text = "DOCX and PDF are produced from one shared intermediate representation."
+modules = ["ris/composition/ir.py", "ris/rendering/layout.py"]
+
+[[req]]
+id = "DOC-02"
+priority = "P0"
+area = "Document engine"
+text = "Genuine editable DOCX: heading and paragraph styles, lists, margins, page breaks, hyperlinks, headers, footers, page numbers, Unicode."
+modules = ["ris/rendering/docx_renderer.py"]
+
+[[req]]
+id = "DOC-03"
+priority = "P0"
+area = "Document engine"
+text = "Genuine PDF: selectable text, embedded fonts, valid structure, metadata, stable pagination."
+modules = ["ris/rendering/pdf_renderer.py"]
+
+[[req]]
+id = "DOC-04"
+priority = "P0"
+area = "Document engine"
+text = "PDF backend selection with a documented fallback when LibreOffice is unavailable; failures are reported, never hidden."
+modules = ["ris/rendering/libreoffice.py", "ris/rendering/export.py"]
+
+[[req]]
+id = "DOC-05"
+priority = "P1"
+area = "Document engine"
+text = "Export DOCX, PDF or both; folder and filename control; open folder; re-export; text-only ATS version; redacted export."
+modules = ["ris/rendering/export.py", "ris/ui/pages/studio.py"]
+
+[[req]]
+id = "DOC-06"
+priority = "P0"
+area = "Document engine"
+text = "Export validation: existence/size, reopen and parse, content, contacts, chronology, sections, placeholders, confidential content, page count, DOCX/PDF consistency, overflow."
+modules = ["ris/rendering/validation.py"]
+
+[[req]]
+id = "DOC-07"
+priority = "P1"
+area = "Document engine"
+text = "Fit-to-page-limit trims lowest-relevance content and reports exactly what was trimmed."
+modules = ["ris/rendering/export.py"]
+
+# ---------------------------------------------------------------- Storage and backup
+[[req]]
+id = "STO-01"
+priority = "P0"
+area = "Storage"
+text = "SQLite with transactions, constraints and explicit migrations."
+modules = ["ris/storage/database.py", "migrations/"]
+
+[[req]]
+id = "STO-02"
+priority = "P0"
+area = "Storage"
+text = "OS-appropriate data directory, separate from the source tree."
+modules = ["ris/paths.py"]
+
+[[req]]
+id = "STO-03"
+priority = "P0"
+area = "Storage"
+text = "Manual backup and restore; a recoverable snapshot is taken before every restore."
+modules = ["ris/backup/backup.py"]
+
+[[req]]
+id = "STO-04"
+priority = "P1"
+area = "Storage"
+text = "Automatic backups with schedule and retention."
+modules = ["ris/backup/backup.py"]
+
+[[req]]
+id = "STO-05"
+priority = "P0"
+area = "Storage"
+text = "Integrity checks: SQLite integrity, foreign keys, record validation, checksums."
+modules = ["ris/backup/integrity.py"]
+
+[[req]]
+id = "STO-06"
+priority = "P1"
+area = "Storage"
+text = "Encrypted backup archives (AES-256-GCM with scrypt key derivation), round-trip and tamper tested."
+modules = ["ris/backup/crypto.py"]
+
+[[req]]
+id = "STO-07"
+priority = "P1"
+area = "Storage"
+text = "Data directory relocation."
+modules = ["ris/storage/workspace.py"]
+
+[[req]]
+id = "STO-08"
+priority = "P0"
+area = "Storage"
+text = "Recovery instructions are documented."
+modules = ["docs/USER_GUIDE.md", "docs/TROUBLESHOOTING.md"]
+
+[[req]]
+id = "STO-09"
+priority = "P0"
+area = "Storage"
+text = "Actual storage protection is disclosed (the local database is not encrypted at rest)."
+modules = ["docs/SECURITY_PRIVACY.md", "ris/ui/pages/settings.py"]
+
+# ---------------------------------------------------------------- Synchronisation
+[[req]]
+id = "SYN-01"
+priority = "P1"
+area = "Synchronisation"
+text = "Cloud features are optional; the application is fully usable without a Google account."
+modules = ["ris/sync"]
+
+[[req]]
+id = "SYN-02"
+priority = "P1"
+area = "Synchronisation"
+text = "Google Drive OAuth connect/disconnect with drive.file scope; no password requests; no hard-coded credentials."
+modules = ["ris/sync/gdrive.py"]
+
+[[req]]
+id = "SYN-03"
+priority = "P1"
+area = "Synchronisation"
+text = "Cloud snapshot backup and restore, clearly distinct from record synchronisation."
+modules = ["ris/sync/service.py"]
+
+[[req]]
+id = "SYN-04"
+priority = "P1"
+area = "Synchronisation"
+text = "Record-level synchronisation with stable ids, revisions, checksums and tombstones."
+modules = ["ris/sync/engine.py"]
+
+[[req]]
+id = "SYN-05"
+priority = "P1"
+area = "Synchronisation"
+text = "Conflicting edits are detected, both versions preserved, comparison shown; nothing is overwritten silently."
+modules = ["ris/sync/engine.py", "ris/ui/pages/sync.py"]
+
+[[req]]
+id = "SYN-06"
+priority = "P1"
+area = "Synchronisation"
+text = "Sync status, last successful sync, retry, error reporting and authentication renewal."
+modules = ["ris/sync/service.py"]
+
+[[req]]
+id = "SYN-07"
+priority = "P1"
+area = "Synchronisation"
+text = "Explicit cloud deletion controls, distinct from local deletion."
+modules = ["ris/sync/service.py"]
+
+[[req]]
+id = "SYN-08"
+priority = "P1"
+area = "Synchronisation"
+text = "Offline operation, interrupted uploads, expired authentication, duplicates and simultaneous edits are tested with mocks."
+modules = ["tests/sync"]
+
+[[req]]
+id = "SYN-09"
+priority = "P2"
+area = "Synchronisation"
+text = "A folder remote supports any locally synced cloud folder (for example Google Drive for desktop)."
+modules = ["ris/sync/remote.py"]
+
+# ---------------------------------------------------------------- AI provider
+[[req]]
+id = "AI-01"
+priority = "P0"
+area = "AI provider"
+text = "Core works without a paid API; the offline engine is labelled as a rules engine, not generative AI."
+modules = ["ris/ai/provider.py"]
+
+[[req]]
+id = "AI-02"
+priority = "P2"
+area = "AI provider"
+text = "Optional external LLM provider (Anthropic or OpenAI-compatible, including local servers) requires explicit configuration."
+modules = ["ris/ai/external.py"]
+
+[[req]]
+id = "AI-03"
+priority = "P1"
+area = "AI provider"
+text = "Only minimal, approved, non-confidential facts are sent; the exact payload is previewed and confirmed."
+modules = ["ris/ai/payload.py"]
+
+[[req]]
+id = "AI-04"
+priority = "P1"
+area = "AI provider"
+text = "AI output is untrusted: validated as claims and adopted only after approval."
+modules = ["ris/ai/provider.py", "ris/intelligence/claims.py"]
+
+[[req]]
+id = "AI-05"
+priority = "P1"
+area = "AI provider"
+text = "API keys live in the OS credential store; never hard-coded, stored in config or logged."
+modules = ["ris/security/secrets.py"]
+
+# ---------------------------------------------------------------- Tracker and cover letters
+[[req]]
+id = "TRK-01"
+priority = "P1"
+area = "Applications"
+text = "Application tracker with organisation, vacancy, URL, reference, eligibility notes, deadline, status, resume version, cover letter, dates and outcome."
+modules = ["ris/domain/models.py", "ris/ui/pages/tracker.py"]
+
+[[req]]
+id = "TRK-02"
+priority = "P1"
+area = "Applications"
+text = "Upcoming deadlines appear on the dashboard."
+modules = ["ris/services/dashboard.py"]
+
+[[req]]
+id = "TRK-03"
+priority = "P1"
+area = "Applications"
+text = "Editable cover letters in DOCX and PDF from profile and vacancy; no invented endorsements, connections or insider knowledge."
+modules = ["ris/composition/cover_letter.py"]
+
+[[req]]
+id = "TRK-04"
+priority = "P2"
+area = "Applications"
+text = "Redacted professional portfolio built only from approved project information."
+modules = ["ris/composition/portfolio.py"]
+
+# ---------------------------------------------------------------- Security and privacy
+[[req]]
+id = "SEC-01"
+priority = "P0"
+area = "Security"
+text = "Documented threat model."
+modules = ["docs/THREAT_MODEL.md"]
+
+[[req]]
+id = "SEC-02"
+priority = "P0"
+area = "Security"
+text = "Logs never contain API keys, tokens, resume contents or confidential descriptions."
+modules = ["ris/logging_setup.py"]
+
+[[req]]
+id = "SEC-03"
+priority = "P0"
+area = "Security"
+text = "No telemetry, advertising or background transmission."
+modules = ["ris"]
+
+[[req]]
+id = "SEC-04"
+priority = "P0"
+area = "Security"
+text = "Temporary files are created in private directories and removed."
+modules = ["ris/security/tempfiles.py"]
+
+[[req]]
+id = "SEC-05"
+priority = "P1"
+area = "Security"
+text = "Local deletion, removal of a reference and deletion of a cloud copy are distinct operations."
+modules = ["ris/ui/pages/exports.py", "ris/sync/service.py"]
+
+[[req]]
+id = "SEC-06"
+priority = "P0"
+area = "Security"
+text = "Destructive operations require confirmation."
+modules = ["ris/ui"]
+
+# ---------------------------------------------------------------- User experience
+[[req]]
+id = "UX-01"
+priority = "P0"
+area = "User experience"
+text = "Diary-inspired identity with the specified palette (#701C35, #FFF3DF, #FFFAF0, #192B4B)."
+modules = ["ris/ui/theme.py"]
+
+[[req]]
+id = "UX-02"
+priority = "P0"
+area = "User experience"
+text = "Diary-index navigation with the eighteen sections; top bar with workspace, save and sync status."
+modules = ["ris/ui/main_window.py"]
+
+[[req]]
+id = "UX-03"
+priority = "P1"
+area = "User experience"
+text = "Contextual side panel (requirements, template settings, validation)."
+modules = ["ris/ui/main_window.py"]
+
+[[req]]
+id = "UX-04"
+priority = "P1"
+area = "User experience"
+text = "Light theme by default and a matching dark theme."
+modules = ["ris/ui/theme.py"]
+
+[[req]]
+id = "UX-05"
+priority = "P0"
+area = "User experience"
+text = "Dashboard shows only real metrics; empty states replace fabricated data."
+modules = ["ris/services/dashboard.py", "ris/ui/pages/diary.py"]
+
+[[req]]
+id = "UX-06"
+priority = "P1"
+area = "User experience"
+text = "Keyboard navigation, visible focus, WCAG AA contrast and meaningful accessible names."
+modules = ["ris/ui"]
+
+[[req]]
+id = "UX-07"
+priority = "P2"
+area = "User experience"
+text = "Centralised UI strings and locale-aware date display."
+modules = ["ris/strings.py", "ris/domain/dates.py"]
+
+[[req]]
+id = "UX-08"
+priority = "P1"
+area = "User experience"
+text = "Background workers keep the interface responsive during rendering, conversion, backup and sync."
+modules = ["ris/ui/workers.py"]
+
+# ---------------------------------------------------------------- Performance and maintainability
+[[req]]
+id = "MNT-01"
+priority = "P1"
+area = "Maintainability"
+text = "Large profiles (hundreds of projects, skills and publications) are handled; performance measured and recorded."
+modules = ["tests/integration/test_performance.py"]
+
+[[req]]
+id = "MNT-02"
+priority = "P0"
+area = "Maintainability"
+text = "Pinned dependencies and reproducible environment setup."
+modules = ["requirements.txt", "scripts/"]
+
+[[req]]
+id = "MNT-03"
+priority = "P1"
+area = "Maintainability"
+text = "Business logic is independent of the UI layer."
+modules = ["ris"]
+
+[[req]]
+id = "MNT-04"
+priority = "P1"
+area = "Maintainability"
+text = "Documented upgrade process with database migrations."
+modules = ["docs/USER_GUIDE.md", "ris/storage/migrations.py"]
+
+# ---------------------------------------------------------------- Release
+[[req]]
+id = "REL-01"
+priority = "P0"
+area = "Release"
+text = "Clearly labelled fictional sample profile, isolated in its own workspace."
+modules = ["sample_data/", "ris/storage/workspace.py"]
+
+[[req]]
+id = "REL-02"
+priority = "P0"
+area = "Release"
+text = "Test report with the actual commands, passed, failed and skipped tests and environment limitations."
+modules = ["docs/TEST_REPORT.md"]
+
+[[req]]
+id = "REL-03"
+priority = "P0"
+area = "Release"
+text = "Release ZIP exists, extracts, contains the required files and no personal data or secrets."
+modules = ["scripts/make_release.py"]
+
+[[req]]
+id = "REL-04"
+priority = "P0"
+area = "Release"
+text = "macOS launch script; application-bundle instructions; signing and notarisation steps documented."
+modules = ["scripts/launch_macos.command", "docs/INSTALL.md"]
+
+[[req]]
+id = "REL-05"
+priority = "P1"
+area = "Release"
+text = "PyInstaller build specification verified on the build platform."
+modules = ["packaging/ris.spec"]
+
+# ---------------------------------------------------------------- Graphical resumes (added 2026-10-25 at the user's request)
+[[req]]
+id = "GFX-01"
+priority = "P1"
+area = "Graphical resumes"
+text = "Graphical templates (framed banner header, contact icons, competency bars, career timeline chart, metric tiles, publications-by-year chart, project cards) in the style of the user's sample graphical CV."
+modules = ["templates/graphical_profile.json", "templates/research_showcase.json", "templates/infographic_timeline.json", "ris/rendering/graphics.py", "ris/rendering/layout.py"]
+
+[[req]]
+id = "GFX-02"
+priority = "P0"
+area = "Graphical resumes"
+text = "Charts and bars are drawn only from recorded data (dates, counts, self-assessed levels); the same facts appear as selectable text (legend, caption or tiles) and images carry alternative text; rating bars are labelled as self-assessed."
+modules = ["ris/composition/composer.py", "ris/rendering/layout.py"]
+
+[[req]]
+id = "GFX-03"
+priority = "P1"
+area = "Graphical resumes"
+text = "Research-results CV: verified metrics with their source and date, publications by year, papers grouped by exact status, research projects as cards (challenge, approach, outcome, contribution), grants, patents, talks and service."
+modules = ["ris/composition/composer.py", "ris/composition/modes.py"]
+
+[[req]]
+id = "GFX-04"
+priority = "P0"
+area = "Graphical resumes"
+text = "Graphical templates are never offered as ATS-safe; the ATS template stays single-column without images or tables."
+modules = ["ris/rendering/specs.py"]
+
+[[req]]
+id = "PRF-20"
+priority = "P1"
+area = "Master profile"
+text = "Areas of expertise (area, narrative, years, keywords, related positions and projects) usable as vacancy evidence and as a profile-summary table."
+modules = ["ris/domain/models.py", "ris/composition/composer.py"]
+
+[[req]]
+id = "PRF-21"
+priority = "P0"
+area = "Master profile"
+text = "Referees are exported only after the user records that the person agreed to be named; contact details can be hidden."
+modules = ["ris/domain/models.py", "ris/composition/composer.py"]
+
+[[req]]
+id = "PRF-22"
+priority = "P1"
+area = "Master profile"
+text = "Research grants, peer review, student supervision and conference organisation are recorded and shown in dedicated sections."
+modules = ["ris/domain/enums.py", "ris/composition/composer.py"]

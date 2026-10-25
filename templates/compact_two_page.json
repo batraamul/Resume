@@ -1,0 +1,73 @@
+{
+  "id": "compact_two_page",
+  "name": "Compact Two-Page Resume",
+  "version": "1.0.0",
+  "family": "dense inline",
+  "description": "Maximum content in two pages: narrow margins, smaller type, one-line entries (title, organisation, place and dates) and inline skills.",
+  "recommended_modes": [
+    "general_professional",
+    "defence_technical",
+    "ats_plain"
+  ],
+  "page": {
+    "margin_top_mm": 11,
+    "margin_bottom_mm": 11,
+    "margin_left_mm": 12,
+    "margin_right_mm": 12
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 9.5,
+    "heading_size": 10.5,
+    "name_size": 17,
+    "headline_size": 10.2,
+    "small_size": 8.5,
+    "line_spacing": 1.02
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4C545C",
+    "accent": "#333F48",
+    "rule": "#333F48",
+    "fill": "#EDEFF1",
+    "banner_fill": "#333F48",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F1F2F4",
+    "link": "#333F48"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "contact_style": "inline",
+    "separator": " | ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "caps_rule",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.6,
+    "space_before": 6,
+    "space_after": 2.5,
+    "rule_weight": 0.5
+  },
+  "entry": {
+    "style": "inline",
+    "date_style": "mm_yyyy",
+    "subtitle_italic": false,
+    "bullet_indent_mm": 3.5,
+    "space_between": 3
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

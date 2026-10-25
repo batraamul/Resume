@@ -1,0 +1,73 @@
+{
+  "id": "scientific_research",
+  "name": "Scientific Research",
+  "version": "1.0.0",
+  "family": "centred serif small-caps",
+  "description": "Research CVs: Times serif, small-capital headings without rules, numbered publications with your name highlighted.",
+  "recommended_modes": [
+    "scientific_research",
+    "academic_cv"
+  ],
+  "page": {
+    "margin_top_mm": 18,
+    "margin_bottom_mm": 18,
+    "margin_left_mm": 20,
+    "margin_right_mm": 20
+  },
+  "fonts": {
+    "body": "Times New Roman",
+    "heading": "Times New Roman",
+    "name": "Times New Roman",
+    "body_size": 11,
+    "heading_size": 12.5,
+    "name_size": 20,
+    "headline_size": 11.5,
+    "small_size": 9.5,
+    "line_spacing": 1.06
+  },
+  "colours": {
+    "text": "#151515",
+    "muted": "#444444",
+    "accent": "#2B3A67",
+    "rule": "#2B3A67",
+    "fill": "#F0F2F7",
+    "banner_fill": "#2B3A67",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F3F4F8",
+    "link": "#2B3A67"
+  },
+  "header": {
+    "style": "centered",
+    "name_case": "normal",
+    "name_colour": "text",
+    "headline_colour": "muted",
+    "contact_style": "inline",
+    "separator": "  ·  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "small_caps",
+    "case": "small_caps",
+    "colour": "accent",
+    "letter_spacing": 0.6,
+    "space_before": 12,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "publications": {
+    "style": "numbered",
+    "highlight_name": true
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

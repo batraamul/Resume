@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resume-intelligence-studio"
+version = "1.0.0"
+description = "Local-first resume management, career intelligence and DOCX/PDF document generation."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Resume Intelligence Studio contributors" }]
+license = { text = "Proprietary - personal use" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: X11 Applications :: Qt",
+]
+dependencies = [
+    "PySide6>=6.7,<7",
+    "pydantic>=2.7,<3",
+    "python-docx>=1.1,<2",
+    "reportlab>=4.2,<6",
+    "pypdf>=4.2,<7",
+    "cryptography>=42",
+    "keyring>=25",
+    "pillow>=10",
+]
+
+[project.optional-dependencies]
+gdrive = ["google-auth>=2.29", "google-auth-oauthlib>=1.2", "requests>=2.31"]
+dev = ["pytest>=8", "pytest-qt>=4.4", "ruff>=0.5", "mypy>=1.10", "pyinstaller>=6.6"]
+
+[project.scripts]
+ris = "ris.app:main"
+
+[tool.setuptools.packages.find]
+include = ["ris*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = [
+    "ignore::DeprecationWarning:docx.*",
+    "ignore::DeprecationWarning:reportlab.*",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = ["build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "C4", "SIM"]
+ignore = ["E501", "B008", "SIM102", "SIM105", "SIM108", "SIM113", "B904", "UP042"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011", "SIM117"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+warn_unused_ignores = false
+check_untyped_defs = false
+files = ["ris/domain", "ris/storage", "ris/services", "ris/intelligence", "ris/composition", "ris/backup"]
