@@ -1,6 +1,10 @@
-# Versioned releases: push a tag such as v1.2.0 (or v1.3.0-beta.1 for a test release).
+# Versioned releases. Start one in either of two ways:
+#   * Actions -> Release -> Run workflow, entering the version tag (for example v1.2.0). The tag is created
+#     on the commit the workflow runs from when the release is published.
+#   * Push a tag such as v1.2.0 (or v1.3.0-beta.1 for a test release).
 # Builds and self-tests the application on Windows, macOS and Linux, packages the installers, writes the
 # update manifest and SHA-256 sums, signs the manifest and publishes a GitHub Release.
+# Pushing to the branch release-dry-run runs the builds and self-tests only (nothing is published).
 #
 # Signing: the repository secret RIS_UPDATE_SIGNING_KEY holds the Ed25519 private key. Without it the
 # release is created as a DRAFT so that no unsigned update reaches users; sign it locally with
@@ -10,10 +14,11 @@ name: Release
 on:
   push:
     tags: ["v*.*.*"]
+    branches: [release-dry-run]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to build (for example v1.1.0)"
+        description: "Version tag to release, for example v1.2.0 (must match ris/__init__.py)"
         required: true
 
 permissions:
@@ -24,7 +29,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  TAG: ${{ inputs.tag || github.ref_name }}
+  # Empty for dry runs on the release-dry-run branch.
+  TAG: ${{ inputs.tag || (startsWith(github.ref, 'refs/tags/') && github.ref_name) || '' }}
   PYTHONUTF8: "1"
 
 jobs:
@@ -49,8 +55,6 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v7
-        with:
-          ref: ${{ env.TAG }}
 
       - uses: actions/setup-python@v7
         with:
@@ -74,8 +78,7 @@ jobs:
         id: version
         run: |
           VERSION=$(python -c "import ris; print(ris.__version__)")
-          TAG_VERSION="${TAG#v}"
-          if [ "$VERSION" != "$TAG_VERSION" ]; then
+          if [ -n "$TAG" ] && [ "$VERSION" != "${TAG#v}" ]; then
             echo "::error title=Version mismatch::Tag $TAG does not match ris.__version__ $VERSION"
             exit 1
           fi
@@ -167,6 +170,7 @@ jobs:
   publish:
     name: Publish release
     needs: build
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -175,8 +179,18 @@ jobs:
       attestations: write
     steps:
       - uses: actions/checkout@v7
-        with:
-          ref: ${{ env.TAG }}
+
+      - name: Check that the tag, if it already exists, is this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # For an annotated tag the "^{}" line is the commit it points to.
+          EXISTING=$(git ls-remote --tags origin "$TAG" "$TAG^{}" | awk -v t="refs/tags/$TAG" \
+            '$2==t"^{}"{p=$1} $2==t{l=$1} END{print (p!="" ? p : l)}')
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "$GITHUB_SHA" ]; then
+            echo "::error title=Tag already exists::$TAG points to $EXISTING, not $GITHUB_SHA. Run the workflow from the tag (Use workflow from: $TAG) or choose a new version."
+            exit 1
+          fi
 
       - uses: actions/setup-python@v7
         with:
@@ -234,5 +248,12 @@ jobs:
           FLAGS=""
           if [[ "$VERSION" == *-* ]]; then FLAGS="$FLAGS --prerelease"; fi
           if [ "${{ steps.sign.outputs.signed }}" != "true" ]; then FLAGS="$FLAGS --draft"; fi
-          gh release create "$TAG" dist/release/* --repo "${{ github.repository }}" \
-            --title "Resume Intelligence Studio $VERSION" --notes-file build-notes.md $FLAGS
+          if gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            # A release made by hand for this tag: attach the files and notes to it.
+            gh release upload "$TAG" dist/release/* --clobber --repo "${{ github.repository }}"
+            gh release edit "$TAG" --notes-file build-notes.md --repo "${{ github.repository }}"
+          else
+            # Creates the tag on this commit if it does not exist yet (workflow started from the Actions page).
+            gh release create "$TAG" dist/release/* --repo "${{ github.repository }}" --target "$GITHUB_SHA" \
+              --title "Resume Intelligence Studio $VERSION" --notes-file build-notes.md $FLAGS
+          fi

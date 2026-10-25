@@ -29,22 +29,28 @@ Releases are built by GitHub Actions from a version tag. You do not need a Mac o
 2. Add a `## <version> — <date>` section to `CHANGELOG.md` (it becomes the release notes and the text shown
    in the update dialog).
 3. Run the checks: `ruff check ris tests scripts docs/tutorial` and `QT_QPA_PLATFORM=offscreen python -m pytest`.
-4. Commit, then tag and push:
-   ```bash
-   git tag -a v1.2.0 -m "Resume Intelligence Studio 1.2.0"
-   git push origin main v1.2.0
-   ```
+4. Commit and push to `main`. Optionally push the same commit to the branch `release-dry-run` first: the
+   Release workflow then builds and self-tests all three platforms without publishing anything.
+5. Start the release, either
+   * **on GitHub**: *Actions → Release → Run workflow*, branch `main`, tag `v1.2.0` — the tag is created on that
+     commit when the release is published; or
+   * **from a terminal**:
+     ```bash
+     git tag -a v1.2.0 -m "Resume Intelligence Studio 1.2.0"
+     git push origin v1.2.0
+     ```
    Use a tag like `v1.3.0-beta.1` for a test release (published as a pre-release; only users on the beta
    channel are offered it).
-5. The **Release** workflow:
-   * checks that the tag matches `ris.__version__`;
+6. The **Release** workflow:
+   * checks that the tag matches `ris.__version__` (and, if the tag already exists, that it points to the
+     commit being built);
    * runs the unit, integration and security tests on Windows, macOS and Linux;
    * builds the application with PyInstaller and runs its `--selftest` on each system;
    * packages `…-windows-x64-setup.exe` (Inno Setup, per-user) and a portable zip, `…-macos-arm64.dmg`, and
      `…-linux-x86_64.tar.gz` plus `resume-intelligence-studio_<version>_amd64.deb`;
    * writes `ris-update.json` and `SHA256SUMS.txt`, signs the manifest (and checks the signature with the
      public key the application uses), records build provenance, and publishes the GitHub Release.
-6. Check the release page: all files present, notes correct, `ris-update.json.sig` attached.
+7. Check the release page: all files present, notes correct, `ris-update.json.sig` attached.
 
 ## If the signing secret is missing
 
@@ -59,4 +65,5 @@ gh release edit v1.2.0 --draft=false --repo batraamul/Resume
 
 ## Re-running a build
 
-Actions → Release → *Run workflow* with the existing tag. Delete the old release first if it was created.
+Actions → Release → *Run workflow*, choosing the existing tag under *Use workflow from* and entering it as the
+tag. If the release already exists, the new files replace the old ones.

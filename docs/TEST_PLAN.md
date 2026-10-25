@@ -20,7 +20,7 @@ suite can never touch real data or secrets.
 * **`.github/workflows/ci.yml`** — every push and pull request: `ruff`, the full suite and `--selftest` on
   Windows, macOS and Linux (Python 3.12) and on Linux with Python 3.11 and 3.13. Failing tests are reported as
   annotations on the commit (`scripts/ci_annotate.py`).
-* **`.github/workflows/release.yml`** — every version tag: the unit, integration and security suites on each
+* **`.github/workflows/release.yml`** — every release, and every push to the `release-dry-run` branch (build only, nothing published): the unit, integration and security suites on each
   platform, a PyInstaller build, `--selftest` of the *frozen* application, packaging (Windows installer and
   zip, macOS disk image, Linux tar.gz and .deb), manifest build, signature and verification, and build
   provenance.

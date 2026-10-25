@@ -626,7 +626,8 @@ are YAML files in `.github/workflows/`:
 * **`ci.yml`** runs on every push and pull request: install the dependencies, `ruff check`, the whole test
   suite and `--selftest` on Windows, macOS and Linux (Python 3.11–3.13). A red cross on GitHub means
   something broke.
-* **`release.yml`** runs when a version tag such as `v1.2.0` is pushed. A *matrix* starts three machines
+* **`release.yml`** runs when a maintainer starts it from the *Actions* page (entering a version such as
+  `v1.2.0`) or pushes a version tag. A *matrix* starts three machines
   (Windows, macOS, Linux); each runs the tests, builds with PyInstaller, runs the frozen program's self-test
   and packages it. A final *publish* job collects all files, writes the update manifest, signs it, records
   build provenance and creates the GitHub Release.
@@ -647,7 +648,7 @@ users on the beta channel. The steps for maintainers are in `docs/RELEASING.md`.
 ### 10.4 How the secure update works
 
 ```
- maintainer pushes tag v1.2.0
+ maintainer starts the Release workflow for v1.2.0 (or pushes the tag)
         │
         ▼
  release.yml builds installers ──► release_manifest.py build   (ris-update.json: version, notes,
