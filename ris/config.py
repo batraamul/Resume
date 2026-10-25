@@ -43,6 +43,7 @@ class AppConfig:
     page_size: str = "A4"
     date_style: str = "mon_year"
     ui_font_scale: float = 1.0
+    appearance: dict[str, Any] = field(default_factory=dict)  # see ris.ui.theme.Appearance
     log_level: str = "INFO"
     ai_provider: str = "off"  # off | anthropic | openai_compatible
     ai_endpoint: str = ""

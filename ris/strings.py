@@ -10,6 +10,7 @@ NAV_SECTIONS: list[tuple[str, list[tuple[str, str]]]] = [
         ("profile", "Master Profile"),
         ("experience", "Experience"),
         ("education", "Education"),
+        ("training", "Training & Certifications"),
         ("research", "Research & Publications"),
         ("skills", "Skills & Technologies"),
         ("projects", "Projects & Achievements"),
@@ -18,6 +19,8 @@ NAV_SECTIONS: list[tuple[str, list[tuple[str, str]]]] = [
     ("Opportunities", [
         ("targets", "Career Targets"),
         ("opportunities", "Job Opportunities"),
+        ("interview", "Interview Preparation"),
+        ("portals", "Job Portals & Recruiters"),
     ]),
     ("Documents", [
         ("studio", "Resume Studio"),
@@ -38,7 +41,13 @@ PAGE_SUBTITLES = {
     "profile": "Identity, contact details, research metrics, summaries, areas of expertise, referees and custom "
                "sections.",
     "experience": "Positions, concurrent responsibilities and the statements that describe your work.",
-    "education": "Degrees, ongoing and planned qualifications, certifications and training.",
+    "education": "Degrees and diplomas, including ongoing and planned qualifications.",
+    "training": "Training programmes, professional courses, certifications, workshops, seminars and other "
+                "qualifications.",
+    "interview": "Questions tailored to your profile and vacancy, STAR stories, practice with a timer, and your "
+                 "personal questionnaire (PIQ/DAF) checked against your profile.",
+    "portals": "Leading recruiters and job portals, profile text for LinkedIn, Naukri and Indeed within their "
+               "limits, and an ATS readiness check for your resume files.",
     "research": "Publications and manuscripts, each with its exact status.",
     "skills": "Skills you choose to claim, with your own proficiency and evidence.",
     "projects": "Projects with problem, approach, results, contribution and disclosure status.",

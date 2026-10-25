@@ -5,15 +5,10 @@ from __future__ import annotations
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QAbstractItemView,
-    QComboBox,
     QDialog,
-    QDialogButtonBox,
-    QDoubleSpinBox,
-    QFormLayout,
     QHBoxLayout,
     QHeaderView,
     QLabel,
-    QLineEdit,
     QListWidget,
     QListWidgetItem,
     QSplitter,
@@ -34,67 +29,6 @@ from ris.ui.dialogs import HtmlDialog, ReportDialog, report_html
 from ris.ui.widgets.common import Page, ask_text, banner, button, confirm, error, esc, info, muted, set_banner
 from ris.ui.widgets.pdf_preview import PdfPreview
 from ris.ui.workers import run_task
-
-
-class TemplateEditDialog(QDialog):
-    """Edit the safe, commonly changed properties of a custom template."""
-
-    FONTS = ["Calibri", "Cambria", "Arial", "Times New Roman"]
-
-    def __init__(self, parent: QWidget | None, spec: TemplateSpec) -> None:
-        super().__init__(parent)
-        self.spec = spec
-        self.setWindowTitle(f"Edit template — {spec.name}")
-        lay = QVBoxLayout(self)
-        lay.addWidget(muted("Custom templates are stored as JSON in your data folder. Built-in templates never "
-                            "change."))
-        f = QFormLayout()
-        self.name = QLineEdit(spec.name)
-        self.body = QComboBox()
-        self.heading = QComboBox()
-        for cb, val in ((self.body, spec.fonts.body), (self.heading, spec.fonts.heading)):
-            cb.addItems(self.FONTS)
-            cb.setCurrentText(val)
-        self.size = QDoubleSpinBox()
-        self.size.setRange(8, 13)
-        self.size.setSingleStep(0.5)
-        self.size.setValue(spec.fonts.body_size)
-        self.accent = QLineEdit(spec.colours.accent)
-        self.text = QLineEdit(spec.colours.text)
-        self.margin = QDoubleSpinBox()
-        self.margin.setRange(8, 30)
-        self.margin.setValue(spec.page.margin_left_mm)
-        self.margin.setSuffix(" mm")
-        for lbl, w in (("Name", self.name), ("Body font", self.body), ("Heading font", self.heading),
-                       ("Body size (pt)", self.size), ("Accent colour", self.accent), ("Text colour", self.text),
-                       ("Side margins", self.margin)):
-            w.setAccessibleName(lbl)
-            f.addRow(lbl + ":", w)
-        lay.addLayout(f)
-        self.problem = banner("", "bad")
-        self.problem.setVisible(False)
-        lay.addWidget(self.problem)
-        bb = QDialogButtonBox(QDialogButtonBox.StandardButton.Save | QDialogButtonBox.StandardButton.Cancel)
-        bb.accepted.connect(self._accept)
-        bb.rejected.connect(self.reject)
-        lay.addWidget(bb)
-        self.result_spec: TemplateSpec | None = None
-
-    def _accept(self) -> None:
-        data = self.spec.model_dump(mode="json")
-        data["name"] = self.name.text().strip() or self.spec.name
-        data["fonts"].update({"body": self.body.currentText(), "heading": self.heading.currentText(),
-                              "body_size": self.size.value()})
-        data["colours"].update({"accent": self.accent.text().strip(), "text": self.text.text().strip()})
-        data["page"].update({"margin_left_mm": self.margin.value(), "margin_right_mm": self.margin.value()})
-        major, minor, patch = (int(x) for x in self.spec.version.split("."))
-        data["version"] = f"{major}.{minor}.{patch + 1}"
-        try:
-            self.result_spec = TemplateSpec.model_validate(data)
-        except Exception as exc:  # noqa: BLE001 - validation message shown to the user
-            set_banner(self.problem, f"Please correct: {exc}".split("\n")[0][:300], "bad")
-            return
-        self.accept()
 
 
 class LibraryPage(Page):
@@ -158,7 +92,9 @@ class LibraryPage(Page):
         tll.addWidget(self.templates, 1)
         trow = QHBoxLayout()
         trow.addWidget(button("Duplicate…", on_click=self._dup_template))
-        self.b_edit_t = button("Edit…", on_click=self._edit_template)
+        self.b_edit_t = button("Design…", "primary", on_click=self._edit_template,
+                               tooltip="Open the template designer: every setting with a live preview. Built-in "
+                                       "templates are saved as your own copy.")
         self.b_del_t = button("Delete", "danger", on_click=self._del_template)
         trow.addWidget(self.b_edit_t)
         trow.addWidget(self.b_del_t)
@@ -336,7 +272,7 @@ class LibraryPage(Page):
         t = self._spec()
         if t is None:
             return
-        self.b_edit_t.setEnabled(not t.builtin)
+        self.b_edit_t.setEnabled(True)
         self.b_del_t.setEnabled(not t.builtin)
         modes = ", ".join(get_mode(m).name for m in t.recommended_modes)
         self.template_info.setHtml(
@@ -398,18 +334,22 @@ class LibraryPage(Page):
                 self.templates.setCurrentRow(i)
         self.ctx.say("Template duplicated. Edit it, then choose it in Resume Studio.")
 
-    def _edit_template(self) -> None:
+    def _edit_template(self, exec_dialog: bool = True):
+        from ris.ui.template_designer import TemplateDesignerDialog
+
         t = self._spec()
-        if t is None or t.builtin:
-            return
-        dlg = TemplateEditDialog(self, t)
+        if t is None:
+            return None
+        dlg = TemplateDesignerDialog(self, self.ctx, t)
+        if not exec_dialog:
+            return dlg
         if dlg.exec() == QDialog.DialogCode.Accepted and dlg.result_spec is not None:
-            try:
-                self.ctx.templates.save_user_template(dlg.result_spec)
-            except RISError as exc:
-                error(self, "Save template", exc.user_message)
-                return
             self._load_templates()
+            for i in range(self.templates.count()):
+                if self.templates.item(i).data(Qt.ItemDataRole.UserRole) == dlg.result_spec.id:
+                    self.templates.setCurrentRow(i)
+            self.ctx.say(f"Template '{dlg.result_spec.name}' saved. Choose it in Resume Studio.")
+        return dlg
 
     def _del_template(self) -> None:
         t = self._spec()

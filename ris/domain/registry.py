@@ -58,6 +58,13 @@ REGISTRY: dict[RecordKind, KindInfo] = {
                                       default_confidentiality=Confidentiality.APPROVED, is_fact=False),
     RecordKind.EXPERTISE: KindInfo(RecordKind.EXPERTISE, m.Expertise),
     RecordKind.REFERENCE: KindInfo(RecordKind.REFERENCE, m.Reference, default_confidentiality=Confidentiality.APPROVED),
+    RecordKind.TRAINING: KindInfo(RecordKind.TRAINING, m.Training, default_confidentiality=Confidentiality.APPROVED),
+    RecordKind.INTERVIEW_STORY: KindInfo(RecordKind.INTERVIEW_STORY, m.InterviewStory,
+                                         default_confidentiality=Confidentiality.APPROVED, is_fact=False),
+    RecordKind.INTERVIEW_ANSWER: KindInfo(RecordKind.INTERVIEW_ANSWER, m.InterviewAnswer,
+                                          default_confidentiality=Confidentiality.APPROVED, is_fact=False),
+    RecordKind.QUESTIONNAIRE: KindInfo(RecordKind.QUESTIONNAIRE, m.Questionnaire,
+                                       default_confidentiality=Confidentiality.APPROVED, is_fact=False),
 }
 
 

@@ -133,8 +133,12 @@ SECTION_PAGES: list[tuple[str, str, list[RecordKind], str, dict]] = [
      "Add each position. Concurrent responsibilities (additional charge, in-charge, nodal officer) and the "
      "statements describing your work are added as linked items.", {RecordKind.POSITION: "position"}),
     ("education", "Education", [RecordKind.EDUCATION],
-     "Add degrees, ongoing or planned study, certifications and training. Planned items are never shown as "
-     "completed.", {RecordKind.EDUCATION: "qualification"}),
+     "Add degrees and diplomas, including ongoing or planned study. Planned items are never shown as "
+     "completed. Training, courses and certifications have their own page.", {RecordKind.EDUCATION: "qualification"}),
+    ("training", "Training & Certifications", [RecordKind.TRAINING],
+     "Add training programmes, professional and online courses, certifications and licences, workshops, seminars "
+     "and other qualifications. Each type appears in its own resume section; certification expiry dates are "
+     "tracked.", {RecordKind.TRAINING: "training or certification"}),
     ("research", "Research & Publications", [RecordKind.PUBLICATION],
      "Add publications and manuscripts with their exact status (in preparation, submitted, under review, "
      "accepted, published).", {RecordKind.PUBLICATION: "publication"}),

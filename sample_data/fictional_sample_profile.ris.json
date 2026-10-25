@@ -374,44 +374,57 @@
   },
   {
    "id": "edu-plan",
-   "kind": "education",
+   "kind": "training",
    "verification": "confirmed",
    "confidentiality": "approved",
    "data": {
-    "qualification_type": "course",
-    "level": "certificate",
-    "degree": "Executive Programme in Technology Management",
-    "institution": "Example School of Management",
+    "training_type": "professional_course",
+    "title": "Executive Programme in Technology Management",
+    "provider": "Example School of Management",
     "start": "2027",
     "status": "planned"
    }
   },
   {
    "id": "edu-dl",
-   "kind": "education",
+   "kind": "training",
    "verification": "confirmed",
    "confidentiality": "approved",
    "data": {
-    "qualification_type": "certification",
-    "level": "certificate",
-    "degree": "Deep Learning for Edge Devices (40-hour course)",
-    "issuer": "Example Academy of Applied Computing",
+    "training_type": "certification",
+    "title": "Deep Learning for Edge Devices",
+    "provider": "Example Academy of Applied Computing",
+    "mode": "online",
     "end": "2022-03",
-    "status": "completed"
+    "duration_hours": 40,
+    "credential_id": "EAAC-DL-0042",
+    "valid_until": "2029-03",
+    "skills": [
+     "Deep learning",
+     "Edge AI",
+     "TensorRT"
+    ],
+    "outcome": "Used the model-compression techniques to deploy the drone super-resolution model on Jetson modules."
    }
   },
   {
    "id": "edu-gfr",
-   "kind": "education",
+   "kind": "training",
    "verification": "confirmed",
    "confidentiality": "approved",
    "data": {
-    "qualification_type": "training",
-    "level": "certificate",
-    "degree": "Public Procurement and GFR 2017 (5-day programme)",
-    "issuer": "Example Institute of Public Administration",
+    "training_type": "training_programme",
+    "title": "Public Procurement and GFR 2017",
+    "provider": "Example Institute of Public Administration",
+    "sponsor": "Kestrel Atmospheric Instrumentation Laboratory",
     "end": "2019-11",
-    "status": "completed"
+    "start": "2019-11",
+    "duration_days": 5,
+    "skills": [
+     "Public procurement",
+     "GFR 2017",
+     "GeM"
+    ]
    }
   },
   {
@@ -1354,6 +1367,88 @@
     "exclude_ids": [
      "prj-glide"
     ]
+   }
+  },
+  {
+   "id": "trn-mctp",
+   "kind": "training",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "training_type": "mandatory_training",
+    "title": "Mid-Career Training Programme for Scientists",
+    "provider": "Example Institute of Scientific Administration",
+    "sponsor": "Ministry of Example Sciences",
+    "start": "2020-02",
+    "end": "2020-02",
+    "duration_days": 10,
+    "topics": [
+     "Research management",
+     "Financial rules",
+     "Leadership"
+    ]
+   }
+  },
+  {
+   "id": "trn-nptel",
+   "kind": "training",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "training_type": "online_course",
+    "title": "Introduction to Machine Learning (12-week course)",
+    "provider": "Example Online University Consortium",
+    "mode": "online",
+    "end": "2018-10",
+    "duration_hours": 48,
+    "grade": "Elite (82%)",
+    "skills": [
+     "Machine learning",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "trn-ws-sr",
+   "kind": "training",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "training_type": "workshop",
+    "title": "Workshop on Efficient Deep Learning for Embedded Vision",
+    "provider": "Example Conference on Instrumentation (ECI 2023)",
+    "location": "Pune",
+    "start": "2023-12",
+    "end": "2023-12",
+    "duration_days": 2
+   }
+  },
+  {
+   "id": "trn-sem",
+   "kind": "training",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "training_type": "seminar",
+    "title": "National Seminar on Upper-Air Observing Systems",
+    "provider": "Example Society of Atmospheric Instrumentation",
+    "location": "New Delhi",
+    "end": "2021-08",
+    "duration_days": 1
+   }
+  },
+  {
+   "id": "trn-ielts",
+   "kind": "training",
+   "verification": "confirmed",
+   "confidentiality": "approved",
+   "data": {
+    "training_type": "language_test",
+    "title": "Academic English proficiency test",
+    "provider": "Example Language Testing Board",
+    "end": "2016-05",
+    "grade": "Overall band 8.0",
+    "valid_until": "2018-05"
    }
   }
  ]

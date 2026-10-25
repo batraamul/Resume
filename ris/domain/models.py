@@ -38,12 +38,17 @@ from ris.domain.enums import (
     PublicationStatus,
     PublicationType,
     QualificationType,
+    QuestionCategory,
+    QuestionnaireType,
     RecruitmentMode,
     RequirementCategory,
     ResumeLength,
     Sector,
     SkillCategory,
     SummaryFocus,
+    TrainingMode,
+    TrainingStatus,
+    TrainingType,
 )
 from ris.util import new_id
 
@@ -302,6 +307,10 @@ class PersonalInfo(RecordData):
     orcid: Orcid = F("", "ORCID iD", group="Online profiles", placeholder="0000-0000-0000-0000")
     google_scholar: Url = F("", "Google Scholar", widget="url", group="Online profiles")
     researchgate: Url = F("", "ResearchGate", widget="url", group="Online profiles")
+    naukri: Url = F("", "Naukri profile", widget="url", group="Online profiles")
+    indeed: Url = F("", "Indeed profile", widget="url", group="Online profiles")
+    scopus_id: str = F("", "Scopus Author ID", group="Online profiles", placeholder="57200000000")
+    researcher_id: str = F("", "Web of Science ResearcherID", group="Online profiles", placeholder="ABC-1234-2020")
     other_profiles: TextList = F(
         [], "Other research profiles", widget="list", group="Online profiles",
         help="One per line as 'Label | URL', e.g. 'Scopus | https://www.scopus.com/authid/...'.",
@@ -641,6 +650,179 @@ class Reference(RecordData):
 
     def display_subtitle(self) -> str:
         return ", ".join(x for x in (self.designation, self.organisation) if x)
+
+
+class Training(_Dated):
+    """A training programme, professional course, certification, workshop, seminar or other qualification."""
+
+    training_type: TrainingType = F(TrainingType.TRAINING_PROGRAMME, "Type", widget="choice", group="Programme")
+    title: str = F("", "Title", group="Programme",
+                   help="As on the certificate, e.g. 'Mid-Career Training Programme' or 'AWS Certified Machine "
+                        "Learning – Specialty'.")
+    provider: str = F("", "Institute / issuing body", group="Programme",
+                      help="e.g. 'ISTM, New Delhi', 'NPTEL (IIT Madras)', 'IEEE', 'Amazon Web Services'.")
+    sponsor: str = F("", "Sponsored / nominated by", group="Programme",
+                     help="The organisation that nominated or funded you, if different from the provider.")
+    mode: TrainingMode = F(TrainingMode.CLASSROOM, "Mode", widget="choice", group="Programme")
+    location: str = F("", "Location", group="Programme")
+    start: PDate = F("", "Start", widget="date", group="Dates & duration")
+    end: PDate = F("", "End / issue date", widget="date", group="Dates & duration")
+    is_current: bool = F(False, "Ongoing", widget="bool", group="Dates & duration")
+    duration_hours: float | None = F(None, "Duration (hours)", widget="number", group="Dates & duration")
+    duration_days: float | None = F(None, "Duration (days)", widget="number", group="Dates & duration")
+    status: TrainingStatus = F(TrainingStatus.COMPLETED, "Status", widget="choice", group="Dates & duration",
+                               help="Planned items are hidden from documents unless you choose to show them.")
+    valid_until: PDate = F("", "Valid until (certifications)", widget="date", group="Credential",
+                           help="Expired certifications are labelled as expired and left out of one- and "
+                                "two-page resumes.")
+    grade: str = F("", "Grade / score / result", group="Credential", help="e.g. 'Elite + Gold (NPTEL)', 'Band 8.0'.")
+    credential_id: str = F("", "Certificate / credential number", group="Credential")
+    credential_url: Url = F("", "Verification URL", widget="url", group="Credential")
+    skills: Tags = F([], "Skills covered", widget="tags", group="Content",
+                     help="Used to match vacancy requirements and to suggest LinkedIn skills.")
+    topics: TextList = F([], "Topics covered", widget="list", group="Content")
+    outcome: str = F("", "How you applied it", widget="text", group="Content",
+                     help="One sentence on what you did with what you learned (optional).")
+    evidence: str = F("", "Supporting evidence", widget="text", group="Disclosure",
+                      help="e.g. certificate number, office order nominating you.")
+    notes: str = F("", "Private notes", widget="text", group="Private notes", private=True)
+
+    @model_validator(mode="after")
+    def _check_validity(self) -> Training:
+        e = dates.parse_or_none(self.end)
+        v = dates.parse_or_none(self.valid_until)
+        if e and v and v.sort_key() < e.sort_key():
+            raise ValueError("'Valid until' is before the issue date")
+        return self
+
+    def display_title(self) -> str:
+        return self.title or "Untitled training"
+
+    def display_subtitle(self) -> str:
+        bits = [b for b in (self.provider, self.end or self.start, self.status if self.status != "completed" else "")
+                if b]
+        return " · ".join(bits)
+
+
+class InterviewStory(RecordData):
+    """A STAR story (Situation, Task, Action, Result) prepared for interviews. Never printed in resumes."""
+
+    title: str = F("", "Story title", group="Story", help="A short name, e.g. 'Rescuing the radiosonde trial'.")
+    competencies: Tags = F([], "Competencies it shows", widget="tags", group="Story",
+                           help="e.g. leadership, problem-solving, teamwork, integrity, initiative.")
+    situation: str = F("", "Situation", widget="text", group="STAR",
+                       help="Context in two or three sentences: where, when, what was at stake.")
+    task: str = F("", "Task", widget="text", group="STAR", help="What you personally were responsible for.")
+    action: str = F("", "Action", widget="text", group="STAR",
+                    help="The steps you took and why. Say 'I', not 'we'. This should be the longest part.")
+    result: str = F("", "Result", widget="text", group="STAR",
+                    help="The outcome, with verified numbers if you have them, and what you learned.")
+    linked_ids: list[str] = F([], "Linked profile records", widget="refs", group="Links",
+                              ref_kind="position,assignment,project,activity,training",
+                              help="Positions, projects or activities this story comes from.")
+    notes: str = F("", "Private notes", widget="text", group="Private notes", private=True)
+
+    def display_title(self) -> str:
+        return self.title or first_line(self.situation) or "Untitled story"
+
+    def display_subtitle(self) -> str:
+        return ", ".join(self.competencies[:4])
+
+
+class InterviewAnswer(RecordData):
+    """Your notes for one interview question, with practice history."""
+
+    question: str = F("", "Question", widget="text", group="Question")
+    category: QuestionCategory = F(QuestionCategory.PERSONAL, "Category", widget="choice", group="Question")
+    answer: str = F("", "Answer notes", widget="text", group="Answer",
+                    help="Key points, not a script: interviewers notice memorised answers.")
+    story_ids: list[str] = F([], "STAR stories to use", widget="refs", ref_kind="interview_story", group="Answer")
+    confidence: int = F(0, "Confidence (0–5)", widget="number", group="Practice")
+    times_practised: int = F(0, "Times practised", widget="number", group="Practice")
+    last_practised: str = F("", "Last practised", hidden=True)
+    source: str = F("", "Where the question came from", hidden=True)
+
+    @field_validator("confidence", "times_practised", mode="before")
+    @classmethod
+    def _non_negative(cls, v: Any) -> int:
+        try:
+            n = int(v or 0)
+        except (TypeError, ValueError):
+            raise ValueError("Enter a whole number") from None
+        return max(0, n)
+
+    @field_validator("confidence")
+    @classmethod
+    def _cap(cls, v: int) -> int:
+        return min(5, v)
+
+    def display_title(self) -> str:
+        return first_line(self.question) or "Untitled question"
+
+    def display_subtitle(self) -> str:
+        return f"confidence {self.confidence}/5" if self.confidence else ""
+
+
+class QEducationRow(BaseModel):
+    model_config = ConfigDict(extra="allow", str_strip_whitespace=True)
+    examination: str = ""
+    institution: str = ""
+    board: str = ""
+    year: str = ""
+    result: str = ""
+    subjects: str = ""
+
+
+class QActivityRow(BaseModel):
+    model_config = ConfigDict(extra="allow", str_strip_whitespace=True)
+    activity: str = ""
+    level: str = ""
+    role: str = ""
+    year: str = ""
+    achievement: str = ""
+
+
+class QAttemptRow(BaseModel):
+    model_config = ConfigDict(extra="allow", str_strip_whitespace=True)
+    examination: str = ""
+    year: str = ""
+    centre: str = ""
+    result: str = ""
+
+
+class Questionnaire(RecordData):
+    """A personal questionnaire you fill for an interview board (SSB PIQ, DAF-style forms).
+
+    Everything here is private: it is never used in resumes. Boards frame questions from these
+    forms, so the app checks them against your profile for inconsistencies.
+    """
+
+    form_type: QuestionnaireType = F(QuestionnaireType.SSB_PIQ, "Form", widget="choice", group="Form")
+    title: str = F("", "Name of this form", group="Form", help="e.g. 'SSB 2026 PIQ' or 'DRDO interview DAF'.")
+    place_of_birth: str = F("", "Place of birth", group="Personal", private=True)
+    home_town: str = F("", "Home town / district / state", group="Personal", private=True)
+    permanent_address: str = F("", "Permanent address", widget="text", group="Personal", private=True)
+    present_address: str = F("", "Present address", widget="text", group="Personal", private=True)
+    father: str = F("", "Father's name, education and occupation", widget="text", group="Family", private=True,
+                    help="Be specific about the post held, e.g. 'Retired Senior Section Engineer, Indian Railways'.")
+    mother: str = F("", "Mother's name, education and occupation", widget="text", group="Family", private=True)
+    siblings: str = F("", "Siblings (education, occupation)", widget="text", group="Family", private=True)
+    education: list[QEducationRow] = F([], "Education", hidden=True)
+    ncc: str = F("", "NCC (certificate, wing, rank)", group="Activities")
+    sports: list[QActivityRow] = F([], "Sports", hidden=True)
+    extracurricular: list[QActivityRow] = F([], "Extra-curricular activities", hidden=True)
+    hobbies: Tags = F([], "Hobbies and interests", widget="tags", group="Activities",
+                      help="List only genuine interests: the interviewer will ask about them in detail.")
+    responsibilities: TextList = F([], "Positions of responsibility held", widget="list", group="Activities")
+    languages: Tags = F([], "Languages known", widget="tags", group="Activities")
+    previous_attempts: list[QAttemptRow] = F([], "Previous attempts / interviews", hidden=True)
+    service_choice: str = F("", "Choice of service / arm / post", widget="text", group="Preferences")
+    reasons: str = F("", "Why you want to join", widget="text", group="Preferences")
+    self_description: str = F("", "Self-description notes", widget="text", group="Preferences", private=True)
+    notes: str = F("", "Private notes", widget="text", group="Private notes", private=True)
+
+    def display_title(self) -> str:
+        return self.title or "Personal questionnaire"
 
 
 class CustomSection(RecordData):

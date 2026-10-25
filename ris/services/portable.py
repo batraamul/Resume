@@ -46,14 +46,16 @@ MAX_RECORDS = 20000
 # Payload fields that reference other records.
 REF_FIELDS_SCALAR = ("related_position_id", "target_id", "vacancy_id", "variant_id", "summary_id",
                      "cover_letter_id", "application_id", "target_bullet_id")
-REF_FIELDS_LIST = ("related_project_ids", "related_position_ids", "project_ids", "include_ids", "exclude_ids", "source_record_ids")
+REF_FIELDS_LIST = ("related_project_ids", "related_position_ids", "project_ids", "include_ids", "exclude_ids",
+                   "source_record_ids", "linked_ids", "story_ids")
 # Kinds imported before their dependants (parents first).
 KIND_ORDER = [RecordKind.PERSONAL, RecordKind.SUMMARY, RecordKind.POSITION, RecordKind.ASSIGNMENT,
               RecordKind.PROJECT, RecordKind.ACTIVITY, RecordKind.BULLET, RecordKind.EDUCATION,
               RecordKind.PUBLICATION, RecordKind.SKILL, RecordKind.EXPERTISE, RecordKind.REFERENCE,
-              RecordKind.CUSTOM_SECTION, RecordKind.CUSTOM_ENTRY,
+              RecordKind.TRAINING, RecordKind.CUSTOM_SECTION, RecordKind.CUSTOM_ENTRY,
               RecordKind.CAREER_TARGET, RecordKind.VACANCY, RecordKind.VARIANT, RecordKind.CLAIM,
-              RecordKind.COVER_LETTER, RecordKind.APPLICATION]
+              RecordKind.COVER_LETTER, RecordKind.APPLICATION, RecordKind.INTERVIEW_STORY,
+              RecordKind.INTERVIEW_ANSWER, RecordKind.QUESTIONNAIRE]
 
 
 def export_profile(repo: RecordRepository, *, include_confidential: bool = True, label: str = "",

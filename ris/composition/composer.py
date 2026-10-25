@@ -47,6 +47,7 @@ from ris.domain.enums import (
     ResumeLength,
     SkillCategory,
     SummaryFocus,
+    TrainingMode,
     Verification,
     label,
 )
@@ -71,6 +72,12 @@ FACET_FIELDS = (("problem", "Challenge"), ("approach", "Approach"), ("results", 
                 ("individual_contribution", "My contribution"))
 
 
+LINK_LABELS = {"linkedin": "LinkedIn", "github": "GitHub", "website": "Website", "portfolio": "Portfolio",
+               "google_scholar": "Google Scholar", "researchgate": "ResearchGate", "naukri": "Naukri",
+               "indeed": "Indeed"}
+NAMED_LINKS = {"google_scholar", "researchgate", "naukri", "indeed"}
+
+
 def short_org(name: str) -> str:
     """Compact organisation label for charts: an acronym in parentheses, a short name, or initials."""
     name = (name or "").strip()
@@ -84,6 +91,17 @@ def short_org(name: str) -> str:
     return initials if 2 <= len(initials) <= 6 else name[:16].rstrip() + "…"
 
 
+#: Dedicated training sections and the training types each one shows.
+TRAINING_SECTIONS: dict[str, set[str]] = {
+    "training_programmes": {"training_programme", "mandatory_training", "faculty_development"},
+    "courses": {"professional_course", "online_course"},
+    "certifications": {"certification", "licence", "language_test"},
+    "workshops": {"workshop", "seminar"},
+    "other_qualifications": {"other_qualification"},
+}
+#: Older profiles kept training in Education records; they are shown in the matching dedicated section.
+LEGACY_EDUCATION_SECTION = {"certification": "certifications", "training": "training_programmes",
+                            "course": "courses", "examination": "other_qualifications"}
 TRAINING_TYPES = {QualificationType.CERTIFICATION, QualificationType.TRAINING, QualificationType.COURSE,
                   QualificationType.EXAMINATION}
 PRIVATE_LABELS = {
@@ -114,6 +132,17 @@ class ComposeContext:
     mandatory_gaps: list[str] = field(default_factory=list)
     is_sample: bool = False
     today: date = field(default_factory=date.today)
+
+
+def _duration_text(hours: float | None, days: float | None) -> str:
+    def fmt(v: float) -> str:
+        return str(int(v)) if float(v).is_integer() else f"{v:g}"
+    parts = []
+    if days:
+        parts.append(f"{fmt(days)} day{'s' if days != 1 else ''}")
+    if hours:
+        parts.append(f"{fmt(hours)} hour{'s' if hours != 1 else ''}")
+    return " / ".join(parts)
 
 
 def _bio_date(text: str) -> str:
@@ -148,6 +177,7 @@ class ResumeComposer:
         self.warnings: list[str] = []
         self.include_ids = set(self.v.include_ids)
         self.exclude_ids = set(self.v.exclude_ids)
+        self.order: list[str] = []
 
     # ------------------------------------------------------------------ eligibility & tracking
     def eligible(self, rec: Record) -> bool:
@@ -234,13 +264,18 @@ class ResumeComposer:
             elif key == "orcid" and p.orcid:
                 out.append(ContactItem(key="orcid", label="ORCID", value=f"ORCID {p.orcid}",
                                        url=f"https://orcid.org/{p.orcid}"))
-            elif key in ("linkedin", "github", "website", "portfolio", "google_scholar", "researchgate"):
+            elif key in LINK_LABELS:
                 url = getattr(p, key, "")
                 if url:
-                    lbl = {"linkedin": "LinkedIn", "github": "GitHub", "website": "Website", "portfolio": "Portfolio",
-                           "google_scholar": "Google Scholar", "researchgate": "ResearchGate"}[key]
-                    value = short(url) if key not in ("google_scholar", "researchgate") else lbl
+                    lbl = LINK_LABELS[key]
+                    value = short(url) if key not in NAMED_LINKS else lbl
                     out.append(ContactItem(key=key, label=lbl, value=value, url=url))
+            elif key == "scopus_id" and p.scopus_id:
+                out.append(ContactItem(key=key, label="Scopus", value=f"Scopus ID {p.scopus_id}",
+                                       url=f"https://www.scopus.com/authid/detail.uri?authorId={p.scopus_id}"))
+            elif key == "researcher_id" and p.researcher_id:
+                out.append(ContactItem(key=key, label="ResearcherID", value=f"ResearcherID {p.researcher_id}",
+                                       url=f"https://www.webofscience.com/wos/author/record/{p.researcher_id}"))
         return out
 
     # ------------------------------------------------------------------ sections
@@ -492,29 +527,133 @@ class ResumeComposer:
             entries.append(entry)
         return IRSection(key=key, title=self.mode.title_for(key), layout="entries", entries=entries, sidebar_ok=True)
 
+    # ------------------------------------------------------------------ training & certifications
+    def _training_section_of(self, rec: Record) -> str:
+        if rec.kind == RecordKind.TRAINING:
+            for key, types in TRAINING_SECTIONS.items():
+                if rec.data.training_type in types:
+                    return key
+            return "other_qualifications"
+        return LEGACY_EDUCATION_SECTION.get(rec.data.qualification_type, "other_qualifications")
+
+    def _training_candidates(self, section_keys: set[str]) -> list[Record]:
+        """Eligible training records (and legacy training-type education records) for the given sections."""
+        recs = [r for r in self.snap.of(RecordKind.TRAINING) if self.eligible(r) and r.data.title]
+        recs += [e for e in self.snap.of(RecordKind.EDUCATION)
+                 if self.eligible(e) and QualificationType(e.data.qualification_type) in TRAINING_TYPES]
+        recs = [r for r in recs if self._training_section_of(r) in section_keys]
+        out = []
+        for r in recs:
+            planned = r.data.status in (EducationStatus.PLANNED.value, "planned")
+            if planned and not self.v.include_planned_education:
+                self.trimmed.append(f"Planned qualification hidden: {r.title}")
+                continue
+            if r.kind == RecordKind.TRAINING and self._expired(r) and self.length != ResumeLength.FULL:
+                self.trimmed.append(f"Expired certification left out: {r.title}")
+                continue
+            out.append(r)
+
+        def key(r: Record):
+            d = r.data
+            ongoing = d.status in ("ongoing",) or bool(getattr(d, "is_current", False))
+            return dates.range_sort_key(d.start, d.end, ongoing)
+        out.sort(key=key, reverse=True)
+        return out
+
+    def _expired(self, rec: Record) -> bool:
+        v = dates.parse_or_none(rec.data.valid_until)
+        if v is None:
+            return False
+        last = date(v.year, v.month or 12, v.day or 28)
+        return last < self.ctx.today
+
+    def _training_entry(self, r: Record, detail: bool) -> IREntry:
+        self._use(r)
+        ver, conf = self._status(r)
+        if r.kind == RecordKind.EDUCATION:
+            d = r.data
+            return IREntry(
+                id=r.id, kind="training", title=d.degree or d.discipline, subtitle=d.issuer or d.institution,
+                date_text=self._edu_date(r),
+                status_label={"ongoing": "Ongoing", "planned": "Planned"}.get(d.status, ""),
+                link=d.credential_url, source_ids=[r.id], verification=ver, confidentiality=conf,
+            )
+        d = r.data
+        subtitle = d.provider
+        if d.sponsor and d.sponsor.lower() not in (d.provider or "").lower():
+            subtitle = f"{subtitle} (sponsored by {d.sponsor})" if subtitle else f"Sponsored by {d.sponsor}"
+        if d.status == "planned":
+            when = "Planned"
+        elif d.status == "ongoing" or d.is_current:
+            start = dates.format_date(d.start, self.ctx.date_style)
+            when = f"{start} – ongoing" if start else "Ongoing"
+        elif d.start and d.end and dates.format_date(d.start, "mon_year") != dates.format_date(d.end, "mon_year"):
+            when = self._date(d.start, d.end, False)
+        else:
+            when = dates.format_date(d.end or d.start, self.ctx.date_style)
+        status = ""
+        if self._expired(r):
+            status = "Expired"
+        elif d.status == "ongoing" or d.is_current:
+            status = "Ongoing"
+        elif d.status == "planned":
+            status = "Planned"
+        entry = IREntry(id=r.id, kind="training", title=d.title, subtitle=subtitle, date_text=when,
+                        status_label=status, link=d.credential_url, source_ids=[r.id], verification=ver,
+                        confidentiality=conf, is_current=d.is_current)
+        duration = _duration_text(d.duration_hours, d.duration_days)
+        if duration:
+            entry.meta.append(("Duration", duration))
+        if d.grade:
+            entry.meta.append(("Result", d.grade))
+        if d.credential_id:
+            entry.meta.append(("Credential", d.credential_id))
+        if d.valid_until:
+            entry.meta.append(("Valid until" if not self._expired(r) else "Expired",
+                               dates.format_date(d.valid_until, self.ctx.date_style)))
+        if detail:
+            if d.mode in ("online", "blended", "abroad"):
+                entry.meta.append(("Mode", label(TrainingMode(d.mode))))
+            if d.skills:
+                entry.meta.append(("Skills", ", ".join(d.skills[:8])))
+            if d.outcome:
+                entry.description = first_sentence(d.outcome, 240)
+        return entry
+
     def section_training(self, key: str) -> IRSection | None:
-        recs = [e for e in self.snap.of(RecordKind.EDUCATION)
-                if self.eligible(e) and QualificationType(e.data.qualification_type) in TRAINING_TYPES]
-        if not self.v.include_planned_education:
-            for e in recs:
-                if e.data.status == EducationStatus.PLANNED.value:
-                    self.trimmed.append(f"Planned qualification hidden: {e.title}")
-            recs = [e for e in recs if e.data.status != EducationStatus.PLANNED.value]
+        """Combined 'Certifications & Training' section for compact resumes.
+
+        Items whose dedicated section (certifications, courses, workshops …) is also in this resume
+        are shown there instead, so nothing appears twice.
+        """
+        keys = {k for k in TRAINING_SECTIONS if k not in self.order}
+        recs = self._training_candidates(keys)
         if not recs:
             return None
-        recs.sort(key=lambda e: dates.range_sort_key(e.data.start, e.data.end, False), reverse=True)
         recs = self._limit(self._rank(recs) if not self.rel.is_empty else recs, self.budget.training, "Training")
-        entries = []
-        for e in recs:
-            d = e.data
-            self._use(e)
-            ver, conf = self._status(e)
-            entries.append(IREntry(
-                id=e.id, kind="training", title=d.degree or d.discipline,
-                subtitle=d.issuer or d.institution, date_text=self._edu_date(e),
-                status_label={"ongoing": "Ongoing", "planned": "Planned"}.get(d.status, ""),
-                link=d.credential_url, source_ids=[e.id], verification=ver, confidentiality=conf,
-            ))
+        detail = self.length == ResumeLength.FULL
+        entries = [self._training_entry(r, detail) for r in recs]
+        return IRSection(key=key, title=self.mode.title_for(key), layout="entries", entries=entries, sidebar_ok=True)
+
+    def section_training_group(self, key: str) -> IRSection | None:
+        recs = self._training_candidates({key})
+        if not recs:
+            return None
+        recs = self._limit(self._rank(recs) if not self.rel.is_empty else recs, self.budget.training,
+                           self.mode.title_for(key))
+        detail = self.length == ResumeLength.FULL
+        if self.mode.government and key != "certifications":
+            header = ["Programme / course", "Institute / sponsor", "Period", "Duration"]
+            rows = []
+            for r in recs:
+                e = self._training_entry(r, False)
+                dur = next((v for k, v in e.meta if k == "Duration"), "")
+                rows.append([e.title, e.subtitle, e.date_text, dur])
+            ids = [r.id for r in recs]
+            return IRSection(key=key, title=self.mode.title_for(key), layout="table",
+                             table=IRTable(header=header, rows=rows, col_widths=[0.38, 0.32, 0.18, 0.12],
+                                           source_ids=ids), source_ids=ids)
+        entries = [self._training_entry(r, detail) for r in recs]
         return IRSection(key=key, title=self.mode.title_for(key), layout="entries", entries=entries, sidebar_ok=True)
 
     def _publication_entry(self, pub: Record, names: list[str]) -> IREntry:
@@ -1002,6 +1141,11 @@ class ResumeComposer:
             "other_activities": lambda k: self._simple_activity_section(k, OTHER_ACTIVITY_TYPES,
                                                                         self.budget.activities),
             "training": self.section_training,
+            "training_programmes": self.section_training_group,
+            "courses": self.section_training_group,
+            "certifications": self.section_training_group,
+            "workshops": self.section_training_group,
+            "other_qualifications": self.section_training_group,
             "languages": self.section_languages,
             "particulars": self.section_particulars,
             "requirements_matrix": self.section_requirements_matrix,
@@ -1023,6 +1167,7 @@ class ResumeComposer:
         order = resolve_order(self.mode, user_order=list(self.v.section_order), target_order=target_order,
                               hidden=list(self.v.hidden_sections), emphasis=self.ctx.emphasis, custom_keys=custom_keys)
         sections: list[IRSection] = []
+        self.order = list(order)
         for key in order:
             sec = self.build_section(key)
             if sec is not None and not sec.is_empty():

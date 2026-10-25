@@ -63,7 +63,8 @@ log = logging.getLogger(__name__)
 
 CONTACT_KEYS = [("email", "Email"), ("phone", "Telephone"), ("location", "Location"), ("linkedin", "LinkedIn"),
                 ("github", "GitHub"), ("website", "Website"), ("portfolio", "Portfolio"), ("orcid", "ORCID"),
-                ("google_scholar", "Google Scholar"), ("researchgate", "ResearchGate")]
+                ("google_scholar", "Google Scholar"), ("researchgate", "ResearchGate"), ("scopus_id", "Scopus ID"),
+                ("researcher_id", "ResearcherID"), ("naukri", "Naukri"), ("indeed", "Indeed")]
 PARTICULARS = [("date_of_birth", "Date of birth"), ("date_of_entry_into_service", "Date of entry into service"),
                ("present_pay_level", "Present pay level"), ("nature_of_employment", "Nature of present employment"),
                ("nationality", "Nationality"), ("home_address", "Address for correspondence")]
@@ -339,6 +340,13 @@ class StudioPage(Page):
         down.clicked.connect(lambda: self._move_section(1))
         srow.addWidget(up)
         srow.addWidget(down)
+        self.b_add_section = QToolButton()
+        self.b_add_section.setText("Add section ▾")
+        self.b_add_section.setAccessibleName("Add a section to this resume")
+        self.b_add_section.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        self.b_add_section.setMenu(QMenu(self.b_add_section))
+        self.b_add_section.menu().aboutToShow.connect(self._fill_add_section_menu)
+        srow.addWidget(self.b_add_section)
         srow.addStretch(1)
         srow.addWidget(button("Reset to mode order", on_click=self._reset_sections))
         content.body.addLayout(srow)
@@ -588,6 +596,30 @@ class StudioPage(Page):
             it.setCheckState(Qt.CheckState.Unchecked if k in hidden else Qt.CheckState.Checked)
             self.sections.addItem(it)
         self.sections.blockSignals(False)
+
+    def _fill_add_section_menu(self) -> None:
+        from ris.composition.modes import ALL_SECTION_KEYS
+
+        menu = self.b_add_section.menu()
+        menu.clear()
+        present = {self.sections.item(i).data(Qt.ItemDataRole.UserRole) for i in range(self.sections.count())}
+        mode = get_mode(self.mode.currentData())
+        missing = [k for k in ALL_SECTION_KEYS if k not in present and k not in ("particulars", "declaration",
+                                                                                 "requirements_matrix")]
+        if not missing:
+            menu.addAction("All sections are already listed").setEnabled(False)
+        for k in missing:
+            menu.addAction(mode.title_for(k), lambda k=k: self.add_section(k))
+
+    def add_section(self, key: str) -> None:
+        mode = get_mode(self.mode.currentData())
+        it = QListWidgetItem(mode.title_for(key))
+        it.setData(Qt.ItemDataRole.UserRole, key)
+        it.setFlags(it.flags() | Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsDragEnabled)
+        it.setCheckState(Qt.CheckState.Checked)
+        self.sections.addItem(it)
+        self.sections.setCurrentItem(it)
+        self._changed()
 
     def _update_mode_ui(self, mode) -> None:
         self.particulars_box.setVisible(mode.government)

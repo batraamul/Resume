@@ -48,7 +48,7 @@ CREDIT = {
 }
 EVIDENCE_KINDS = (RecordKind.SKILL, RecordKind.BULLET, RecordKind.POSITION, RecordKind.ASSIGNMENT, RecordKind.PROJECT,
                   RecordKind.PUBLICATION, RecordKind.ACTIVITY, RecordKind.EDUCATION, RecordKind.CUSTOM_ENTRY,
-                  RecordKind.EXPERTISE)
+                  RecordKind.EXPERTISE, RecordKind.TRAINING)
 
 
 @dataclass

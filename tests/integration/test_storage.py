@@ -40,6 +40,30 @@ class TestMigrations:
         assert not db.table_exists("b")
         db.close()
 
+    @pytest.mark.req("MNT-04")
+    def test_upgrade_from_version_1_keeps_exports(self, tmp_path):
+        import shutil
+
+        from ris.resources import migrations_dir
+
+        v1 = tmp_path / "v1"
+        v1.mkdir()
+        shutil.copy(migrations_dir() / "0001_initial.sql", v1 / "0001_initial.sql")
+        db = Database(tmp_path / "old.db")
+        migrations.migrate(db, v1)
+        db.execute("INSERT INTO exports (id, created_at, document_kind, format, path, size_bytes, sha256, status)"
+                   " VALUES ('e1', 't', 'resume', 'pdf', '/x.pdf', 10, 'abc', 'valid')")
+        with pytest.raises(sqlite3.IntegrityError):
+            db.execute("INSERT INTO exports (id, created_at, document_kind, format, path, size_bytes, sha256, status)"
+                       " VALUES ('e2', 't', 'interview_pack', 'pdf', '/y.pdf', 10, 'abc', 'valid')")
+        applied = migrations.migrate(db)
+        assert [m.version for m in applied] == list(range(2, migrations.latest_version() + 1))
+        assert db.query_one("SELECT path FROM exports WHERE id = 'e1'")["path"] == "/x.pdf"
+        db.execute("INSERT INTO exports (id, created_at, document_kind, format, path, size_bytes, sha256, status)"
+                   " VALUES ('e3', 't', 'interview_pack', 'pdf', '/z.pdf', 10, 'abc', 'valid')")
+        assert db.scalar("SELECT COUNT(*) FROM exports") == 2
+        db.close()
+
     def test_constraints_enforced(self, workspace):
         with pytest.raises(sqlite3.IntegrityError):
             workspace.db.execute(

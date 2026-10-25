@@ -46,7 +46,7 @@ class SettingsPage(Page):
         app = Card("Appearance")
         f = QFormLayout()
         self.theme = QComboBox()
-        for v, t in (("light", "Light (ivory diary)"), ("dark", "Dark"), ("system", "Follow the system")):
+        for v, t in (("light", "Light"), ("dark", "Dark"), ("system", "Follow the system")):
             self.theme.addItem(t, v)
         self.ui_scale = QDoubleSpinBox()
         self.ui_scale.setRange(0.85, 1.5)
@@ -55,6 +55,12 @@ class SettingsPage(Page):
         f.addRow("Theme:", self.theme)
         f.addRow("Text size:", self.ui_scale)
         app.body.addLayout(f)
+        arow = QHBoxLayout()
+        arow.addWidget(button("Customise appearance…", "primary", on_click=self.customise_appearance,
+                              tooltip="Colour presets, your own colours, fonts, density, navigation and layout"))
+        arow.addWidget(muted("Colours, fonts, text size, density, icons, navigation and layout."))
+        arow.addStretch(1)
+        app.body.addLayout(arow)
         self.theme.currentIndexChanged.connect(self._appearance_changed)
         self.ui_scale.valueChanged.connect(self._appearance_changed)
         self.body.addWidget(app)
@@ -250,6 +256,19 @@ class SettingsPage(Page):
         self._save_config()
         if self.on_theme:
             self.on_theme()
+
+    def customise_appearance(self, exec_dialog: bool = True):
+        from ris.ui.appearance import AppearanceDialog
+
+        def applied() -> None:
+            if self.on_theme:
+                self.on_theme()
+
+        dlg = AppearanceDialog(self, self.ctx, applied)
+        if exec_dialog:
+            dlg.exec()
+            self.refresh()
+        return dlg
 
     def _docs_changed(self) -> None:
         if self._loading:

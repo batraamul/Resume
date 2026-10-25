@@ -505,7 +505,7 @@ class CollectionWidget(QWidget):
         self.add_labels = add_labels or {}
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        split = QSplitter(Qt.Orientation.Horizontal)
+        split = self.split = QSplitter(Qt.Orientation.Horizontal)
         left = QWidget()
         ll = QVBoxLayout(left)
         ll.setContentsMargins(0, 0, 8, 0)
@@ -608,6 +608,11 @@ class CollectionWidget(QWidget):
         QShortcut(QKeySequence.StandardKey.Delete, self.tree, activated=self.bulk_delete,
                   context=Qt.ShortcutContext.WidgetShortcut)
         self._suppress = False
+
+    def set_stacked(self, stacked: bool) -> None:
+        """Show the record list above the editor (stacked) or beside it."""
+        self.split.setOrientation(Qt.Orientation.Vertical if stacked else Qt.Orientation.Horizontal)
+        self.split.setSizes([300, 500] if stacked else [380, 620])
 
     # ------------------------------------------------------------------ tree
     def all_kinds(self) -> set[str]:

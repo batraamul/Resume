@@ -40,8 +40,9 @@ def apply_theme(app, config) -> None:
     from ris.ui import theme
 
     theme.load_fonts()
-    app.setFont(QFont(theme.UI_FONT, 10))
-    app.setStyleSheet(theme.stylesheet(theme.resolve(config.theme), config.ui_font_scale or 1.0))
+    a = theme.appearance_of(config)
+    app.setFont(QFont(a.ui_font or theme.UI_FONT, 10))
+    app.setStyleSheet(theme.stylesheet_for(config))
 
 
 def _install_excepthook() -> None:

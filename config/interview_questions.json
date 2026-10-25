@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "_comment": "General interview question bank and preparation guidance. Questions are written for scientific, technical, defence, intelligence and government interview boards, drawing on the sources listed. The app adds questions generated from your own profile, vacancy and questionnaire.",
+  "checked": "2026-10",
+  "sources": [
+    {"id": "star", "title": "The STAR Method: complete guide (The Interview Guys)", "url": "https://blog.theinterviewguys.com/the-star-method/"},
+    {"id": "upsc", "title": "How to prepare for the UPSC interview (Careers360)", "url": "https://competition.careers360.com/articles/how-prepare-for-upsc-ias-interview"},
+    {"id": "piq_fill", "title": "How to fill the online PIQ form for SSB (SSBCrackExams)", "url": "https://ssbcrackexams.com/step-by-step-guide-pro-tips-on-how-to-fill-new-online-piq-form-for-ssb-interview/"},
+    {"id": "piq_questions", "title": "Questions asked from the PIQ form in SSB (SSBCrackExams)", "url": "https://ssbcrackexams.com/sure-shot-questions-asked-from-piq-form-in-ssb-interview/"},
+    {"id": "senior_scientist", "title": "Senior scientist interview questions (InterviewPrep)", "url": "https://interviewprep.org/senior-scientist-interview-questions/"},
+    {"id": "deputation", "title": "Proforma for Bio-data as per DoPT OM dated 02.07.2015 (CAG)", "url": "https://cag.gov.in/uploads/subsite_whats_new/Proforma-for-Biodata-as-per-DoPT-OM-dated-02-07-2015-06231703a0fb5a8-59987840.pdf"}
+  ],
+  "questions": [
+    {"category": "personal", "text": "Tell us about yourself.", "hint": "Two minutes: present role, career path, one or two achievements and why you are here. Do not recite your resume."},
+    {"category": "personal", "text": "Walk us through your career so far, and the reasons for each move.", "hint": "Give honest, positive reasons for each change."},
+    {"category": "personal", "text": "Tell us about your home town or district: its economy, history and challenges.", "source": "upsc"},
+    {"category": "personal", "text": "What are your strengths? Give an example of each.", "hint": "Pick strengths the post needs and prove them with evidence."},
+    {"category": "personal", "text": "What is a weakness you are working on, and what are you doing about it?", "hint": "Name a real one and the concrete steps you are taking; avoid claiming to have none."},
+    {"category": "personal", "text": "How do you keep up to date in your field?", "source": "senior_scientist"},
+    {"category": "personal", "text": "Describe your daily routine and how you manage your time.", "source": "piq_questions"},
+    {"category": "personal", "text": "Who is your role model, and why?", "source": "piq_questions"},
+    {"category": "personal", "text": "What responsibilities have you taken on outside work, and what did you learn from them?", "source": "piq_questions"},
+
+    {"category": "motivation", "text": "Why do you want this post?", "hint": "Connect the post's duties to what you have done and want to do next."},
+    {"category": "motivation", "text": "Why should we select you over other candidates?"},
+    {"category": "motivation", "text": "Where do you see yourself in five years?"},
+    {"category": "motivation", "text": "What will you contribute in your first year?"},
+    {"category": "motivation", "text": "Why are you leaving (or seeking deputation from) your present organisation?", "hint": "Never criticise your employer; speak about growth and contribution."},
+    {"category": "motivation", "text": "If you are not selected, what will you do?", "source": "piq_questions"},
+
+    {"category": "technical", "text": "Explain the core principle behind your main area of work to a non-specialist.", "source": "senior_scientist"},
+    {"category": "technical", "text": "What are the current trends in your field that will matter most in the next five years?", "source": "senior_scientist"},
+    {"category": "technical", "text": "Describe a technical problem that took you a long time to solve. How did you approach it?"},
+    {"category": "technical", "text": "How do you validate that a system or result is correct?", "source": "senior_scientist"},
+    {"category": "technical", "text": "Which tools and methods do you use most, and what are their limitations?"},
+    {"category": "technical", "text": "How would you design a test plan for a new instrument or subsystem?"},
+    {"category": "technical", "text": "What standards or qualification requirements apply to your work, and how have you met them?"},
+    {"category": "technical", "text": "How do you decide between building in-house and procuring a solution?"},
+
+    {"category": "research", "text": "Summarise your most important publication: the problem, what is new, and the evidence.", "source": "senior_scientist"},
+    {"category": "research", "text": "What was your individual contribution to your co-authored papers?", "source": "senior_scientist"},
+    {"category": "research", "text": "How do you ensure your results are reproducible and your data is sound?", "source": "senior_scientist"},
+    {"category": "research", "text": "Describe a time your findings were challenged. How did you respond?", "source": "senior_scientist"},
+    {"category": "research", "text": "How do you move research into a working product or field deployment?", "source": "senior_scientist"},
+    {"category": "research", "text": "What is your next research question, and why does it matter to this organisation?"},
+    {"category": "research", "text": "How do you protect intellectual property arising from your work?", "source": "senior_scientist"},
+
+    {"category": "projects", "text": "Pick one project from your resume and explain it end to end in two minutes."},
+    {"category": "projects", "text": "What went wrong in a project, and what did you change as a result?"},
+    {"category": "projects", "text": "How did you manage risk, schedule and budget in your largest project?", "source": "senior_scientist"},
+    {"category": "projects", "text": "How did you work with industry partners, vendors or other laboratories?", "source": "senior_scientist"},
+
+    {"category": "leadership", "text": "Describe your experience leading a technical team.", "source": "senior_scientist"},
+    {"category": "leadership", "text": "How do you mentor junior scientists, engineers or students?", "source": "senior_scientist"},
+    {"category": "leadership", "text": "Tell us about a conflict in your team and how you handled it.", "source": "senior_scientist"},
+    {"category": "leadership", "text": "How do you prioritise when several projects need you at once?", "source": "senior_scientist"},
+    {"category": "leadership", "text": "Describe a difficult decision you took about the direction of a project.", "source": "senior_scientist"},
+    {"category": "leadership", "text": "How do you encourage innovation while keeping to schedules and rules?", "source": "senior_scientist"},
+
+    {"category": "behavioural", "text": "Tell us about a time you had to meet a tight deadline.", "hint": "Answer with a STAR story; spend about half the time on what you did."},
+    {"category": "behavioural", "text": "Describe a time you showed initiative beyond your assigned duties."},
+    {"category": "behavioural", "text": "Give an example of working with someone difficult."},
+    {"category": "behavioural", "text": "Tell us about a mistake you made and how you dealt with it."},
+    {"category": "behavioural", "text": "Describe a situation where you had to learn something quickly."},
+    {"category": "behavioural", "text": "Give an example of explaining a complex idea to senior officials or a non-technical audience.", "source": "senior_scientist"},
+    {"category": "behavioural", "text": "Tell us about a time you disagreed with your superior. What did you do?"},
+
+    {"category": "situational", "text": "A critical field trial fails a day before a review by senior officers. What do you do?"},
+    {"category": "situational", "text": "You discover that a supplier's test certificate does not match the delivered equipment. How do you proceed?"},
+    {"category": "situational", "text": "A subordinate repeatedly disobeys instructions. How do you handle it?", "source": "upsc"},
+    {"category": "situational", "text": "You are asked to deliver a project with half the planned budget. What would you change?"},
+    {"category": "situational", "text": "You notice a colleague sharing restricted information casually. What do you do?"},
+
+    {"category": "government", "text": "What do the General Financial Rules require when you procure equipment?", "hint": "Relevant if you have handled procurement; answer only from your experience."},
+    {"category": "government", "text": "How do you balance transparency with the need to protect classified or sensitive information?"},
+    {"category": "government", "text": "What does integrity in public service mean to you? Give an example from your work."},
+    {"category": "government", "text": "What will you bring back to your parent department after deputation?", "source": "deputation"},
+    {"category": "government", "text": "Which recent government schemes or missions relate to your field?", "source": "upsc"},
+
+    {"category": "organisation", "text": "What do you know about our organisation's mandate and recent programmes?"},
+    {"category": "organisation", "text": "Which of our current projects would you most like to work on, and why?"},
+    {"category": "organisation", "text": "How does your experience fit the specialisation advertised for this post?"},
+
+    {"category": "questionnaire", "text": "Describe your journey to the interview venue.", "source": "piq_questions"},
+    {"category": "questionnaire", "text": "What does your name mean?", "source": "piq_questions"},
+    {"category": "questionnaire", "text": "Tell us about your family. Whom are you closest to, and why?", "source": "piq_questions"},
+    {"category": "questionnaire", "text": "Name five good and five bad points about your city.", "source": "piq_questions"},
+    {"category": "questionnaire", "text": "How do you spend your free time?", "source": "piq_questions"},
+    {"category": "questionnaire", "text": "Who is your favourite teacher, and why?", "source": "piq_questions"},
+    {"category": "questionnaire", "text": "How did you prepare for this interview?", "source": "piq_questions"},
+
+    {"category": "closing", "text": "What would success look like in this post after the first year?"},
+    {"category": "closing", "text": "Which capabilities is the team looking to strengthen most?"},
+    {"category": "closing", "text": "What are the next steps in the selection process?"}
+  ],
+  "tips": {
+    "star": {
+      "title": "Answer behavioural questions with STAR",
+      "points": [
+        "Situation (about 20%): two or three sentences of context.",
+        "Task (about 15%): what you personally were responsible for.",
+        "Action (about 50%): the concrete steps you took and why — say 'I', not 'we'.",
+        "Result (about 15%): the outcome, with verified numbers where you have them, and what you learned.",
+        "Aim for 60–90 seconds per answer; over two minutes usually means too much background.",
+        "Prepare five to seven stories that cover different competencies, and adapt them to each question."
+      ],
+      "source": "star"
+    },
+    "board": {
+      "title": "Facing an interview board",
+      "points": [
+        "Most questions come from your application form — know every line of it.",
+        "If you do not know an answer, say so politely; do not guess or speak at length about things you are unsure of.",
+        "Make eye contact with every member, sit upright, and keep answers calm and positive.",
+        "Do not over-elaborate: long answers invite follow-up questions you may not want.",
+        "Read up on the last 12 months of developments in your field and the organisation.",
+        "Stay calm with sensitive or personal questions; the board often watches how you respond."
+      ],
+      "source": "upsc"
+    },
+    "dress": {
+      "title": "Presentation",
+      "points": [
+        "Neatly pressed formal clothes in neutral colours and polished formal shoes.",
+        "Keep accessories simple; leave phones and papers outside unless asked to bring them."
+      ],
+      "source": "upsc"
+    },
+    "questionnaire": {
+      "title": "Filling a personal questionnaire (PIQ/DAF)",
+      "points": [
+        "Be specific: write the exact post your parents hold rather than 'Government employee'.",
+        "Match every education entry to your certificates and disclose gaps honestly.",
+        "Do not exaggerate achievements or hobbies — the interviewer will ask about each in detail.",
+        "Keep the questionnaire, your self-description and your interview answers consistent.",
+        "Leave no section blank and check spelling before you submit."
+      ],
+      "source": "piq_fill"
+    }
+  }
+}

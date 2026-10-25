@@ -52,6 +52,10 @@ class RecordKind(StrEnum):
     COVER_LETTER = "cover_letter"
     EXPERTISE = "expertise"
     REFERENCE = "reference"
+    TRAINING = "training"
+    INTERVIEW_STORY = "interview_story"
+    INTERVIEW_ANSWER = "interview_answer"
+    QUESTIONNAIRE = "questionnaire"
 
 
 #: Kinds that hold professional facts (subject to verification and disclosure rules).
@@ -70,6 +74,7 @@ FACT_KINDS: frozenset[RecordKind] = frozenset(
         RecordKind.CUSTOM_ENTRY,
         RecordKind.EXPERTISE,
         RecordKind.REFERENCE,
+        RecordKind.TRAINING,
     }
 )
 
@@ -232,6 +237,56 @@ class ActivityType(StrEnum):
     OTHER = "other"
 
 
+class TrainingType(StrEnum):
+    TRAINING_PROGRAMME = "training_programme"
+    MANDATORY_TRAINING = "mandatory_training"
+    PROFESSIONAL_COURSE = "professional_course"
+    ONLINE_COURSE = "online_course"
+    CERTIFICATION = "certification"
+    LICENCE = "licence"
+    LANGUAGE_TEST = "language_test"
+    WORKSHOP = "workshop"
+    SEMINAR = "seminar"
+    FACULTY_DEVELOPMENT = "faculty_development"
+    OTHER_QUALIFICATION = "other_qualification"
+
+
+class TrainingMode(StrEnum):
+    CLASSROOM = "classroom"
+    ONLINE = "online"
+    BLENDED = "blended"
+    ON_THE_JOB = "on_the_job"
+    ABROAD = "abroad"
+
+
+class TrainingStatus(StrEnum):
+    COMPLETED = "completed"
+    ONGOING = "ongoing"
+    PLANNED = "planned"
+
+
+class QuestionCategory(StrEnum):
+    PERSONAL = "personal"
+    MOTIVATION = "motivation"
+    TECHNICAL = "technical"
+    RESEARCH = "research"
+    PROJECTS = "projects"
+    LEADERSHIP = "leadership"
+    BEHAVIOURAL = "behavioural"
+    SITUATIONAL = "situational"
+    GOVERNMENT = "government"
+    ORGANISATION = "organisation"
+    QUESTIONNAIRE = "questionnaire"
+    CLOSING = "closing"
+
+
+class QuestionnaireType(StrEnum):
+    SSB_PIQ = "ssb_piq"
+    INTERVIEW_DAF = "interview_daf"
+    ORGANISATION = "organisation"
+    OTHER = "other"
+
+
 class SummaryFocus(StrEnum):
     GENERAL = "general"
     SCIENTIFIC_LEADERSHIP = "scientific_leadership"
@@ -343,6 +398,51 @@ LABELS: dict[type, dict[str, str]] = {
         "cover_letter": "Cover letter",
         "expertise": "Area of expertise",
         "reference": "Referee",
+        "training": "Training & certification",
+        "interview_story": "Interview story (STAR)",
+        "interview_answer": "Interview answer",
+        "questionnaire": "Personal questionnaire",
+    },
+    TrainingType: {
+        "training_programme": "Training programme",
+        "mandatory_training": "Induction / mandatory / mid-career training",
+        "professional_course": "Professional course",
+        "online_course": "Online course (MOOC)",
+        "certification": "Certification",
+        "licence": "Licence",
+        "language_test": "Language proficiency test",
+        "workshop": "Workshop",
+        "seminar": "Seminar / conference attended",
+        "faculty_development": "Faculty / staff development programme",
+        "other_qualification": "Other qualification",
+    },
+    TrainingMode: {
+        "classroom": "Classroom / in person",
+        "online": "Online",
+        "blended": "Blended",
+        "on_the_job": "On the job",
+        "abroad": "Abroad",
+    },
+    TrainingStatus: {"completed": "Completed", "ongoing": "Ongoing", "planned": "Planned"},
+    QuestionCategory: {
+        "personal": "Personal & background",
+        "motivation": "Motivation & fit",
+        "technical": "Technical / domain",
+        "research": "Research & publications",
+        "projects": "Projects",
+        "leadership": "Leadership & management",
+        "behavioural": "Behavioural (STAR)",
+        "situational": "Situational & administrative",
+        "government": "Government service & ethics",
+        "organisation": "About the organisation",
+        "questionnaire": "From your questionnaire (PIQ/DAF)",
+        "closing": "Questions to ask the board",
+    },
+    QuestionnaireType: {
+        "ssb_piq": "SSB Personal Information Questionnaire (PIQ)",
+        "interview_daf": "Interview application form (DAF-style)",
+        "organisation": "Organisation-specific questionnaire",
+        "other": "Other questionnaire",
     },
     EmploymentType: {
         "permanent": "Permanent / regular",

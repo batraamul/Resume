@@ -29,9 +29,11 @@ from ris.ui import theme
 from ris.ui.pages.backup import BackupPage
 from ris.ui.pages.diary import DiaryPage
 from ris.ui.pages.exports import ExportsPage
+from ris.ui.pages.interview import InterviewPage
 from ris.ui.pages.letters import LettersPage
 from ris.ui.pages.library import LibraryPage
 from ris.ui.pages.opportunities import OpportunitiesPage
+from ris.ui.pages.portals import PortalsPage
 from ris.ui.pages.profile import SECTION_PAGES, CollectionPage, ProfilePage
 from ris.ui.pages.settings import SettingsPage
 from ris.ui.pages.studio import StudioPage
@@ -39,6 +41,7 @@ from ris.ui.pages.sync import SyncPage
 from ris.ui.pages.targets import TargetsPage
 from ris.ui.pages.tracker import TrackerPage
 from ris.ui.widgets.common import error
+from ris.ui.widgets.records import CollectionWidget
 from ris.ui.workers import run_task
 
 log = logging.getLogger(__name__)
@@ -50,6 +53,8 @@ PAGE_FOR_KIND = {
     RecordKind.PROJECT: "projects", RecordKind.ACTIVITY: "leadership", RecordKind.CAREER_TARGET: "targets",
     RecordKind.VACANCY: "opportunities", RecordKind.VARIANT: "studio", RecordKind.APPLICATION: "tracker",
     RecordKind.COVER_LETTER: "letters", RecordKind.EXPERTISE: "profile", RecordKind.REFERENCE: "profile",
+    RecordKind.TRAINING: "training", RecordKind.INTERVIEW_STORY: "interview", RecordKind.INTERVIEW_ANSWER: "interview",
+    RecordKind.QUESTIONNAIRE: "interview",
 }
 
 
@@ -100,7 +105,9 @@ class MainWindow(QMainWindow):
             QShortcut(QKeySequence(f"Ctrl+{i}"), self, activated=lambda k=key: self.navigate(k, ""))
         if ctx.has_workspace:
             self._workspace_opened()
-        self.navigate("diary", "")
+        self.apply_layout()
+        start = theme.appearance_of(ctx.config).start_page
+        self.navigate(start if start in self.pages else "diary", "")
 
     # ------------------------------------------------------------------ construction
     def _build_nav(self) -> QWidget:
@@ -110,11 +117,12 @@ class MainWindow(QMainWindow):
         outer = QVBoxLayout(nav)
         outer.setContentsMargins(0, 0, 0, 0)
         outer.setSpacing(0)
-        brand = QLabel("Resume Intelligence\nStudio")
+        self.nav = nav
+        brand = self.nav_brand = QLabel("Resume Intelligence\nStudio")
         brand.setObjectName("NavBrand")
         brand.setAccessibleName(APP_NAME)
         outer.addWidget(brand)
-        tag = QLabel(TAGLINE)
+        tag = self.nav_tagline = QLabel(TAGLINE)
         tag.setObjectName("NavTagline")
         tag.setWordWrap(True)
         outer.addWidget(tag)
@@ -126,9 +134,11 @@ class MainWindow(QMainWindow):
         self.nav_group = QButtonGroup(self)
         self.nav_group.setExclusive(True)
         self.nav_buttons: dict[str, QPushButton] = {}
+        self.nav_groups: list[QLabel] = []
         for group, items in NAV_SECTIONS:
             g = QLabel(group.upper())
             g.setObjectName("NavGroup")
+            self.nav_groups.append(g)
             hl.addWidget(g)
             for key, title in items:
                 b = QPushButton(title.replace("&", "&&"))
@@ -176,7 +186,8 @@ class MainWindow(QMainWindow):
         pages: list[tuple[str, QWidget]] = [("diary", DiaryPage(ctx)), ("profile", ProfilePage(ctx))]
         for key, title, kinds, hint, add_labels in SECTION_PAGES:
             pages.append((key, CollectionPage(ctx, key, title, kinds, empty_hint=hint, add_labels=add_labels)))
-        pages += [("targets", TargetsPage(ctx)), ("opportunities", OpportunitiesPage(ctx)), ("studio", StudioPage(ctx)),
+        pages += [("targets", TargetsPage(ctx)), ("opportunities", OpportunitiesPage(ctx)),
+                  ("interview", InterviewPage(ctx)), ("portals", PortalsPage(ctx)), ("studio", StudioPage(ctx)),
                   ("library", LibraryPage(ctx)), ("letters", LettersPage(ctx)), ("tracker", TrackerPage(ctx)),
                   ("exports", ExportsPage(ctx)), ("sync", SyncPage(ctx)), ("backup", BackupPage(ctx)),
                   ("settings", SettingsPage(ctx, on_theme=self.apply_theme, on_workspace=self.switch_workspace))]
@@ -307,11 +318,46 @@ class MainWindow(QMainWindow):
 
         QApplication.setOverrideCursor(_Qt.CursorShape.WaitCursor)
         try:
-            p = theme.resolve(self.ctx.config.theme)
-            QApplication.instance().setStyleSheet(theme.stylesheet(p, self.ctx.config.ui_font_scale or 1.0))
+            from PySide6.QtGui import QFont
+
+            a = theme.appearance_of(self.ctx.config)
+            QApplication.instance().setFont(QFont(a.ui_font or theme.UI_FONT, 10))
+            QApplication.instance().setStyleSheet(theme.stylesheet_for(self.ctx.config))
+            self.apply_layout()
         finally:
             QApplication.restoreOverrideCursor()
         self.ctx.theme_changed.emit()
+
+    def apply_layout(self) -> None:
+        """Navigation style and side, tagline and editor layout from the appearance settings."""
+        a = theme.appearance_of(self.ctx.config)
+        icons = a.nav_style in ("icons", "icons_text")
+        for _group, items in NAV_SECTIONS:
+            for key, title in items:
+                b = self.nav_buttons[key]
+                glyph = theme.NAV_ICONS.get(key, "•")
+                if a.nav_style == "icons":
+                    b.setText(glyph)
+                elif icons:
+                    b.setText(f"{glyph}   {title.replace('&', '&&')}")
+                else:
+                    b.setText(title.replace("&", "&&"))
+                b.setToolTip(title)
+        narrow = a.nav_style == "icons"
+        self.nav.setFixedWidth(64 if narrow else 250)
+        self.nav_brand.setVisible(not narrow)
+        self.nav_tagline.setVisible(a.show_tagline and not narrow)
+        for g in self.nav_groups:
+            g.setVisible(not narrow)
+        root_layout = self.centralWidget().layout()
+        want = 0 if a.nav_side == "left" else 1
+        if root_layout.indexOf(self.nav) != want:
+            root_layout.removeWidget(self.nav)
+            root_layout.insertWidget(want, self.nav)
+        stacked = a.editor_layout == "stacked"
+        for page in self.pages.values():
+            for col in page.findChildren(CollectionWidget):
+                col.set_stacked(stacked)
 
     def switch_workspace(self, entry) -> None:
         for page in self.pages.values():

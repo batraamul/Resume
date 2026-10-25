@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "_comment": "Orientation directory of recruiters for defence, intelligence, space, scientific and deputation careers in India, plus private defence-aerospace employers. Recruitment routes and documents are summarised from official notices and other sources listed; they change, so the app always tells you to read the actual notification. 'org_profile' links an entry to the organisation profiles in career_presets.json.",
+  "checked": "2026-10",
+  "categories": ["Defence R&D", "Space", "Technical intelligence", "Aeronautics", "Defence PSU", "Scientific research", "Central government", "Private defence & aerospace"],
+  "recruiters": [
+    {
+      "id": "drdo", "org_profile": "drdo", "name": "Defence Research and Development Organisation (DRDO)", "category": "Defence R&D",
+      "website": "https://www.drdo.gov.in", "careers": "https://rac.gov.in",
+      "routes": [
+        "Direct recruitment of Scientist 'B' through a valid GATE score and/or a written test and interview, conducted by the Recruitment and Assessment Centre (RAC).",
+        "Lateral recruitment to higher scientist grades through RAC advertisements for specified disciplines and experience.",
+        "Tenure, contract and deputation posts announced by individual laboratories."
+      ],
+      "advertised_in": ["RAC website", "Employment News", "DRDO website"],
+      "documents": ["Prescribed online application", "Degree certificates and mark sheets", "Experience certificates for lateral posts", "No-objection certificate from the present employer for serving government employees"],
+      "interview_focus": ["Depth in your core discipline", "Contribution to the projects listed in your application", "Relevance of your experience to the advertised specialisation"],
+      "sources": [
+        {"title": "Must-know facts about DRDO RAC recruitment (MADE EASY)", "url": "https://www.madeeasy.in/blog/must-know-facts-and-details-about-drdo-rac-recruitment"},
+        {"title": "DRDO RAC advertisement 153 (DRDO)", "url": "https://www.drdo.gov.in/drdo/sites/default/files/career-vacancy-documents/advt153RAC03032025.pdf"}
+      ]
+    },
+    {
+      "id": "isro", "org_profile": "isro", "name": "Indian Space Research Organisation (ISRO)", "category": "Space",
+      "website": "https://www.isro.gov.in", "careers": "https://www.isro.gov.in/CurrentOpportunities.html",
+      "routes": [
+        "Scientist/Engineer posts recruited centrally through the ISRO Centralised Recruitment Board (ICRB).",
+        "Centres (for example URSC, SAC, VSSC, LPSC, NRSC, SDSC) advertise their own Scientist/Engineer 'SC'/'SD', research and technical posts."
+      ],
+      "advertised_in": ["ISRO Current Opportunities page", "Centre websites"],
+      "documents": ["Online application as per the notice", "Qualification certificates", "Experience certificates where required"],
+      "interview_focus": ["Fundamentals of your engineering or science discipline", "Projects and hands-on work", "Fit with the centre's programmes"],
+      "sources": [{"title": "ISRO Current Opportunities", "url": "https://www.isro.gov.in/CurrentOpportunities.html"}]
+    },
+    {
+      "id": "ntro", "org_profile": "ntro", "name": "National Technical Research Organisation (NTRO)", "category": "Technical intelligence",
+      "website": "https://ntro.gov.in", "careers": "https://ntro.gov.in",
+      "routes": ["Direct recruitment of scientists and technical officers through advertisements.", "Deputation from central and state government organisations."],
+      "advertised_in": ["NTRO website", "Employment News"],
+      "documents": ["Application in the prescribed format", "For deputation: bio-data proforma, APARs, vigilance clearance and integrity certificate through proper channel"],
+      "interview_focus": ["Technical depth in signal, imagery, cyber or data domains as advertised", "Discretion and integrity"],
+      "sources": [{"title": "Proforma for Bio-data as per DoPT OM dated 02.07.2015 (CAG)", "url": "https://cag.gov.in/uploads/subsite_whats_new/Proforma-for-Biodata-as-per-DoPT-OM-dated-02-07-2015-06231703a0fb5a8-59987840.pdf"}]
+    },
+    {
+      "id": "arc", "org_profile": "arc", "name": "Aviation Research Centre (ARC)", "category": "Technical intelligence",
+      "website": "", "careers": "",
+      "routes": ["Posts are notified through official advertisements; deputation is a common route for experienced officers."],
+      "advertised_in": ["Employment News"],
+      "documents": ["Bio-data proforma and supporting documents as per the circular"],
+      "interview_focus": ["Aviation, airborne sensor or imagery experience relevant to the post"],
+      "sources": []
+    },
+    {
+      "id": "ada", "org_profile": "ada", "name": "Aeronautical Development Agency (ADA)", "category": "Aeronautics",
+      "website": "https://www.ada.gov.in", "careers": "https://www.ada.gov.in",
+      "routes": ["Scientist/engineer and project posts advertised on the ADA website; deputation for some posts."],
+      "advertised_in": ["ADA website"], "documents": ["As listed in the advertisement"],
+      "interview_focus": ["Aircraft systems, avionics, flight control or testing experience"], "sources": []
+    },
+    {
+      "id": "hal", "org_profile": "dpsu", "name": "Hindustan Aeronautics Limited (HAL)", "category": "Defence PSU",
+      "website": "https://hal-india.co.in", "careers": "https://hal-india.co.in",
+      "routes": ["Management trainee and experienced-professional recruitment through HAL advertisements."],
+      "advertised_in": ["HAL careers pages"], "documents": ["As listed in the advertisement"],
+      "interview_focus": ["Aircraft maintenance, manufacturing, avionics and quality experience"], "sources": []
+    },
+    {
+      "id": "bel", "org_profile": "dpsu", "name": "Bharat Electronics Limited (BEL)", "category": "Defence PSU",
+      "website": "https://bel-india.in", "careers": "https://bel-india.in",
+      "routes": ["Engineer and project-engineer recruitment through BEL advertisements."],
+      "advertised_in": ["BEL careers pages"], "documents": ["As listed in the advertisement"],
+      "interview_focus": ["Radar, communication and electronic systems"], "sources": []
+    },
+    {
+      "id": "csir", "org_profile": "csir_labs", "name": "CSIR laboratories", "category": "Scientific research",
+      "website": "https://www.csir.res.in", "careers": "https://www.csir.res.in",
+      "routes": ["Each laboratory advertises scientist and technical officer posts and follows its own format."],
+      "advertised_in": ["Laboratory websites", "Employment News"], "documents": ["Prescribed application format of the laboratory"],
+      "interview_focus": ["Research record and publications", "Proposed research plan"], "sources": []
+    },
+    {
+      "id": "cdac", "org_profile": "cdac", "name": "Centre for Development of Advanced Computing (C-DAC)", "category": "Scientific research",
+      "website": "https://www.cdac.in", "careers": "https://www.cdac.in",
+      "routes": ["Project and regular posts advertised by C-DAC centres."],
+      "advertised_in": ["C-DAC careers pages"], "documents": ["As listed in the advertisement"],
+      "interview_focus": ["Computing, AI, embedded or cyber security skills for the project"], "sources": []
+    },
+    {
+      "id": "upsc", "org_profile": "national_labs", "name": "Union Public Service Commission (UPSC) — recruitment by selection", "category": "Central government",
+      "website": "https://upsc.gov.in", "careers": "https://upsc.gov.in",
+      "routes": ["Many Group 'A' scientific and technical posts in ministries are filled by UPSC through advertisement, shortlisting and interview."],
+      "advertised_in": ["UPSC website", "Employment News"], "documents": ["Online recruitment application and supporting documents"],
+      "interview_focus": ["Your application form: background, education and experience", "Current developments in your field"],
+      "sources": [{"title": "How to prepare for the UPSC interview (Careers360)", "url": "https://competition.careers360.com/articles/how-prepare-for-upsc-ias-interview"}]
+    },
+    {
+      "id": "deputation", "org_profile": "defence_civilian", "name": "Central government deputation (various ministries and organisations)", "category": "Central government",
+      "website": "https://dopt.gov.in", "careers": "https://employmentnews.gov.in",
+      "routes": ["Vacancy circulars for deputation (including short-term contract) posts; applications are forwarded through proper channel by the cadre-controlling authority."],
+      "advertised_in": ["Employment News", "Ministry and organisation websites"],
+      "documents": [
+        "Bio-data/CV in the DoPT proforma (OM dated 02.07.2015): service details in chronological order, pay, nature of duties, additional qualifications and professional training, achievements",
+        "Candidate's declaration",
+        "Employer's certificate: no vigilance or disciplinary case, integrity certified, APARs (CR dossier or attested copies for the last five years), penalties in the last ten years if any"
+      ],
+      "interview_focus": ["How your duties match the essential qualifications and experience in the circular", "What you will contribute and bring back to your parent department"],
+      "sources": [{"title": "Proforma for Bio-data as per DoPT OM dated 02.07.2015 (CAG)", "url": "https://cag.gov.in/uploads/subsite_whats_new/Proforma-for-Biodata-as-per-DoPT-OM-dated-02-07-2015-06231703a0fb5a8-59987840.pdf"}]
+    },
+    {
+      "id": "tasl", "org_profile": "", "name": "Tata Advanced Systems", "category": "Private defence & aerospace",
+      "website": "https://www.tataadvancedsystems.com", "careers": "https://www.tataadvancedsystems.com",
+      "routes": ["Direct applications and recruitment through the company's careers page and professional networks."],
+      "advertised_in": ["Company careers page", "LinkedIn"], "documents": ["Resume (an ATS-friendly format is advisable)"],
+      "interview_focus": ["Programme delivery, systems engineering and manufacturing experience"], "sources": []
+    },
+    {
+      "id": "lt_defence", "org_profile": "", "name": "Larsen & Toubro (defence and aerospace businesses)", "category": "Private defence & aerospace",
+      "website": "https://www.larsentoubro.com", "careers": "https://www.larsentoubro.com",
+      "routes": ["Direct applications through the company's careers portal and professional networks."],
+      "advertised_in": ["Company careers portal", "LinkedIn", "Naukri"], "documents": ["Resume (an ATS-friendly format is advisable)"],
+      "interview_focus": ["Engineering delivery and project management"], "sources": []
+    }
+  ],
+  "trends": [
+    {"text": "AI is now widely used in hiring: in Deloitte India's Campus Workforce Trends 2026 survey, 86% of organisations said AI is transforming hiring and 72% use it for resume screening — so machine-readable resumes matter even when people make the final decision.",
+     "source": {"title": "Deloitte India — Campus Workforce Trends 2026", "url": "https://deloitte.com/in/en/about/press-room/india-s-campus-talent-landscape-pivots-to-skill-based-hiring-as-86-percent-of-employers-adopt-ai-in-recruitment--deloitte-india.html"}},
+    {"text": "Skills carry pay premiums: the same survey reports 20–25% premiums for AI, data and cyber security skills and identifies behavioural competencies and learning agility as the strongest predictors of conversion.",
+     "source": {"title": "Deloitte India — Campus Workforce Trends 2026", "url": "https://deloitte.com/in/en/about/press-room/india-s-campus-talent-landscape-pivots-to-skill-based-hiring-as-86-percent-of-employers-adopt-ai-in-recruitment--deloitte-india.html"}},
+    {"text": "Focus on two or three portals that suit your experience level, tailor each application, and follow up; profile completeness and recent activity affect visibility on Naukri.",
+     "source": {"title": "Best Job Portals in India 2026 (Jobrise)", "url": "https://jobrise.io/blog/best-job-portals-india-2026"}},
+    {"text": "Government and PSU notifications often prescribe their own application format or file type; read each notification before preparing documents.",
+     "source": {"title": "Resume PDF vs Word (Jobrise)", "url": "https://jobrise.io/blog/resume-pdf-vs-word-format"}}
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "_comment": "Job portals and profile sites with the limits and practices used by the Job Portal Kit. Figures come from the sources listed for each item (checked October 2026). Portals change their forms; the app treats every limit as guidance and tells you where it came from.",
+  "checked": "2026-10",
+  "portals": [
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com",
+      "best_for": "Technical, research and mid-to-senior roles; recruiters search profiles actively, and referrals and direct messages convert better than one-click applications.",
+      "resume_formats": ["DOC", "DOCX", "PDF"],
+      "resume_max_mb": 2,
+      "fields": [
+        {"id": "headline", "label": "Headline", "limit": 220, "kind": "hard"},
+        {"id": "about", "label": "About", "limit": 2600, "kind": "hard", "note": "Only the first two or three lines show before 'see more', so lead with your strongest line."},
+        {"id": "experience", "label": "Experience description (per position)", "limit": 2000, "kind": "hard"},
+        {"id": "job_title", "label": "Job title", "limit": 100, "kind": "hard"},
+        {"id": "skills", "label": "Skills", "kind": "list", "note": "Put the skills that match your target roles first."},
+        {"id": "certifications", "label": "Licenses & certifications", "kind": "list"}
+      ],
+      "tips": [
+        "Use a custom profile URL and put it on your resume.",
+        "Keep the headline factual: role, specialisation and the problems you solve.",
+        "LinkedIn keeps your four most recent uploaded resumes for quick applications; delete outdated files."
+      ],
+      "sources": [
+        {"title": "LinkedIn Character Limits in 2026 (Unilink)", "url": "https://unil.ink/blog/linkedin-character-limits-2026"},
+        {"title": "How to upload or replace your resume on LinkedIn, Indeed and Naukri (FastApply)", "url": "https://blog.fastapply.co/how-to-upload-or-replace-resume-linkedin-indeed-naukri-2026"},
+        {"title": "Best Job Portals in India 2026 (Jobrise)", "url": "https://jobrise.io/blog/best-job-portals-india-2026"}
+      ]
+    },
+    {
+      "id": "naukri",
+      "name": "Naukri.com",
+      "url": "https://www.naukri.com",
+      "best_for": "Mid-level corporate, engineering and IT roles in India; the portal most widely used by Indian employers.",
+      "resume_formats": ["DOC", "DOCX", "RTF", "PDF"],
+      "resume_max_mb": 2,
+      "fields": [
+        {"id": "resume_headline", "label": "Resume headline", "limit": 100, "kind": "advice", "note": "Recruiters judge fit from the headline at a glance; keep it short and specific."},
+        {"id": "profile_summary", "label": "Profile summary", "limit_words": [200, 300], "kind": "advice"},
+        {"id": "key_skills", "label": "Key skills", "limit": 50, "kind": "hard", "note": "Up to 50 skills; recruiters search and shortlist by skill."},
+        {"id": "projects", "label": "Projects", "kind": "list"}
+      ],
+      "tips": [
+        "Verify your mobile number and email so recruiters see the profile as genuine.",
+        "Fill every section (career profile, projects, accomplishments); complete profiles are recommended to recruiters more often.",
+        "One resume per profile: replacing it overwrites the old file, and the headline is a separate field.",
+        "DOCX can auto-fill the profile more cleanly than PDF."
+      ],
+      "sources": [
+        {"title": "Best practices for your Naukri profile (Naukri blog)", "url": "https://www.naukri.com/blog/best-practices-for-your-naukri-profile"},
+        {"title": "How Many Key Skills Can You Add on Naukri? (FirstDay AI)", "url": "https://firstdayai.in/blog/how-many-key-skills-can-you-add-on-naukri/"},
+        {"title": "Naukri Profile Optimization 2026 (Careerskraft)", "url": "https://www.careerskraft.com/blog/naukri-profile-optimization-2026.html"},
+        {"title": "How to upload or replace your resume on LinkedIn, Indeed and Naukri (FastApply)", "url": "https://blog.fastapply.co/how-to-upload-or-replace-resume-linkedin-indeed-naukri-2026"},
+        {"title": "Resume PDF vs Word (Jobrise)", "url": "https://jobrise.io/blog/resume-pdf-vs-word-format"}
+      ]
+    },
+    {
+      "id": "indeed",
+      "name": "Indeed",
+      "url": "https://in.indeed.com",
+      "best_for": "Broad, free job search with listings aggregated from many employers.",
+      "resume_formats": ["PDF", "DOCX"],
+      "resume_max_mb": null,
+      "fields": [
+        {"id": "headline", "label": "Headline", "kind": "text"},
+        {"id": "summary", "label": "Summary", "kind": "text"},
+        {"id": "skills", "label": "Skills", "kind": "list"}
+      ],
+      "tips": [
+        "Choose whether your resume is public or private; uploading for one application does not make it public.",
+        "Indeed keeps only the latest file you upload, so keep your own versions."
+      ],
+      "sources": [
+        {"title": "FAQs: creating, uploading and managing a resume file (Indeed Help Centre)", "url": "https://ca.indeed.com/help/job-seekers/articles/11314976176141-faqs-creating-uploading-and-managing-a-resume-file"},
+        {"title": "How to upload or replace your resume on LinkedIn, Indeed and Naukri (FastApply)", "url": "https://blog.fastapply.co/how-to-upload-or-replace-resume-linkedin-indeed-naukri-2026"}
+      ]
+    },
+    {
+      "id": "foundit",
+      "name": "foundit (formerly Monster India)",
+      "url": "https://www.foundit.in",
+      "best_for": "Mid-level corporate, sales and banking roles, including some multinational roles not posted elsewhere.",
+      "resume_formats": ["DOC", "DOCX", "PDF"],
+      "resume_max_mb": null,
+      "fields": [],
+      "tips": ["Offers a free resume critique; check listing dates, as some are outdated."],
+      "sources": [{"title": "Best Job Portals in India 2026 (Jobrise)", "url": "https://jobrise.io/blog/best-job-portals-india-2026"}]
+    },
+    {
+      "id": "instahyre",
+      "name": "Instahyre",
+      "url": "https://www.instahyre.com",
+      "best_for": "Technology professionals with about 2–15 years' experience; recruiters contact candidates directly (reverse recruiting).",
+      "resume_formats": ["PDF", "DOCX"],
+      "resume_max_mb": null,
+      "fields": [],
+      "tips": ["Salary information is shown upfront; keep your skills list current."],
+      "sources": [{"title": "Best Job Portals in India 2026 (Jobrise)", "url": "https://jobrise.io/blog/best-job-portals-india-2026"}]
+    },
+    {
+      "id": "ncs",
+      "name": "National Career Service (NCS)",
+      "url": "https://www.ncs.gov.in",
+      "best_for": "Government of India's national employment portal: job search, career counselling and job fairs.",
+      "resume_formats": [],
+      "resume_max_mb": null,
+      "fields": [],
+      "tips": ["Use alongside the official notification for each post; government applications usually follow a prescribed proforma."],
+      "sources": [{"title": "National Career Service job search (National Portal of India)", "url": "https://services.india.gov.in/service/detail/national-career-service-job-search"}]
+    },
+    {
+      "id": "employment_news",
+      "name": "Employment News / Rozgar Samachar",
+      "url": "https://employmentnews.gov.in",
+      "best_for": "Official weekly listing of central government vacancies, including deputation circulars.",
+      "resume_formats": [],
+      "resume_max_mb": null,
+      "fields": [],
+      "tips": ["Deputation applications go through proper channel with the bio-data proforma, APARs and vigilance clearance; see the Government CV mode."],
+      "sources": [{"title": "Proforma for Bio-data as per DoPT OM dated 02.07.2015 (CAG)", "url": "https://cag.gov.in/uploads/subsite_whats_new/Proforma-for-Biodata-as-per-DoPT-OM-dated-02-07-2015-06231703a0fb5a8-59987840.pdf"}]
+    }
+  ],
+  "profile_sites": [
+    {"id": "orcid", "name": "ORCID", "url": "https://orcid.org", "use": "Persistent researcher identifier; link it on research CVs."},
+    {"id": "google_scholar", "name": "Google Scholar", "url": "https://scholar.google.com", "use": "Publication list and citation metrics."},
+    {"id": "researchgate", "name": "ResearchGate", "url": "https://www.researchgate.net", "use": "Research network and publication pages."},
+    {"id": "scopus_id", "name": "Scopus Author ID", "url": "https://www.scopus.com", "use": "Often requested by government research organisations."},
+    {"id": "researcher_id", "name": "Web of Science ResearcherID", "url": "https://www.webofscience.com", "use": "Identifier used in Web of Science."},
+    {"id": "github", "name": "GitHub", "url": "https://github.com", "use": "Code and project portfolio for technical roles."}
+  ],
+  "file_practices": {
+    "name_pattern": "{first}_{last}_Resume",
+    "advice": [
+      "Name files clearly, for example Anika_Sharma_Resume.pdf; avoid names such as resume.pdf, CV.pdf or final_v3.",
+      "Keep resume files under 2 MB for Naukri and LinkedIn, and under about 1 MB for email attachments; a text-based one- or two-page PDF is typically 50–200 KB.",
+      "Government notifications sometimes require DOC or DOCX; read each notification."
+    ],
+    "sources": [{"title": "Resume PDF vs Word (Jobrise)", "url": "https://jobrise.io/blog/resume-pdf-vs-word-format"}]
+  }
+}

@@ -71,9 +71,9 @@ def window(qtbot, no_modals):
 
 
 @pytest.mark.req("UX-01", "UX-02")
-def test_navigation_has_eighteen_sections_and_every_page_opens(window, qtbot):
+def test_navigation_sections_and_every_page_opens(window, qtbot):
     keys = [k for _g, items in NAV_SECTIONS for k, _t in items]
-    assert len(keys) == 18 and set(keys) == set(window.pages)
+    assert len(keys) == 21 and set(keys) == set(window.pages)
     for key in keys:
         window.navigate(key, "")
         qtbot.wait(10)
@@ -326,3 +326,167 @@ def test_responsibility_and_storage_notices_shown(window):
     assert RESPONSIBILITY_NOTICE in texts(window.pages["diary"])
     settings = texts(window.pages["settings"])
     assert RESPONSIBILITY_NOTICE in settings and STORAGE_NOTICE in settings
+
+
+@pytest.mark.req("PRF-23")
+def test_training_page_lists_and_creates_records(window):
+    page = window.pages["training"]
+    window.navigate("training", "")
+    col = page.collection
+    col.add(RecordKind.TRAINING)
+    form = col.editor.form
+    form.set_value("title", "Advanced Radar Signal Processing")
+    form.set_value("training_type", "workshop")
+    form.set_value("provider", "Example Institute")
+    form.set_value("end", "2025-02")
+    assert col.editor.save()
+    rec = window.ctx.repo.get(col.editor.record.id)
+    assert rec.kind == RecordKind.TRAINING and rec.data.training_type == "workshop"
+
+
+@pytest.mark.req("INT-02", "INT-05")
+def test_interview_page_questions_answers_and_practice(window):
+    page = window.pages["interview"]
+    window.navigate("interview", "")
+    assert page.qtree.topLevelItemCount() > 40
+    mine = [q for q in page.questions if q.personalised]
+    assert mine
+    rec = page.prepare_answer(mine[0])
+    assert rec.kind == RecordKind.INTERVIEW_ANSWER and page.answers.editor.record.id == rec.id
+    page.n_questions.setValue(3)
+    page.start_practice()
+    assert page.p_question.text() and "Question 1 of 3" in page.p_progress.text()
+    page.p_notes.setPlainText("Key points: scope, team, result.")
+    page.p_conf.setValue(4)
+    saved = page.save_practice()
+    assert saved.data.confidence == 4 and saved.data.times_practised >= 1
+    page.next_question()
+    assert "Question 2 of 3" in page.p_progress.text()
+
+
+@pytest.mark.req("INT-03")
+def test_interview_story_check(window):
+    page = window.pages["interview"]
+    window.navigate("interview", "")
+    page.tabs.setCurrentIndex(3)
+    page.stories.add(RecordKind.INTERVIEW_STORY)
+    form = page.stories.editor.form
+    form.set_value("title", "Receiver failure")
+    form.set_value("situation", "Long background " * 30)
+    form.set_value("task", "We had to deliver.")
+    form.set_value("action", "We fixed it.")
+    form.set_value("result", "It worked.")
+    a = page.check_story()
+    assert a is not None and a.issues and "Situation is" in page.story_check.toPlainText()
+
+
+@pytest.mark.req("INT-04")
+def test_questionnaire_tab_fill_check_and_save(window):
+    page = window.pages["interview"]
+    window.navigate("interview", "")
+    rec = page.new_questionnaire()
+    assert page.questionnaire_rec.id == rec.id
+    page.fill_from_profile()
+    assert page.q_tables["education"].rows()
+    page.q_form.set_value("hobbies", "cycling, chess")
+    assert page.save_questionnaire()
+    saved = window.ctx.repo.get(rec.id)
+    assert saved.data.hobbies == ["cycling", "chess"] and saved.data.education
+    issues = page.check_questionnaire()
+    assert any(i.area == "Completeness" for i in issues)
+    assert page.q_issues.count() >= 1
+
+
+@pytest.mark.req("POR-02", "POR-04")
+def test_portals_page_kit_ats_and_target(window, tmp_path):
+    page = window.pages["portals"]
+    window.navigate("portals", "")
+    kit = page.build_kit()
+    assert {"linkedin", "naukri", "indeed"} <= set(kit) and page.kit_tree.topLevelItemCount() == 3
+    path = page.save_kit(str(tmp_path / "kit.txt"))
+    assert "=== LinkedIn ===" in path.read_text(encoding="utf-8")
+    page.tabs.setCurrentIndex(3)
+    rep = page.check_variant()
+    assert rep is not None and page.ats_tree.topLevelItemCount() == len(rep.checks)
+    assert "ATS readiness" in page.ats_score.text()
+    page.tabs.setCurrentIndex(0)
+    for i in range(page.rec_list.count()):
+        if page.rec_list.item(i).data(0x0100)["id"] == "isro":
+            page.rec_list.setCurrentRow(i)
+    target = page._make_target()
+    assert target is not None and target.kind == RecordKind.CAREER_TARGET
+
+
+@pytest.mark.req("STU-07")
+def test_studio_add_section(window, qtbot):
+    page = window.pages["studio"]
+    window.navigate("studio", "")
+    before = page.sections.count()
+    page._fill_add_section_menu()
+    assert page.b_add_section.menu().actions()
+    page.add_section("workshops")
+    assert page.sections.count() == before + 1
+    page._flush_save()
+    rec = window.ctx.repo.get(page.variant_id)
+    assert "workshops" in rec.data.section_order
+
+
+@pytest.mark.req("UX-09", "UX-10")
+def test_appearance_dialog_applies_and_undoes(window, tmp_path):
+    page = window.pages["settings"]
+    window.navigate("settings", "")
+    dlg = page.customise_appearance(exec_dialog=False)
+    dlg.preset.setCurrentIndex(dlg.preset.findData("forest"))
+    dlg.nav_style.setCurrentIndex(dlg.nav_style.findData("icons"))
+    dlg.editor_layout.setCurrentIndex(dlg.editor_layout.findData("stacked"))
+    dlg.set_colour("accent", "#123456")
+    dlg.apply_now()
+    css = QApplication.instance().styleSheet()
+    assert "#123456" in css and "#1E5B3F" in css  # custom accent and the forest navigation colour
+    assert window.nav.width() == 64 and window.nav_buttons["diary"].text() == "✎"
+    from PySide6.QtCore import Qt as _Qt
+
+    assert window.pages["experience"].collection.split.orientation() == _Qt.Orientation.Vertical
+    path = dlg.export_settings(str(tmp_path / "look.json"))
+    assert path.exists()
+    dlg.reject()
+    assert "#123456" not in QApplication.instance().styleSheet()
+    assert window.nav.width() == 250
+    dlg2 = page.customise_appearance(exec_dialog=False)
+    assert dlg2.import_settings(str(tmp_path / "look.json"))
+    assert window.ctx.config.appearance["preset"] == "forest"
+    dlg2.reject()
+
+
+@pytest.mark.req("TPL-03", "TPL-04", "TPL-06")
+def test_template_designer_saves_copy_with_live_checks(window, qtbot, tmp_path):
+    from ris.ui.workers import wait_idle
+
+    page = window.pages["library"]
+    window.navigate("library", "")
+    for i in range(page.templates.count()):
+        if page.templates.item(i).data(0x0100) == "modern_professional":
+            page.templates.setCurrentRow(i)
+    dlg = page._edit_template(exec_dialog=False)
+    assert ("colours", "accent") in dlg.editors and ("graphics", "palette") in dlg.editors
+    dlg.scheme.setCurrentIndex(dlg.scheme.findData("Teal modern"))
+    dlg.set_value("fonts", "body_size", 11.0)
+    dlg.update_preview()
+    wait_idle(30000)
+    qtbot.waitUntil(lambda: hasattr(dlg, "last_checks"), timeout=30000)
+    ats, notes = dlg.last_checks
+    assert ats.score > 0 and not notes
+    dlg.set_value("colours", "text", "#DDDDDD")
+    spec, err = dlg.spec_or_error()
+    assert spec is not None and any("Text: contrast" in n for n in dlg.readability(spec))
+    dlg.set_value("colours", "text", "#1F1F1F")
+    dlg.ats.setChecked(True)
+    spec, err = dlg.spec_or_error()
+    assert spec is not None and spec.ats_safe and not spec.columns.enabled and not err
+    out = dlg.export_json(str(tmp_path / "t.json"))
+    assert out.exists()
+    dlg.name.setText("My Teal ATS")
+    saved = dlg.save(as_new=True)
+    assert saved is not None and not saved.builtin and saved.id.startswith("user_my_teal_ats")
+    assert saved.colours.accent == "#0F6E5C" and saved.fonts.body_size == 11.0 and saved.ats_safe
+    assert window.ctx.templates.get("modern_professional").colours.accent != "#0F6E5C"  # built-in unchanged

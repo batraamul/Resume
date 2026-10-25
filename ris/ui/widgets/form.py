@@ -35,7 +35,7 @@ from PySide6.QtWidgets import (
 )
 
 from ris.composition.modes import MODES
-from ris.domain.enums import RecordKind, SummaryFocus, choices
+from ris.domain.enums import RecordKind, SummaryFocus, choices, label
 from ris.domain.registry import FieldMeta, field_metas
 from ris.ui.widgets.common import muted, repolish
 
@@ -66,7 +66,7 @@ class _ListEdit(QPlainTextEdit):
         return [ln.strip() for ln in self.toPlainText().splitlines() if ln.strip()]
 
     def set_value(self, v: Any) -> None:
-        self.setPlainText("\n".join(str(x) for x in (v or [])))
+        self.setPlainText(v if isinstance(v, str) else "\n".join(str(x) for x in (v or [])))
 
 
 class _TextEdit(QPlainTextEdit):
@@ -208,8 +208,11 @@ class RecordForm(QWidget):
         if not self.ctx or not self.ctx.has_workspace:
             return []
         out = []
-        for r in self.ctx.repo.list(RecordKind(kind)):
-            out.append((r.id, (r.title or "(untitled)") + (f" — {r.subtitle}" if r.subtitle else "")))
+        kinds = [k.strip() for k in (kind or "").split(",") if k.strip()]
+        for k in kinds:
+            prefix = f"{label(RecordKind(k))}: " if len(kinds) > 1 else ""
+            for r in self.ctx.repo.list(RecordKind(k)):
+                out.append((r.id, prefix + (r.title or "(untitled)") + (f" — {r.subtitle}" if r.subtitle else "")))
         return out
 
     def _combo(self, items: list[tuple[str, str]], editable: bool = False) -> QComboBox:
@@ -358,7 +361,7 @@ class RecordForm(QWidget):
             ed.edit.setText("" if v is None else str(v))
         elif isinstance(ed, QLineEdit):
             if m.widget == "tags":
-                ed.setText(", ".join(str(x) for x in (v or [])))
+                ed.setText(v if isinstance(v, str) else ", ".join(str(x) for x in (v or [])))
             elif v is None:
                 ed.setText("")
             elif isinstance(v, float) and v.is_integer() and m.widget == "number":
