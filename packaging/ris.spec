@@ -2,6 +2,7 @@
 #   pyinstaller packaging/ris.spec --noconfirm --clean
 # Produces dist/ResumeIntelligenceStudio/ (one folder). On macOS also an .app bundle.
 # Verify the build with:  dist/ResumeIntelligenceStudio/ResumeIntelligenceStudio --selftest
+import re
 import sys
 from pathlib import Path
 
@@ -25,12 +26,18 @@ a = Analysis(  # noqa: F821
     noarchive=False,
 )
 pyz = PYZ(a.pure)  # noqa: F821
-icon = None
+VERSION = re.search(r'__version__ = "([^"]+)"', (ROOT / "ris" / "__init__.py").read_text()).group(1)
+ICONS = ROOT / "assets" / "icons"
+icon = str(ICONS / "app.ico") if sys.platform.startswith("win") else (
+    str(ICONS / "app.icns") if sys.platform == "darwin" else None)
 exe = EXE(  # noqa: F821
     pyz, a.scripts, [], exclude_binaries=True, name="ResumeIntelligenceStudio", console=False, icon=icon,
     debug=False, strip=False, upx=False,
 )
 coll = COLLECT(exe, a.binaries, a.datas, name="ResumeIntelligenceStudio", strip=False, upx=False)  # noqa: F821
 if sys.platform == "darwin":
-    app = BUNDLE(coll, name="Resume Intelligence Studio.app", bundle_identifier="org.example.resumeintelligencestudio",  # noqa: F821
-                 info_plist={"NSHighResolutionCapable": True, "CFBundleShortVersionString": "1.0.0"})
+    app = BUNDLE(coll, name="Resume Intelligence Studio.app", icon=icon,  # noqa: F821
+                 bundle_identifier="io.github.batraamul.resumeintelligencestudio",
+                 info_plist={"NSHighResolutionCapable": True, "CFBundleShortVersionString": VERSION,
+                             "CFBundleVersion": VERSION, "CFBundleName": "Resume Intelligence Studio",
+                             "LSMinimumSystemVersion": "12.0", "NSHumanReadableCopyright": "MIT licence"})

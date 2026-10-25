@@ -67,6 +67,7 @@ def _isolated_user_dirs(tmp_path_factory, monkeypatch):
     monkeypatch.setenv("RIS_DATA_DIR", str(base / "data"))
     monkeypatch.setenv("RIS_CONFIG_DIR", str(base / "config"))
     monkeypatch.setenv("RIS_DISABLE_KEYRING", "1")
+    monkeypatch.setenv("RIS_DISABLE_UPDATE_CHECK", "1")
     yield base
 
 

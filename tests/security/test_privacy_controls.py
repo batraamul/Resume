@@ -163,7 +163,8 @@ def test_no_telemetry_and_business_logic_independent_of_ui():
         for bad in ("telemetry", "analytics.google", "segment.io", "sentry_sdk", "mixpanel"):
             if bad in text and "no telemetry" not in text.lower() and "telemetry" not in rel:
                 offenders.append(f"{rel}: {bad}")
-    allowed_network = {"ris/sync/gdrive.py", "ris/ai/external.py"}
+    # Optional sync, optional AI and the update check (GitHub only, no personal data) are the only network code.
+    allowed_network = {"ris/sync/gdrive.py", "ris/ai/external.py", "ris/update/client.py"}
     for py in (ROOT / "ris").rglob("*.py"):
         rel = py.relative_to(ROOT).as_posix()
         text = py.read_text(encoding="utf-8")

@@ -66,8 +66,10 @@ Pick or create a **variant** (a named set of choices). Settings save automatical
 * **Template** — visual layout (15). ATS-safe templates are single-column without tables or images.
 * **Target / vacancy** — drive ordering and emphasis; a vacancy adds the "required vs possessed" table to
   bio-data.
-* **Sections** — drag to reorder, untick to hide; **Contact details shown**; **Official particulars** (bio-data
-  only); **Choose records…** to leave individual records out.
+* **Sections** — drag to reorder, untick to hide, **Add section ▾** to include any other section (for
+  example *Workshops, Seminars & Conferences Attended* in a two-page resume); **Contact details shown**
+  (including Naukri, Indeed, Scopus Author ID and ResearcherID); **Official particulars** (bio-data only);
+  **Choose records…** to leave individual records out.
 * **Preview** — the built-in engine is fast; *export engine* shows the exact pagination.
 * **Content & claims** — select a statement → **Tailor wording for this resume…**: the suggestion is shown
   next to your original with every check (new numbers, stronger involvement, outcomes, qualifications…).
@@ -95,11 +97,72 @@ The three graphical templates (Graphical Career Profile, Research Showcase, Info
 
 Graphical resumes are for people to read. For online portals use the ATS mode and template.
 
+### Training, courses and certifications
+
+*Profile → Training & Certifications* records training programmes (including induction, mandatory and
+mid-career training), professional and online courses, certifications, licences, language tests, workshops,
+seminars and conferences attended, faculty development programmes and other qualifications — with the
+institute, who nominated or sponsored you, mode, dates, duration in hours or days, result, certificate
+number, verification link, *valid until* date and skills covered.
+
+Each group has its own resume section: **Training Programmes**, **Professional Courses**, **Certifications &
+Licences**, **Workshops, Seminars & Conferences Attended** and **Other Qualifications**. The Government CV
+uses all of them (as tables, matching the "professional training" item of the DoPT bio-data proforma);
+compact resumes use one combined *Certifications & Training* section and never repeat an item that already
+has its own section. Expired certifications are marked *Expired* and left out of one- and two-page resumes;
+planned items are hidden unless you choose to show planned qualifications. Older profiles that kept
+certifications under Education still work.
+
+## 4a. Interview preparation
+
+*Opportunities → Interview Preparation*:
+
+* **Questions** — a general bank (personal, motivation, technical, research, projects, leadership,
+  behavioural, situational, government service, the organisation, questionnaire-based, and questions to ask
+  the board) plus questions **generated from your own records**: your roles and moves between organisations,
+  gaps, projects ("your individual contribution, as distinct from the team's"), papers by exact status,
+  ongoing PhD, self-rated skills, training, leadership, the selected vacancy's requirements and gaps, the
+  organisation, and your questionnaire. Confidential records are never used. *Prepare an answer* creates a
+  note for the question.
+* **Practice** — rounds of 3–30 questions with a timer (aim for 60–90 seconds for STAR answers), notes and a
+  confidence rating; notes are saved under *My answers*.
+* **STAR stories** — five to seven true stories; the check shows each part's share (aim: Situation 20%,
+  Task 15%, Action 50%, Result 15%), the spoken length, "I" versus "we", and whether the result has an
+  outcome. Never add numbers you cannot verify.
+* **Questionnaire (PIQ / DAF)** — fill an SSB Personal Information Questionnaire or an interview application
+  form; *Fill empty sections from profile* copies education, languages and responsibilities; *Check against
+  profile* lists blanks and anything that disagrees with your profile (years, results, languages,
+  responsibilities) — boards cross-check these forms. *Export copy…* prints a private copy.
+* **Tips** — STAR, interview boards, presentation and questionnaires, with sources.
+* **Export preparation pack…** — your tailored questions, answer notes, stories, questionnaire summary and
+  reminders as DOCX and PDF (private; never for submission).
+
+## 4b. Job portals and recruiters
+
+*Opportunities → Job Portals & Recruiters*:
+
+* **Recruiters** — DRDO, ISRO, NTRO, ARC, ADA, HAL, BEL, CSIR, C-DAC, UPSC, central government deputation and
+  private defence-aerospace employers: recruitment routes, where vacancies appear, documents usually asked
+  for, interview focus, official website and sources. *Create a career target* sets up a target in one click.
+* **Job portals** — LinkedIn, Naukri, Indeed, foundit, Instahyre, National Career Service and Employment
+  News: who each suits, accepted resume files and size limits, profile field limits and tips, with sources;
+  research profile sites; file-naming practice.
+* **Profile kit** — LinkedIn headline (≤220 characters), About (≤2,600), experience descriptions (≤2,000 each),
+  skills and certifications; Naukri resume headline, profile summary (200–300 words recommended) and key
+  skills (≤50); Indeed headline, summary and skills — built only from confirmed facts approved for
+  professional use, with live counters. Edit and copy, or save everything as text.
+* **ATS check** — a scored checklist for any resume (one column, no tables or graphics, contacts in the body,
+  common font at 10–12 pt, 0.5–1 inch margins, standard headings, reverse chronology, consistent dates, plain
+  bullets, summary length, bullets per role, vacancy keywords), and *Check an exported file…* for file type,
+  size, selectable text and a clear file name.
+* **Trends** — current recruitment trends with sources.
+
 ## 5. Library, letters, tracker, exports
 
 * **Resume Library** — variants, immutable versions (preview, compare two, re-export identically, delete),
   "may be outdated" warnings when source records changed; **Templates** tab to preview with the fictional
-  sample, duplicate a template and edit fonts, colours and margins of your copy.
+  sample, duplicate a template, or open the **template designer** (*Design…*): every setting, colour schemes,
+  live preview, readability and ATS checks, and an ATS-safe switch. Built-in templates are saved as copies.
 * **Cover Letters** — drafts from confirmed facts and the vacancy; edit, preview, export (validated).
 * **Application Tracker** — status, deadlines, interview and follow-up dates, linked resume version and letter.
 * **Documents & Exports** — every exported file with checksum and validation report; *Verify checksum*;
@@ -117,6 +180,12 @@ Graphical resumes are for people to read. For online portals use the ATS mode an
 * **Settings & Security** — theme, text size, PDF engine and LibreOffice path, export folder and file-name
   pattern, score weights, credential store status, data folder, optional AI provider (see AI_PROVIDER.md),
   workspaces (including the fictional sample) and the glossary for engineering readers.
+* **Appearance** — *Settings & Security → Customise appearance…*: colour presets, your own colours (with
+  contrast checks), fonts, text size, density, corner roundness, navigation style and side, list position on
+  record pages and the start page. Changes apply immediately; *Undo changes* restores the previous look.
+* **Updates** — automatic checks (daily, can be turned off), stable or beta channel, *Check for updates
+  now*. When an update is available, a button appears at the top of the window; updates are verified against
+  the project's signature before you are asked to install. See [UPDATES.md](UPDATES.md).
 
 ## 7. Keyboard
 

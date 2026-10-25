@@ -1,0 +1,238 @@
+# Versioned releases: push a tag such as v1.2.0 (or v1.3.0-beta.1 for a test release).
+# Builds and self-tests the application on Windows, macOS and Linux, packages the installers, writes the
+# update manifest and SHA-256 sums, signs the manifest and publishes a GitHub Release.
+#
+# Signing: the repository secret RIS_UPDATE_SIGNING_KEY holds the Ed25519 private key. Without it the
+# release is created as a DRAFT so that no unsigned update reaches users; sign it locally with
+# scripts/release_manifest.py and publish the draft (see docs/RELEASING.md).
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build (for example v1.1.0)"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  TAG: ${{ inputs.tag || github.ref_name }}
+  PYTHONUTF8: "1"
+
+jobs:
+  build:
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: windows-x64
+          - os: macos-latest
+            target: macos-arm64
+          - os: ubuntu-22.04
+            target: linux-x86_64
+    env:
+      HAS_MAC_CERT: ${{ secrets.MACOS_CERTIFICATE_P12 != '' }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements*.txt
+
+      - name: Install Qt runtime libraries (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libxkbcommon0 libxkbcommon-x11-0 \
+            libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libxcb-xinerama0 libfontconfig1 libdbus-1-3
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Check that the tag matches the application version
+        id: version
+        run: |
+          VERSION=$(python -c "import ris; print(ris.__version__)")
+          TAG_VERSION="${TAG#v}"
+          if [ "$VERSION" != "$TAG_VERSION" ]; then
+            echo "::error title=Version mismatch::Tag $TAG does not match ris.__version__ $VERSION"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Unit and integration tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+          RIS_DISABLE_KEYRING: "1"
+        run: |
+          mkdir -p build
+          python -m pytest -q -p no:cacheprovider tests/unit tests/integration tests/security --junitxml=build/junit.xml
+
+      - name: Report failed tests as annotations
+        if: failure()
+        run: python scripts/ci_annotate.py build/junit.xml
+
+      - name: Build the application (PyInstaller)
+        run: pyinstaller packaging/ris.spec --noconfirm --clean
+
+      - name: Self-test the built application (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          QT_QPA_PLATFORM: offscreen
+          RIS_DISABLE_KEYRING: "1"
+        run: |
+          $p = Start-Process -FilePath "dist\ResumeIntelligenceStudio\ResumeIntelligenceStudio.exe" `
+               -ArgumentList "--selftest","--report","build\frozen-selftest.txt" -Wait -PassThru
+          Get-Content build\frozen-selftest.txt
+          if ($p.ExitCode -ne 0) { Write-Output "::error title=Self-test failed::See the log above"; exit 1 }
+
+      - name: Self-test the built application (macOS)
+        if: runner.os == 'macOS'
+        env:
+          QT_QPA_PLATFORM: offscreen
+          RIS_DISABLE_KEYRING: "1"
+        run: |
+          "dist/Resume Intelligence Studio.app/Contents/MacOS/ResumeIntelligenceStudio" --selftest --report build/frozen-selftest.txt \
+            || { cat build/frozen-selftest.txt; echo "::error title=Self-test failed::$(tail -3 build/frozen-selftest.txt | tr '\n' ' ')"; exit 1; }
+          cat build/frozen-selftest.txt
+
+      - name: Self-test the built application (Linux)
+        if: runner.os == 'Linux'
+        env:
+          QT_QPA_PLATFORM: offscreen
+          RIS_DISABLE_KEYRING: "1"
+        run: |
+          dist/ResumeIntelligenceStudio/ResumeIntelligenceStudio --selftest --report build/frozen-selftest.txt \
+            || { cat build/frozen-selftest.txt; echo "::error title=Self-test failed::$(tail -3 build/frozen-selftest.txt | tr '\n' ' ')"; exit 1; }
+          cat build/frozen-selftest.txt
+
+      - name: Package the Windows installer
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $iscc = (Get-Command iscc.exe -ErrorAction SilentlyContinue).Source
+          if (-not $iscc) { $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress; $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          & $iscc "/DAppVersion=${{ steps.version.outputs.version }}" "/DSourceDir=..\..\dist\ResumeIntelligenceStudio" "/DOutputDir=..\..\dist\installer" packaging\windows\ris.iss
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          Compress-Archive -Path dist\ResumeIntelligenceStudio -DestinationPath "dist\installer\ResumeIntelligenceStudio-${{ steps.version.outputs.version }}-windows-x64-portable.zip"
+
+      - name: Sign and notarise the macOS app (optional)
+        if: runner.os == 'macOS' && env.HAS_MAC_CERT == 'true'
+        env:
+          MACOS_CERTIFICATE_P12: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: bash packaging/macos/sign_and_notarise.sh
+
+      - name: Package the macOS disk image
+        if: runner.os == 'macOS'
+        run: bash packaging/macos/make_dmg.sh "${{ steps.version.outputs.version }}" arm64
+
+      - name: Package the Linux archives
+        if: runner.os == 'Linux'
+        run: bash packaging/linux/make_packages.sh "${{ steps.version.outputs.version }}"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ matrix.target }}
+          path: dist/installer/*
+          if-no-files-found: error
+
+  publish:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install manifest tooling
+        run: python -m pip install "cryptography==50.0.2" "pydantic==2.14.1"
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: release-*
+          path: dist/release
+          merge-multiple: true
+
+      - name: Write the update manifest and checksums
+        run: |
+          VERSION="${TAG#v}"
+          python scripts/release_manifest.py build --dir dist/release --version "$VERSION" --tag "$TAG" --repo "${{ github.repository }}"
+          ls -la dist/release
+
+      - name: Sign the update manifest
+        id: sign
+        env:
+          RIS_UPDATE_SIGNING_KEY: ${{ secrets.RIS_UPDATE_SIGNING_KEY }}
+        run: |
+          if [ -n "$RIS_UPDATE_SIGNING_KEY" ]; then
+            python scripts/release_manifest.py sign --manifest dist/release/ris-update.json
+            python scripts/release_manifest.py verify --manifest dist/release/ris-update.json --dir dist/release
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning title=Unsigned release::RIS_UPDATE_SIGNING_KEY is not set; the release is created as a draft. Sign it with scripts/release_manifest.py and publish it."
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Record build provenance
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: dist/release/*
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${TAG#v}"
+          python scripts/release_manifest.py notes --version "$VERSION" > build-notes.md
+          {
+            echo
+            echo "### Downloads"
+            echo "* **Windows**: \`ResumeIntelligenceStudio-$VERSION-windows-x64-setup.exe\` (per-user installer) or the portable zip"
+            echo "* **macOS (Apple silicon)**: \`ResumeIntelligenceStudio-$VERSION-macos-arm64.dmg\`"
+            echo "* **Linux**: \`ResumeIntelligenceStudio-$VERSION-linux-x86_64.tar.gz\` or \`resume-intelligence-studio_${VERSION}_amd64.deb\`"
+            echo
+            echo "Verify downloads with \`SHA256SUMS.txt\`. Installed copies update themselves after checking the signed \`ris-update.json\`."
+          } >> build-notes.md
+          FLAGS=""
+          if [[ "$VERSION" == *-* ]]; then FLAGS="$FLAGS --prerelease"; fi
+          if [ "${{ steps.sign.outputs.signed }}" != "true" ]; then FLAGS="$FLAGS --draft"; fi
+          gh release create "$TAG" dist/release/* --repo "${{ github.repository }}" \
+            --title "Resume Intelligence Studio $VERSION" --notes-file build-notes.md $FLAGS

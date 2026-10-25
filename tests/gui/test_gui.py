@@ -490,3 +490,42 @@ def test_template_designer_saves_copy_with_live_checks(window, qtbot, tmp_path):
     assert saved is not None and not saved.builtin and saved.id.startswith("user_my_teal_ats")
     assert saved.colours.accent == "#0F6E5C" and saved.fonts.body_size == 11.0 and saved.ats_safe
     assert window.ctx.templates.get("modern_professional").colours.accent != "#0F6E5C"  # built-in unchanged
+
+
+@pytest.mark.req("UPD-02", "UPD-03", "UPD-04")
+def test_update_check_dialog_and_settings(window, monkeypatch, tmp_path):
+    import base64
+
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    from ris.ui.updates import UpdateDialog, due_for_check
+    from ris.update.client import UpdateClient
+    from tests.unit.test_updates import REPO, _server
+
+    key = Ed25519PrivateKey.generate()
+    pubs = (base64.b64encode(key.public_key().public_bytes(serialization.Encoding.Raw,
+                                                           serialization.PublicFormat.Raw)).decode(),)
+    opener, asset = _server(key)
+    factory = lambda: UpdateClient(repository=REPO, current_version="1.1.0", keys=pubs, opener=opener)  # noqa: E731
+    window.updater.client_factory = factory
+    found = []
+    window.updater.found.connect(found.append)
+    window._manual_check = False
+    window.updater.check(manual=False, synchronous=True)
+    assert found and window.update_button.isVisible() and "9.0.0" in window.update_button.text()
+    assert window.ctx.config.update_last_check and not due_for_check(window.ctx.config)
+    dlg = UpdateDialog(window, window.ctx, found[0], client_factory=factory)
+    assert "Signature verified" in dlg.status.text()
+    dlg.download_and_install(synchronous=True, run=False)
+    assert dlg.downloaded is not None and dlg.downloaded.read_bytes() == b"installer-bytes"
+    assert dlg.plan is not None and "Download verified" in dlg.status.text()
+    dlg.skip()
+    assert window.ctx.config.update_skipped_version == "9.0.0"
+    found.clear()
+    window.updater.check(manual=False, synchronous=True)
+    assert not found, "a skipped version is not offered again automatically"
+    page = window.pages["settings"]
+    window.navigate("settings", "")
+    page.update_auto.setChecked(False)
+    assert window.ctx.config.update_auto_check is False and not due_for_check(window.ctx.config)

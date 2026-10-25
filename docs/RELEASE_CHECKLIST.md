@@ -2,7 +2,7 @@
 
 - [ ] Version updated in `ris/__init__.py`, `pyproject.toml` and `CHANGELOG.md`.
 - [ ] New database changes are a new numbered migration; older migrations unchanged (checksums verified at start-up).
-- [ ] `ruff check ris tests scripts` clean.
+- [ ] `ruff check ris tests scripts docs/tutorial` clean.
 - [ ] `QT_QPA_PLATFORM=offscreen python -m pytest` — all tests pass; failures investigated, not skipped.
 - [ ] `python scripts/trace_requirements.py` — no *Failing* requirements; review *No automated test* entries.
 - [ ] `python scripts/gen_data_dictionary.py` — DATA_MODEL.md regenerated.

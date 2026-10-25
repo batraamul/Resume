@@ -13,7 +13,7 @@ All text/background pairs are listed in `ris/ui/theme.py` and checked for WCAG 2
 ```
 ┌──────────────┬──────────────────────────────────────────────────────────────┐
 │ Diary index  │ Top bar: workspace · search (Ctrl+F) · sync status           │
-│ (18 sections │ [Fictional sample banner when the sample workspace is open]  │
+│ (21 sections │ [Fictional sample banner when the sample workspace is open]  │
 │  in 5 groups)│ Page title + subtitle                       [page actions]   │
 │              │ Page body (lists, editors, previews)                         │
 │              │ Status bar (messages, progress)                              │
@@ -21,10 +21,21 @@ All text/background pairs are listed in `ris/ui/theme.py` and checked for WCAG 2
 ```
 
 Groups and sections: **Diary** (My Professional Diary) · **Profile** (Master Profile, Experience, Education,
-Research & Publications, Skills & Technologies, Projects & Achievements, Leadership & Responsibilities) ·
-**Opportunities** (Career Targets, Job Opportunities) · **Documents** (Resume Studio, Resume Library, Cover
-Letters, Application Tracker, Documents & Exports) · **System** (Synchronisation, Backup & Restore, Settings &
-Security).
+Training & Certifications, Research & Publications, Skills & Technologies, Projects & Achievements,
+Leadership & Responsibilities) · **Opportunities** (Career Targets, Job Opportunities, Interview Preparation,
+Job Portals & Recruiters) · **Documents** (Resume Studio, Resume Library, Cover Letters, Application Tracker,
+Documents & Exports) · **System** (Synchronisation, Backup & Restore, Settings & Security).
+
+## Customisation (version 1.1)
+
+*Settings & Security → Customise appearance…* changes the whole interface live: colour preset (Diary maroon,
+Navy professional, Forest green, Slate grey, Royal plum, High contrast) in light, dark or system mode; your own
+accent, navigation, page, card, text and heading colours (dependent colours follow, unreadable text is
+corrected to black or white, and remaining contrast problems are listed); interface and heading fonts; text
+size; density (compact, comfortable, spacious); corner roundness; navigation as text, icons and text, or a
+narrow icon bar, on the left or right; record pages with the list beside or above the editor; the tagline;
+and the start page. Settings can be exported and imported. Icons are monochrome glyphs from the bundled
+DejaVu Sans font, so they look the same on every platform.
 
 ## Shared patterns
 

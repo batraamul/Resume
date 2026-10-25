@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Resume Intelligence Studio
+GenericName=Resume builder
+Comment=Verified master profile and tailored resumes
+Exec=/opt/resume-intelligence-studio/ResumeIntelligenceStudio
+Icon=resume-intelligence-studio
+Categories=Office;
+Terminal=false
+StartupWMClass=ResumeIntelligenceStudio

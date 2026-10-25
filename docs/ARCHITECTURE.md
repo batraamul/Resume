@@ -55,7 +55,8 @@ ris/
   services/                profile service, completeness, chronology, duplicates, importers, JSON export
   intelligence/            text normalisation, taxonomy, vacancy extraction, evidence matching,
                            scoring, presets (Defence & Intelligence), rewriting, claims,
-                           disclosure scanner, ATS checks, readiness
+                           disclosure scanner, ATS checks and readiness checklist, interview preparation,
+                           job-portal profile kit
   composition/             content IR, resume composer, cover-letter composer, portfolio
   rendering/               template specs, layout planner, DOCX renderer, PDF renderer,
                            LibreOffice converter, fonts, plain-text export, validation, export service
@@ -64,7 +65,9 @@ ris/
   security/                secret store (keyring), redaction helpers, temp-file hygiene
   ai/                      provider interface, offline rules provider, external providers, payload builder
   tracker/                 applications, deadlines
-  ui/                      main window, theme, pages (18 navigation sections), widgets, workers
+  update/                  signed update manifests, GitHub release client, installers per platform
+  ui/                      main window, theme and appearance, pages (21 navigation sections), template
+                           designer, update dialog, widgets, workers
 ```
 
 Business logic never imports `ris.ui`. The UI calls services; services call storage. This is checked by a test.

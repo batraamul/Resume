@@ -74,9 +74,10 @@ class WelcomeDialog:
 
     @staticmethod
     def run(parent, ctx) -> str:
-        from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout
+        from PySide6.QtWidgets import QCheckBox, QDialog, QLabel, QPushButton, QVBoxLayout
 
         from ris.strings import RESPONSIBILITY_NOTICE, STORAGE_NOTICE
+        from ris.ui.updates import PRIVACY_NOTE
         from ris.ui.widgets.common import banner
 
         d = QDialog(parent)
@@ -92,6 +93,11 @@ class WelcomeDialog:
         lay.addWidget(intro)
         lay.addWidget(banner(RESPONSIBILITY_NOTICE, "info"))
         lay.addWidget(banner(STORAGE_NOTICE, "info"))
+        updates = QCheckBox("Check for updates automatically (you can change this in Settings)")
+        updates.setChecked(ctx.config.update_auto_check)
+        updates.setToolTip(PRIVACY_NOTE)
+        updates.toggled.connect(lambda on: setattr(ctx.config, "update_auto_check", on))
+        lay.addWidget(updates)
         choice = {"value": "empty"}
         for text, val, primary in (("Start my profile", "empty", True),
                                    ("Import an existing CV or profile file…", "import", False),

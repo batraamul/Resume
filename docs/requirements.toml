@@ -817,6 +817,13 @@ area = "Maintainability"
 text = "Documented upgrade process with database migrations."
 modules = ["docs/USER_GUIDE.md", "ris/storage/migrations.py"]
 
+[[req]]
+id = "MNT-05"
+priority = "P1"
+area = "Maintainability"
+text = "Beginner-friendly developer guide explaining the code layer by layer, with a tested step-by-step tutorial for building a similar application; paths and functions it names exist."
+modules = ["docs/DEVELOPER_GUIDE.md", "docs/tutorial/resume_lite/", "tests/security/test_developer_guide.py"]
+
 # ---------------------------------------------------------------- Release
 [[req]]
 id = "REL-01"
@@ -902,3 +909,159 @@ priority = "P1"
 area = "Master profile"
 text = "Research grants, peer review, student supervision and conference organisation are recorded and shown in dedicated sections."
 modules = ["ris/domain/enums.py", "ris/composition/composer.py"]
+
+# ---------------------------------------------------------------- version 1.1
+
+[[req]]
+id = "PRF-23"
+priority = "P0"
+area = "Master profile"
+text = "Training programmes, professional and online courses, certifications and licences, workshops and seminars, and other qualifications are recorded with provider, sponsor, mode, dates, duration, result, credential number, verification URL, validity and skills."
+modules = ["ris/domain/models.py", "ris/ui/pages/profile.py"]
+
+[[req]]
+id = "PRF-24"
+priority = "P0"
+area = "Master profile"
+text = "Each training type has a dedicated resume section; a combined section is used in compact resumes without duplicating items; expired certifications are labelled and left out of one- and two-page resumes."
+modules = ["ris/composition/composer.py", "ris/composition/modes.py"]
+
+[[req]]
+id = "PRF-25"
+priority = "P0"
+area = "Master profile"
+text = "Training records follow the same confirmation and disclosure gates as other facts."
+modules = ["ris/rendering/export.py"]
+
+[[req]]
+id = "INT-01"
+priority = "P1"
+area = "Interview preparation"
+text = "A sourced question bank and preparation guidance (STAR, interview boards, questionnaires) for scientific, technical, defence and government interviews."
+modules = ["config/interview_questions.json", "ris/intelligence/interview.py"]
+
+[[req]]
+id = "INT-02"
+priority = "P1"
+area = "Interview preparation"
+text = "Questions are generated from the user's own records, vacancy requirements, organisation and questionnaire, never from confidential records; timed practice rounds save answer notes and confidence."
+modules = ["ris/intelligence/interview.py", "ris/ui/pages/interview.py"]
+
+[[req]]
+id = "INT-03"
+priority = "P1"
+area = "Interview preparation"
+text = "STAR stories are checked for structure (share of each part), length when spoken, first-person ownership and an outcome."
+modules = ["ris/intelligence/interview.py"]
+
+[[req]]
+id = "INT-04"
+priority = "P1"
+area = "Interview preparation"
+text = "Personal questionnaires (SSB PIQ, DAF-style forms) can be filled from the profile and are checked against it for inconsistencies and blank sections; they stay private."
+modules = ["ris/intelligence/interview.py", "ris/domain/models.py"]
+
+[[req]]
+id = "INT-05"
+priority = "P2"
+area = "Interview preparation"
+text = "A private preparation pack and a printable copy of the questionnaire can be exported as validated DOCX and PDF."
+modules = ["ris/intelligence/interview.py", "ris/rendering/export.py"]
+
+[[req]]
+id = "POR-01"
+priority = "P1"
+area = "Job portals"
+text = "A recruiter directory and job-portal guidance with resume formats, size limits and profile field limits, each with its source."
+modules = ["config/job_portals.json", "config/recruiters.json"]
+
+[[req]]
+id = "POR-02"
+priority = "P1"
+area = "Job portals"
+text = "Profile text for LinkedIn, Naukri and Indeed is built only from confirmed, disclosable facts and checked against each field's limit."
+modules = ["ris/intelligence/portal_kit.py"]
+
+[[req]]
+id = "POR-03"
+priority = "P1"
+area = "Job portals"
+text = "Resume files are checked against portal upload rules: type, size, selectable text and a clear file name."
+modules = ["ris/intelligence/portal_kit.py"]
+
+[[req]]
+id = "POR-04"
+priority = "P1"
+area = "Job portals"
+text = "An ATS readiness checklist explains each formatting rule (columns, tables, graphics, fonts, margins, headings, dates, bullets, keywords) with its source."
+modules = ["ris/intelligence/ats.py"]
+
+[[req]]
+id = "UX-09"
+priority = "P1"
+area = "User experience"
+text = "Colour presets in light and dark, custom colours with automatic contrast correction and warnings, interface and heading fonts, and text size."
+modules = ["ris/ui/theme.py", "ris/ui/appearance.py"]
+
+[[req]]
+id = "UX-10"
+priority = "P2"
+area = "User experience"
+text = "Density, corner radius, navigation style (text, icons and text, icons only) and side, record editor layout, start page; appearance can be exported and imported."
+modules = ["ris/ui/theme.py", "ris/ui/main_window.py", "ris/ui/appearance.py"]
+
+[[req]]
+id = "TPL-06"
+priority = "P1"
+area = "Templates"
+text = "A visual template designer exposes every template setting with colour schemes, live preview, readability and ATS checks; built-in templates are saved as copies."
+modules = ["ris/ui/template_designer.py"]
+
+[[req]]
+id = "STU-07"
+priority = "P2"
+area = "Resume Studio"
+text = "Any section can be added to a resume, beyond the mode's default order."
+modules = ["ris/ui/pages/studio.py"]
+
+[[req]]
+id = "UPD-01"
+priority = "P0"
+area = "Updates"
+text = "Update manifests are signed with Ed25519; the application accepts only manifests signed by an embedded public key, for this repository, pointing to this repository's release downloads."
+modules = ["ris/update/manifest.py", "ris/update/keys.py"]
+
+[[req]]
+id = "UPD-02"
+priority = "P0"
+area = "Updates"
+text = "The application checks GitHub Releases (stable or beta channel) at most daily when allowed, over HTTPS to GitHub hosts only, without personal data; newer versions only; skipped versions are not offered again automatically."
+modules = ["ris/update/client.py", "ris/ui/updates.py"]
+
+[[req]]
+id = "UPD-03"
+priority = "P0"
+area = "Updates"
+text = "Downloads are verified against the signed size and SHA-256 and deleted if they do not match."
+modules = ["ris/update/client.py"]
+
+[[req]]
+id = "UPD-04"
+priority = "P1"
+area = "Updates"
+text = "Updates install only after the user agrees: silent per-user installer on Windows, app replacement from the disk image on macOS, folder swap or package installer on Linux; user data is never touched."
+modules = ["ris/update/installer.py", "packaging/windows/ris.iss"]
+
+[[req]]
+id = "UPD-05"
+priority = "P1"
+area = "Updates"
+text = "Release tooling builds the manifest and SHA-256 sums, signs only with a key the application accepts, and verifies signatures and checksums."
+modules = ["scripts/release_manifest.py"]
+
+[[req]]
+id = "REL-06"
+priority = "P1"
+area = "Release"
+text = "Automated builds and tests on Windows, macOS and Linux for every change; tagged versions produce installers, a signed update manifest, checksums and build provenance on GitHub Releases."
+modules = [".github/workflows/ci.yml", ".github/workflows/release.yml"]

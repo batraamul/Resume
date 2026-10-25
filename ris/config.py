@@ -44,6 +44,10 @@ class AppConfig:
     date_style: str = "mon_year"
     ui_font_scale: float = 1.0
     appearance: dict[str, Any] = field(default_factory=dict)  # see ris.ui.theme.Appearance
+    update_auto_check: bool = True  # look for signed updates on GitHub at most once a day
+    update_channel: str = "stable"  # stable | beta
+    update_last_check: str = ""
+    update_skipped_version: str = ""
     log_level: str = "INFO"
     ai_provider: str = "off"  # off | anthropic | openai_compatible
     ai_endpoint: str = ""

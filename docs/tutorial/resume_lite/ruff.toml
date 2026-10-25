@@ -1,0 +1,9 @@
+# The tutorial is a separate small project: its own modules are first-party.
+line-length = 120
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "C4", "SIM"]
+
+[lint.isort]
+known-first-party = ["app", "export_docx", "export_pdf", "model", "storage"]

@@ -37,10 +37,11 @@ DEFAULT_WEIGHTS = {"essential": 35, "technical": 25, "evidence": 15, "experience
 class SettingsPage(Page):
     key = "settings"
 
-    def __init__(self, ctx, on_theme=None, on_workspace=None) -> None:
+    def __init__(self, ctx, on_theme=None, on_workspace=None, on_check_updates=None) -> None:
         super().__init__(ctx, "Settings & Security", PAGE_SUBTITLES["settings"])
         self.on_theme = on_theme
         self.on_workspace = on_workspace
+        self.on_check_updates = on_check_updates
         self._loading = False
         # appearance
         app = Card("Appearance")
@@ -64,6 +65,30 @@ class SettingsPage(Page):
         self.theme.currentIndexChanged.connect(self._appearance_changed)
         self.ui_scale.valueChanged.connect(self._appearance_changed)
         self.body.addWidget(app)
+        # updates
+        from ris.ui.updates import PRIVACY_NOTE
+
+        upd = Card("Updates")
+        uf = QFormLayout()
+        uf.addRow("Installed version:", QLabel(__version__))
+        self.update_auto = QCheckBox("Check for updates automatically (once a day)")
+        self.update_auto.setAccessibleName("Check for updates automatically")
+        self.update_channel = QComboBox()
+        self.update_channel.setAccessibleName("Update channel")
+        self.update_channel.addItem("Stable releases", "stable")
+        self.update_channel.addItem("Stable and test (beta) releases", "beta")
+        uf.addRow("", self.update_auto)
+        uf.addRow("Channel:", self.update_channel)
+        upd.body.addLayout(uf)
+        urow = QHBoxLayout()
+        urow.addWidget(button("Check for updates now", on_click=self._check_updates))
+        self.update_status = muted("")
+        urow.addWidget(self.update_status, 1)
+        upd.body.addLayout(urow)
+        upd.add(muted(PRIVACY_NOTE))
+        self.update_auto.toggled.connect(self._updates_changed)
+        self.update_channel.currentIndexChanged.connect(self._updates_changed)
+        self.body.addWidget(upd)
         # documents
         docs = Card("Documents")
         df = QFormLayout()
@@ -213,6 +238,10 @@ class SettingsPage(Page):
         s = self.ctx.settings
         self.theme.setCurrentIndex(max(self.theme.findData(c.theme), 0))
         self.ui_scale.setValue(c.ui_font_scale or 1.0)
+        self.update_auto.setChecked(c.update_auto_check)
+        self.update_channel.setCurrentIndex(max(self.update_channel.findData(c.update_channel), 0))
+        self.update_status.setText(f"Last checked {c.update_last_check[:16].replace('T', ' ')} UTC."
+                                   if c.update_last_check else "Not checked yet.")
         self.engine.setCurrentIndex(max(self.engine.findData(c.pdf_engine), 0))
         self.lo_path.setText(c.libreoffice_path)
         self.export_folder.setText(s.get("export.default_folder") or "")
@@ -256,6 +285,18 @@ class SettingsPage(Page):
         self._save_config()
         if self.on_theme:
             self.on_theme()
+
+    def _updates_changed(self) -> None:
+        if self._loading:
+            return
+        self.ctx.config.update_auto_check = self.update_auto.isChecked()
+        self.ctx.config.update_channel = self.update_channel.currentData()
+        self._save_config()
+
+    def _check_updates(self) -> None:
+        self.update_status.setText("Checking…")
+        if self.on_check_updates:
+            self.on_check_updates()
 
     def customise_appearance(self, exec_dialog: bool = True):
         from ris.ui.appearance import AppearanceDialog

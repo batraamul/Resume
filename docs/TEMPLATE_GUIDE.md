@@ -3,7 +3,26 @@
 A template is a versioned JSON specification that selects a **layout system** (header, headings, entries,
 skills, columns, graphics) plus typography and colour. Content always comes from the resume mode and your
 profile; templates never add text. Built-in templates live in `templates/`; your own copies live in the data
-folder under `templates/` and can be created from *Resume Library → Templates → Duplicate…*.
+folder under `templates/` and can be created from *Resume Library → Templates → Duplicate…* or *Design…*.
+
+## Template designer
+
+*Resume Library → Templates → Design…* opens every setting of the selected template — page and margins,
+fonts and sizes, all colours, header, section headings, entries, skills, publications, two-column layout,
+graphics (chart palette, timeline and chart heights, tiles per row, bar width), photograph and footer — with a
+live preview using the fictional sample. The controls are generated from the specification models, so new
+settings appear automatically.
+
+* **Colour schemes** (Navy classic, Maroon diary, Teal modern, Charcoal, Forest, Royal blue, Plum) set the
+  accent, fills, links and chart palette together; every accent is dark enough for text on white.
+* **ATS-safe** switches the template to one column without tables, banners, bars, cards or graphics, and the
+  specification validator refuses any combination that would break that promise.
+* The status line shows the **ATS readiness score** of the preview and **readability** warnings (contrast
+  below WCAG AA, body text under 9.5 pt, side margins under 12 mm).
+* Built-in templates are never changed: *Save* is offered only for your own templates; *Save as new
+  template* makes a copy. Templates can be exported and imported as JSON.
+* Charts and other graphics can also be left out of a single resume by unticking the *Career Timeline* or
+  *Research at a Glance* sections in Resume Studio.
 
 ## Built-in templates
 

@@ -40,6 +40,7 @@ from ris.ui.pages.studio import StudioPage
 from ris.ui.pages.sync import SyncPage
 from ris.ui.pages.targets import TargetsPage
 from ris.ui.pages.tracker import TrackerPage
+from ris.ui.updates import UpdateChecker, due_for_check, updates_allowed
 from ris.ui.widgets.common import error
 from ris.ui.widgets.records import CollectionWidget
 from ris.ui.workers import run_task
@@ -108,6 +109,13 @@ class MainWindow(QMainWindow):
         self.apply_layout()
         start = theme.appearance_of(ctx.config).start_page
         self.navigate(start if start in self.pages else "diary", "")
+        self._pending_update = None
+        self.updater = UpdateChecker(ctx)
+        self.updater.found.connect(self._update_found)
+        self.updater.up_to_date.connect(lambda: self._update_status("You have the latest version."))
+        self.updater.failed.connect(lambda msg: self._update_status(msg))
+        if updates_allowed() and due_for_check(ctx.config):
+            QTimer.singleShot(5000, lambda: self.check_updates(manual=False))
 
     # ------------------------------------------------------------------ construction
     def _build_nav(self) -> QWidget:
@@ -176,6 +184,12 @@ class MainWindow(QMainWindow):
         self.search.returnPressed.connect(self._search)
         lay.addWidget(self.search)
         lay.addStretch(1)
+        self.update_button = QPushButton("")
+        self.update_button.setProperty("kind", "primary")
+        self.update_button.setAccessibleName("Update available")
+        self.update_button.setVisible(False)
+        self.update_button.clicked.connect(self._show_update)
+        lay.addWidget(self.update_button)
         self.sync_label = QLabel("")
         self.sync_label.setAccessibleName("Synchronisation status")
         lay.addWidget(self.sync_label)
@@ -190,7 +204,8 @@ class MainWindow(QMainWindow):
                   ("interview", InterviewPage(ctx)), ("portals", PortalsPage(ctx)), ("studio", StudioPage(ctx)),
                   ("library", LibraryPage(ctx)), ("letters", LettersPage(ctx)), ("tracker", TrackerPage(ctx)),
                   ("exports", ExportsPage(ctx)), ("sync", SyncPage(ctx)), ("backup", BackupPage(ctx)),
-                  ("settings", SettingsPage(ctx, on_theme=self.apply_theme, on_workspace=self.switch_workspace))]
+                  ("settings", SettingsPage(ctx, on_theme=self.apply_theme, on_workspace=self.switch_workspace,
+                                            on_check_updates=lambda: self.check_updates(manual=True)))]
         for key, page in pages:
             page.key = key
             self.pages[key] = page
@@ -358,6 +373,37 @@ class MainWindow(QMainWindow):
         for page in self.pages.values():
             for col in page.findChildren(CollectionWidget):
                 col.set_stacked(stacked)
+
+    # ------------------------------------------------------------------ updates
+    def check_updates(self, manual: bool = False) -> None:
+        self._manual_check = manual
+        self.updater.check(manual=manual)
+
+    def _update_found(self, info) -> None:
+        self._pending_update = info
+        self.update_button.setText(f"Update available: {info.version}")
+        self.update_button.setVisible(True)
+        self._update_status(f"Version {info.version} is available.")
+        if getattr(self, "_manual_check", False):
+            self._show_update()
+
+    def _update_status(self, message: str) -> None:
+        settings = self.pages.get("settings")
+        if settings is not None and hasattr(settings, "update_status"):
+            settings.update_status.setText(message)
+        if getattr(self, "_manual_check", False):
+            self._status(message, 8000)
+
+    def _show_update(self):
+        if self._pending_update is None:
+            return None
+        from PySide6.QtWidgets import QApplication
+
+        from ris.ui.updates import UpdateDialog
+
+        dlg = UpdateDialog(self, self.ctx, self._pending_update, quit_app=QApplication.instance().quit)
+        dlg.exec()
+        return dlg
 
     def switch_workspace(self, entry) -> None:
         for page in self.pages.values():

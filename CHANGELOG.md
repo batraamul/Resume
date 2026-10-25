@@ -1,5 +1,44 @@
 # Changelog
 
+## 1.1.0 — 2026-10-25
+
+### Added
+* **Installers for Windows, macOS and Linux** built by GitHub Actions: per-user Windows installer (and
+  portable zip), macOS disk image (Apple silicon), Linux `.deb` and `.tar.gz`. Each build runs its own
+  self-test before packaging.
+* **Secure automatic updates**: daily check of GitHub Releases (can be turned off; stable or beta channel),
+  Ed25519-signed update manifest verified against the key built into the app, SHA-256 and size checks on
+  every download, HTTPS to GitHub only, no downgrades, installation only after you agree. User data is
+  never touched.
+* **Training & Certifications** page and dedicated resume sections for training programmes, professional
+  and online courses, certifications and licences (with expiry), workshops and seminars, and other
+  qualifications. The Government CV shows them as tables.
+* **Interview Preparation**: sourced question bank, questions generated from your profile, vacancy,
+  organisation and questionnaire, timed practice with notes, STAR story checks, SSB PIQ / DAF-style
+  questionnaires filled from and checked against your profile, tips, and a private preparation pack.
+* **Job Portals & Recruiters**: recruiter directory (routes, documents, interview focus, official sites),
+  portal guidance with sourced limits, a LinkedIn/Naukri/Indeed profile kit built from confirmed facts, an
+  ATS readiness checklist and resume-file checks; recruitment trends. New profile links: Naukri, Indeed,
+  Scopus Author ID and Web of Science ResearcherID.
+* **Appearance customisation**: six colour presets in light and dark, your own colours with automatic
+  contrast correction, fonts, text size, density, corner roundness, navigation icons/style/side, editor
+  layout and start page; export and import of appearance settings.
+* **Template designer** with every template setting, colour schemes, live preview, readability and ATS
+  checks, ATS-safe switch, JSON import/export. Resume Studio can add any section to a resume.
+* GitHub Actions CI running lint, the test suite and the self-test on Windows, macOS and Linux.
+* Documentation: beginner's developer guide, research findings, updates and releasing guides.
+
+### Changed
+* Navigation has 21 sections. Training items formerly kept under Education are shown in the matching
+  training section (existing data keeps working).
+* Database migration 0002 allows the new export kinds (a backup is taken automatically before upgrading).
+
+### Known limitations
+* Builds are not code-signed by Apple or Microsoft unless the optional certificates are configured, so the
+  operating system warns on first install. macOS builds are for Apple silicon; Intel Macs run from source.
+* Portal limits come from published guides where portals do not document them; they are shown as
+  recommendations with their sources.
+
 ## 1.0.0 — 2026-10-25
 
 First release.

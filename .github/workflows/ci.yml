@@ -60,7 +60,7 @@ jobs:
           python -m pip install -r requirements-dev.txt
 
       - name: Lint
-        run: python -m ruff check ris tests scripts
+        run: python -m ruff check ris tests scripts docs/tutorial
 
       - name: Test suite
         run: |

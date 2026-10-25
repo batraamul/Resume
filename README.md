@@ -8,7 +8,7 @@ posts — plain ATS resumes, Government of India bio-data, academic CVs and **gr
 career-timeline charts, competency bars, research metric tiles and project cards.
 
 Your data stays on your computer. Nothing is sent anywhere unless you turn on synchronisation or an AI
-provider, and the application never invents facts: every line in a document traces to a record you
+provider (the daily update check sends only the app name and version to GitHub and can be turned off), and the application never invents facts: every line in a document traces to a record you
 entered and confirmed.
 
 ## What it does
@@ -34,8 +34,25 @@ entered and confirmed.
   confirmed facts, application tracker with deadlines, export log with checksums, redacted portfolio.
 * **Backups and sync** — plain or AES-256-GCM encrypted backups with verification and pre-restore
   snapshots; optional encrypted record-level sync through a folder or Google Drive (`drive.file` scope).
+* **Training & certifications** — dedicated sections for training programmes, professional courses,
+  certifications and licences (with expiry), workshops and seminars, and other qualifications.
+* **Interview preparation** — questions generated from your own record and the vacancy, a sourced question
+  bank, timed practice, STAR story checks, and SSB PIQ / DAF-style questionnaires checked against your profile.
+* **Job portals & recruiters** — recruiter directory, LinkedIn/Naukri/Indeed profile text within each
+  portal's limits, an ATS readiness checklist and resume-file checks, with sources.
+* **Make it yours** — colour presets, your own colours (contrast-checked), fonts, text size, density, icons,
+  navigation and layout; a template designer with live preview and ATS checks.
+* **Installers and automatic updates** — Windows, macOS and Linux installers built by GitHub Actions;
+  signed, verified updates from GitHub Releases.
 
-## Quick start
+## Install
+
+Download the installer for Windows, macOS (Apple silicon) or Linux from
+**[GitHub Releases](https://github.com/batraamul/Resume/releases/latest)** — see
+[docs/INSTALL.md](docs/INSTALL.md). Installed copies update themselves after verifying the project's signature
+([docs/UPDATES.md](docs/UPDATES.md)).
+
+## Run from source
 
 | Platform | Start |
 |---|---|
@@ -68,6 +85,9 @@ Open the fictional sample workspace to explore safely: `python run_application.p
 | Example outputs (every template) | [examples/README.md](examples/README.md) |
 | Product requirements | [docs/PRD.md](docs/PRD.md), [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) |
 | Architecture and data | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/DATA_MODEL.md](docs/DATA_MODEL.md), [docs/UI_SPEC.md](docs/UI_SPEC.md) |
+| Learning the code (beginner's guide) | [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) |
+| Research behind 1.1 features | [docs/RESEARCH_FINDINGS.md](docs/RESEARCH_FINDINGS.md) |
+| Updates and releases | [docs/UPDATES.md](docs/UPDATES.md), [docs/RELEASING.md](docs/RELEASING.md) |
 | Testing | [docs/TEST_PLAN.md](docs/TEST_PLAN.md), [docs/TEST_REPORT.md](docs/TEST_REPORT.md) |
 | Release | [CHANGELOG.md](CHANGELOG.md), [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md), [docs/BACKLOG.md](docs/BACKLOG.md) |
 
@@ -75,15 +95,16 @@ Open the fictional sample workspace to explore safely: `python run_application.p
 
 ```
 ris/              application package (domain, storage, services, composition, rendering, intelligence,
-                  backup, sync, ai, security, ui)
+                  backup, sync, ai, security, update, ui)
 templates/        15 template specifications (JSON)
 migrations/       versioned SQL migrations
-config/           taxonomy, career presets, glossary
-assets/           bundled open fonts (with licences) and icon
+config/           taxonomy, career presets, glossary, interview questions, job portals, recruiters
+assets/           bundled open fonts (with licences) and icons (SVG, ICO, ICNS, PNG)
 sample_data/      fictional sample profile (not a real person)
 tests/            unit, integration, documents, security, sync, GUI and end-to-end tests
-scripts/          traceability, examples, data dictionary, release builder
-packaging/        PyInstaller specification
+scripts/          traceability, examples, data dictionary, source ZIP, update manifest signing, CI annotations
+packaging/        PyInstaller spec, Windows installer (Inno Setup), macOS disk image, Linux .deb/.tar.gz
+.github/workflows CI on Windows/macOS/Linux and the tagged release workflow
 examples/         example DOCX/PDF for every template (fictional sample)
 ```
 
@@ -92,7 +113,7 @@ examples/         example DOCX/PDF for every template (fictional sample)
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest      # 257 tests
-.venv/bin/ruff check ris tests scripts
+.venv/bin/ruff check ris tests scripts docs/tutorial
 python scripts/trace_requirements.py                       # docs/REQUIREMENTS.md
 python scripts/generate_examples.py                        # examples/
 pyinstaller packaging/ris.spec --noconfirm --clean         # dist/ResumeIntelligenceStudio/
@@ -100,6 +121,6 @@ pyinstaller packaging/ris.spec --noconfirm --clean         # dist/ResumeIntellig
 
 ## Status
 
-Version 1.0.0. See [docs/TEST_REPORT.md](docs/TEST_REPORT.md) for exactly what was verified and how,
+Version 1.1.0. See [docs/TEST_REPORT.md](docs/TEST_REPORT.md) for exactly what was verified and how,
 and [CHANGELOG.md](CHANGELOG.md) for known limitations. This software has not had an independent
 security audit and is not claimed to be production-certified.

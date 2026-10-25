@@ -5,8 +5,13 @@ This page describes what the application does with your information. The threat 
 
 ## Principles
 
-* **Local first.** Everything is stored on your computer. There is no telemetry, analytics, advertising or
-  background transmission (an automated test scans the code for network use outside the two optional modules).
+* **Local first.** Everything is stored on your computer. There is no telemetry, analytics or advertising
+  (an automated test scans the code for network use outside the three allowed modules: optional sync,
+  optional AI and the update check).
+* **Update checks.** Unless you turn them off (first-run window or *Settings → Updates*), the application asks
+  GitHub at most once a day whether a newer version exists. The request carries no personal data — only the
+  application name and version — and every update is verified against the project's Ed25519 signing key and
+  the signed SHA-256 before it is offered and installed. See [UPDATES.md](UPDATES.md).
 * **Nothing is invented.** Documents contain only facts you recorded. Rule-based suggestions rearrange your
   facts; any suggestion that adds or strengthens a claim is flagged and needs explicit approval.
 * **You decide disclosure.** Unconfirmed facts and facts that require review cannot be exported. Confidential
@@ -46,6 +51,13 @@ This page describes what the application does with your information. The threat 
 Encrypted backups and sync state use AES-256-GCM with a key derived from your passphrase by scrypt
 (N = 2^15, r = 8, p = 1) and a random salt and nonce per file; the header is authenticated. Passphrases must
 have at least 10 characters. **A lost passphrase cannot be recovered.**
+
+## Interview preparation and questionnaires
+
+Interview answers, STAR stories and personal questionnaires (SSB PIQ, DAF-style forms) are private
+preparation notes. They never appear in resumes, cover letters or portfolios. Questionnaires can hold
+family details and addresses; they are exported only when you choose *Export copy…*, and confidential
+profile records are never used to generate interview questions.
 
 ## Private particulars
 
