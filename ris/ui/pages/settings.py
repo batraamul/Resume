@@ -153,6 +153,7 @@ class SettingsPage(Page):
         prow = QHBoxLayout()
         prow.addWidget(button("Move data folder…", on_click=self._relocate))
         prow.addWidget(button("Open log folder", on_click=self._open_logs))
+        prow.addWidget(button("Fresh Start…", "danger", on_click=self._fresh_start))
         prow.addStretch(1)
         pr.body.addLayout(prow)
         pr.add(muted("Logs record events and counts only — never resume content, passwords, API keys or tokens. "
@@ -472,6 +473,49 @@ class SettingsPage(Page):
                 out[k] = v
         self.ctx.settings.set("glossary.overrides", out)
         self.ctx.say("Glossary saved.")
+
+    def _fresh_start(self) -> None:
+        """Fresh Start - delete all data safely."""
+        import shutil
+        from datetime import datetime
+        from pathlib import Path
+
+        if not confirm(self, "Fresh Start",
+                      "⚠️ This will delete ALL your resume data, profiles, and variants.\n\n"
+                      "This action:\n"
+                      "• Deletes all stored resumes and profiles\n"
+                      "• Cannot be undone\n"
+                      "• Automatically creates a backup first\n\n"
+                      "Are you absolutely sure?"):
+            return
+
+        try:
+            # Create backup
+            workspace_path = self.ctx.workspace.path
+            backup_dir = workspace_path / "backups"
+            backup_dir.mkdir(parents=True, exist_ok=True)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            backup_name = f"backup_before_fresh_start_{timestamp}"
+            backup_path = backup_dir / backup_name
+
+            # Backup data
+            data_dir = workspace_path / "data"
+            if data_dir.exists():
+                shutil.copytree(data_dir, backup_path)
+
+            # Delete all data
+            if data_dir.exists():
+                shutil.rmtree(data_dir)
+
+            # Recreate empty data directory
+            data_dir.mkdir(parents=True, exist_ok=True)
+
+            info(self, "Fresh Start Complete",
+                 f"All data has been deleted.\n\nBackup saved to:\n{backup_path}")
+
+        except Exception as e:
+            error(self, "Fresh Start Failed", f"Error during fresh start:\n{str(e)}")
 
 
 _ = (QCheckBox, set_banner)
