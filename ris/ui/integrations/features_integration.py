@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from PySide6.QtWidgets import QHBoxLayout, QWidget, QPushButton
-from PySide6.QtCore import Qt, pyqtSignal
+from PySide6.QtCore import Qt
 
 from ris.ui.widgets.help_system import HelpCenterDialog
 from ris.intelligence.resume_templates import recommend_templates, get_all_templates

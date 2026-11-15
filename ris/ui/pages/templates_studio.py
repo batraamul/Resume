@@ -258,20 +258,9 @@ class TemplatesStudioPage(Page):
 
     def _on_template_selected(self, template: dict):
         """Handle template selection."""
-        from ris.ui.dialogs import show_dialog
-
-        # Show template details and selection dialog
-        msg = (
-            f"Template: {template.get('name', 'Unnamed')}\n\n"
-            f"Category: {template.get('category', 'General')}\n"
-            f"Pages: {template.get('pages', '1')}\n"
-            f"ATS Friendly: {'Yes' if template.get('is_ats_friendly') else 'No'}\n\n"
-            f"Description:\n{template.get('description', 'No description available')}"
-        )
-
-        # Here you would implement the actual template application
-        # For now, just show confirmation
         from PySide6.QtWidgets import QMessageBox
+
+        # Show template selection confirmation
         QMessageBox.information(
             self,
             "Template Selected",
