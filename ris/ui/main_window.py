@@ -40,6 +40,7 @@ from ris.ui.pages.studio import StudioPage
 from ris.ui.pages.sync import SyncPage
 from ris.ui.pages.targets import TargetsPage
 from ris.ui.pages.tracker import TrackerPage
+from ris.ui.pages.upsc_format import UPSCFormatPage
 from ris.ui.updates import UpdateChecker, due_for_check, updates_allowed
 from ris.ui.widgets.common import error
 from ris.ui.widgets.records import CollectionWidget
@@ -204,6 +205,7 @@ class MainWindow(QMainWindow):
                   ("interview", InterviewPage(ctx)), ("portals", PortalsPage(ctx)), ("studio", StudioPage(ctx)),
                   ("library", LibraryPage(ctx)), ("letters", LettersPage(ctx)), ("tracker", TrackerPage(ctx)),
                   ("exports", ExportsPage(ctx)), ("sync", SyncPage(ctx)), ("backup", BackupPage(ctx)),
+                  ("upsc_format", UPSCFormatPage(ctx)),
                   ("settings", SettingsPage(ctx, on_theme=self.apply_theme, on_workspace=self.switch_workspace,
                                             on_check_updates=lambda: self.check_updates(manual=True)))]
         for key, page in pages:
