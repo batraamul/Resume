@@ -1,0 +1,72 @@
+{
+  "id": "modern_minimal",
+  "name": "Modern Minimal",
+  "version": "1.0.0",
+  "family": "single-column minimal",
+  "description": "Quiet, contemporary resume: generous margins, sans-serif type, bold headings without rules, role and dates stacked above each entry. Single column and ATS-safe.",
+  "recommended_modes": [
+    "general_professional",
+    "ats_plain",
+    "technical_specialist"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "page": {
+    "margin_top_mm": 18,
+    "margin_bottom_mm": 18,
+    "margin_left_mm": 22,
+    "margin_right_mm": 22
+  },
+  "fonts": {
+    "body": "Arial",
+    "heading": "Arial",
+    "name": "Arial",
+    "body_size": 10,
+    "heading_size": 11,
+    "name_size": 24,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.15
+  },
+  "colours": {
+    "text": "#222222",
+    "muted": "#5A5F66",
+    "accent": "#222222",
+    "rule": "#C9CDD2",
+    "fill": "#EEF2F7",
+    "banner_fill": "#222222",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#222222"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "text",
+    "headline_colour": "muted",
+    "separator": "   ·   ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "plain_bold",
+    "case": "upper",
+    "colour": "text",
+    "letter_spacing": 1.6,
+    "space_before": 13,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "stacked",
+    "date_style": "mon_year",
+    "subtitle_italic": false,
+    "bullet_glyph": "–"
+  },
+  "skills": {
+    "style": "inline",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "x",
+    "show_name": false
+  }
+}

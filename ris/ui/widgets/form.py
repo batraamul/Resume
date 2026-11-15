@@ -38,6 +38,7 @@ from ris.composition.modes import MODES
 from ris.domain.enums import RecordKind, SummaryFocus, choices, label
 from ris.domain.registry import FieldMeta, field_metas
 from ris.ui.widgets.common import muted, repolish
+from ris.ui.widgets.help_system import HelpButton, field_help_text
 
 STR_CHOICES: dict[str, list[tuple[str, str]]] = {
     "layout": [("entries", "Entries"), ("bullets", "Bullet points"), ("paragraph", "Paragraph")],
@@ -154,6 +155,7 @@ class RecordForm(QWidget):
             self.metas = [m for m in self.metas if not m.private]
         self.editors: dict[str, QWidget] = {}
         self.labels: dict[str, QLabel] = {}
+        self.help_buttons: dict[str, HelpButton] = {}
         self._original: dict[str, Any] = {}
         self._loading = False
         lay = QVBoxLayout(self)
@@ -189,17 +191,31 @@ class RecordForm(QWidget):
                 ed.setAccessibleName(m.title)
                 if m.help:
                     ed.setAccessibleDescription(m.help)
+                cell: QWidget = ed
                 if m.help and m.widget in ("text", "list", "tags", "date", "refs"):
-                    holder = QWidget()
-                    hl = QVBoxLayout(holder)
+                    cell = QWidget()
+                    hl = QVBoxLayout(cell)
                     hl.setContentsMargins(0, 0, 0, 0)
                     hl.setSpacing(2)
                     hl.addWidget(ed)
                     h = muted(m.help)
                     hl.addWidget(h)
-                    form.addRow(lab, holder)
-                else:
-                    form.addRow(lab, ed)
+                guidance = field_help_text(self.kind.value, m.name, tip)
+                if guidance:
+                    # A '?' beside the field: what it is for and how to word it well.
+                    row = QWidget()
+                    rl = QHBoxLayout(row)
+                    rl.setContentsMargins(0, 0, 0, 0)
+                    rl.setSpacing(6)
+                    expands = cell.maximumWidth() >= 16777215
+                    rl.addWidget(cell, 1 if expands else 0)
+                    hb = HelpButton(m.title, guidance)
+                    self.help_buttons[m.name] = hb
+                    rl.addWidget(hb, 0, Qt.AlignmentFlag.AlignTop)
+                    if not expands:
+                        rl.addStretch(1)  # keep the ? next to short fields such as dates
+                    cell = row
+                form.addRow(lab, cell)
             lay.addWidget(box)
         lay.addStretch(1)
 

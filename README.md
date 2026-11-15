@@ -25,7 +25,7 @@ entered and confirmed.
 * **Vacancy analysis** — paste or import a notice; requirements are extracted by transparent rules,
   mapped to your evidence and scored 35/25/15/10/10/5 with a full explanation. The score is never a
   prediction of selection, and formal eligibility is always left to official verification.
-* **Resume Studio** — 14 resume modes × 18 templates (14 classic, 4 graphical), section ordering,
+* **Resume Studio** — 14 resume modes × 38 templates (33 classic, 5 graphical), a Template Gallery with advice for your profile, section ordering,
   contact visibility, record inclusion, per-resume wording approved claim by claim, live preview.
 * **Validated export** — genuine DOCX (real Word styles) and PDF (LibreOffice if installed, otherwise
   a built-in engine with embedded fonts), checked for content, contacts, chronology, confidential text,

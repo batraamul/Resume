@@ -143,7 +143,7 @@ NAV_STYLES = {"text": "Text only", "icons_text": "Icons and text", "icons": "Ico
 NAV_ICONS = {
     "diary": "✎", "profile": "☺", "experience": "⚒", "education": "✍", "training": "✪", "research": "⚗",
     "skills": "✱", "projects": "⚑", "leadership": "♔", "targets": "◎", "opportunities": "✦", "interview": "☏",
-    "portals": "⇄", "studio": "✐", "library": "▤", "letters": "✉", "tracker": "☑", "exports": "⇩", "sync": "☁",
+    "portals": "⇄", "studio": "✐", "gallery": "▦", "deputation": "⚖", "library": "▤", "letters": "✉", "tracker": "☑", "exports": "⇩", "sync": "☁",
     "backup": "↺", "settings": "⚙",
 }
 
@@ -454,6 +454,13 @@ QPushButton[kind="danger"] {{ color: {p.bad_ink}; border-color: {p.bad_ink}; }}
 QToolButton {{ background: transparent; color: {p.ink}; border: 1px solid transparent; border-radius: 4px; padding: 3px 6px; }}
 QToolButton:hover {{ background: {p.card_alt}; border-color: {p.rule}; }}
 QToolButton:focus {{ border: 1px solid {p.accent}; }}
+QToolButton#HelpButton {{ background: {p.info_bg}; color: {p.info_ink}; border: 1px solid {p.rule_strong};
+    border-radius: 10px; padding: 0px; font-weight: bold; min-width: 20px; max-width: 20px; min-height: 20px;
+    max-height: 20px; }}
+QToolButton#HelpButton:hover {{ background: {p.accent}; color: {p.accent_ink}; border-color: {p.accent}; }}
+#TemplateCard {{ background: {p.card}; border: 1px solid {p.rule}; border-radius: 8px; }}
+#TemplateCard:hover {{ border: 1px solid {p.accent}; }}
+#TemplateCard[recommended="true"] {{ border: 2px solid {p.ribbon}; }}
 
 /* ---------- lists & tables ---------- */
 QListWidget, QTreeWidget, QTableWidget, QTableView, QTreeView, QListView {{

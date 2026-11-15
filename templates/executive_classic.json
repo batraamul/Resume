@@ -1,0 +1,73 @@
+{
+  "id": "executive_classic",
+  "name": "Executive Classic",
+  "version": "1.0.0",
+  "family": "centered classic",
+  "description": "Traditional senior-leadership resume: centred serif name over a single rule, restrained navy headings, dates at the right. Single column and ATS-safe.",
+  "recommended_modes": [
+    "executive_summary",
+    "general_professional",
+    "senior_scientist"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "summary_style": "plain",
+  "page": {
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 20,
+    "margin_right_mm": 20
+  },
+  "fonts": {
+    "body": "Cambria",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10.5,
+    "heading_size": 11.5,
+    "name_size": 24,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#1B2A49",
+    "rule": "#1B2A49",
+    "fill": "#EEF2F7",
+    "banner_fill": "#1B2A49",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#1B2A49"
+  },
+  "header": {
+    "style": "centered",
+    "name_case": "upper",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "separator": "  |  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "rule_below",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 1.0,
+    "space_before": 11,
+    "space_after": 4,
+    "rule_weight": 0.75
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

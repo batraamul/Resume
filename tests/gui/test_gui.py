@@ -73,7 +73,7 @@ def window(qtbot, no_modals):
 @pytest.mark.req("UX-01", "UX-02")
 def test_navigation_sections_and_every_page_opens(window, qtbot):
     keys = [k for _g, items in NAV_SECTIONS for k, _t in items]
-    assert len(keys) == 21 and set(keys) == set(window.pages)
+    assert len(keys) == 23 and set(keys) == set(window.pages)
     for key in keys:
         window.navigate(key, "")
         qtbot.wait(10)
@@ -601,3 +601,89 @@ def test_recruiter_create_resume_in_format(window):
     r = page._current_recruiter()
     rec = page.create_resume_in_format(r, r["formats"][0])
     assert rec.data.mode == "deputation_proforma"
+
+
+@pytest.mark.req("TPL-07")
+def test_template_gallery_filters_previews_and_applies(window, qtbot):
+    page = window.pages["gallery"]
+    window.navigate("gallery", "")
+    total = len(page.cards)
+    assert total >= 30 and len(page.visible_ids()) == total
+    page.filter.setCurrentIndex(page.filter.findData("ats"))
+    ats = page.visible_ids()
+    assert ats and len(ats) < total and all(window.ctx.templates.get(t).ats_safe for t in ats)
+    page.filter.setCurrentIndex(page.filter.findData("recommended"))
+    assert page.visible_ids() and set(page.visible_ids()) == set(page.suggestions)
+    page.filter.setCurrentIndex(page.filter.findData("all"))
+    page.search.setText("burgundy")
+    assert page.visible_ids() == ["elegant_burgundy"]
+    page.search.clear()
+    page.synchronous_preview = True
+    dlg = page.preview_template("executive_sidebar")
+    assert dlg.preview.page_count >= 1
+    dlg.close()
+    variants_before = len(window.ctx.repo.list(RecordKind.VARIANT))
+    assert window.apply_template("corporate_blue")
+    assert window.current_key == "studio"
+    studio = window.pages["studio"]
+    assert window.ctx.repo.find(studio.variant_id).data.template_id == "corporate_blue"
+    assert len(window.ctx.repo.list(RecordKind.VARIANT)) == variants_before
+    rid = window.new_with_template("technical_lead")
+    assert rid and window.ctx.repo.find(rid).data.template_id == "technical_lead"
+
+
+@pytest.mark.req("FMT-04")
+def test_deputation_page_readiness_and_creation(window):
+    page = window.pages["deputation"]
+    window.navigate("deputation", "")
+    assert page.table.rowCount() == 18
+    assert page.table.item(0, 0).text() == "1" and page.table.item(17, 0).text() == "18"
+    rid = window.create_for_mode("deputation_proforma")
+    rec = window.ctx.repo.find(rid)
+    assert rec.data.mode == "deputation_proforma" and rec.data.template_id == "dopt_proforma"
+    assert window.current_key == "studio"
+
+
+@pytest.mark.req("HLP-01")
+def test_help_buttons_and_help_window(window):
+    from ris.ui.widgets.help_system import HelpButton
+
+    window.navigate("experience", "")
+    position = window.ctx.repo.list(RecordKind.POSITION)[0]
+    assert window.pages["experience"].focus_record(position.id)
+    form = window.pages["experience"].collection.editor
+    buttons = window.pages["experience"].findChildren(HelpButton)
+    assert buttons, "form fields must carry help buttons"
+    assert any("nature of duties" in b.help_text.lower() or "proforma" in b.help_text.lower() for b in buttons)
+    dlg = window.show_help("deputation")
+    assert dlg.isVisible() and "DoPT" in dlg.view.toPlainText()
+    dlg.search.setText("delete all data")
+    assert "settings" in dlg.visible_topics()
+    assert window.show_help("studio") is dlg  # one help window, reused
+    dlg.close()
+    del form
+
+
+@pytest.mark.req("FS-01")
+def test_fresh_start_from_settings(window, monkeypatch):
+    import ris.ui.pages.settings as settings_mod
+
+    page = window.pages["settings"]
+    # The sample workspace is protected.
+    seen = []
+    monkeypatch.setattr(settings_mod, "info", lambda *a, **k: seen.append(a[2]))
+    page._fresh_start()
+    assert seen and "sample" in seen[0].lower() and window.ctx.repo.count() > 0
+    # Treat it as the user's own workspace: cancelled unless DELETE is typed.
+    window.ctx.ws.is_sample = False
+    monkeypatch.setattr(settings_mod, "ask_text", lambda *a, **k: "no")
+    page._fresh_start()
+    assert window.ctx.repo.count() > 0
+    monkeypatch.setattr(settings_mod, "ask_text", lambda *a, **k: "DELETE")
+    page._fresh_start()
+    assert page.last_fresh_start.records_removed > 20
+    for kind in (RecordKind.POSITION, RecordKind.EDUCATION, RecordKind.PUBLICATION, RecordKind.VARIANT):
+        assert not window.ctx.repo.list(kind)
+    assert window.ctx.repo.count() <= 1  # opening Master Profile may start an empty personal record
+    assert page.last_fresh_start.backup_path.exists()
+    assert window.current_key == "profile"

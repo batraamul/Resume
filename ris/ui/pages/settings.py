@@ -153,7 +153,9 @@ class SettingsPage(Page):
         prow = QHBoxLayout()
         prow.addWidget(button("Move data folder…", on_click=self._relocate))
         prow.addWidget(button("Open log folder", on_click=self._open_logs))
-        prow.addWidget(button("Fresh Start…", "danger", on_click=self._fresh_start))
+        prow.addWidget(button("Fresh Start…", "danger", on_click=self._fresh_start,
+                              tooltip="Delete all records in this workspace and begin again. A full backup is "
+                                      "written first."))
         prow.addStretch(1)
         pr.body.addLayout(prow)
         pr.add(muted("Logs record events and counts only — never resume content, passwords, API keys or tokens. "
@@ -475,47 +477,50 @@ class SettingsPage(Page):
         self.ctx.say("Glossary saved.")
 
     def _fresh_start(self) -> None:
-        """Fresh Start - delete all data safely."""
-        import shutil
-        from datetime import datetime
-        from pathlib import Path
+        """Empty the current workspace after a verified backup (see ris/services/fresh_start.py)."""
+        from PySide6.QtGui import QGuiApplication
 
-        if not confirm(self, "Fresh Start",
-                      "⚠️ This will delete ALL your resume data, profiles, and variants.\n\n"
-                      "This action:\n"
-                      "• Deletes all stored resumes and profiles\n"
-                      "• Cannot be undone\n"
-                      "• Automatically creates a backup first\n\n"
-                      "Are you absolutely sure?"):
+        from ris.services.fresh_start import fresh_start, record_count
+
+        if not self.ctx.has_workspace:
             return
-
+        if self.ctx.is_sample:
+            info(self, "Fresh Start", "This is the fictional sample workspace. Switch to your own workspace under "
+                                      "'Data location' to start afresh.")
+            return
+        n = record_count(self.ctx.ws)
+        if n == 0:
+            info(self, "Fresh Start", "This workspace is already empty.")
+            return
+        if not confirm(self, "Fresh Start",
+                       f"This removes all {n} record(s) in the workspace '{self.ctx.ws.name}': your profile, "
+                       "experience, education, publications, projects, vacancies, resumes, cover letters and "
+                       "applications.\n\nA full backup is written and checked first, and you can restore it from "
+                       "Backup & Restore. Settings, earlier backups and files you already exported are kept.",
+                       ok="Continue", destructive=True):
+            return
+        typed = ask_text(self, "Fresh Start", "Type DELETE to confirm that all records should be removed:")
+        if (typed or "").strip().upper() != "DELETE":
+            self.ctx.say("Fresh Start cancelled. Nothing was deleted.")
+            return
+        QGuiApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        failure: RISError | None = None
+        result = None
         try:
-            # Create backup
-            workspace_path = self.ctx.workspace.path
-            backup_dir = workspace_path / "backups"
-            backup_dir.mkdir(parents=True, exist_ok=True)
-
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            backup_name = f"backup_before_fresh_start_{timestamp}"
-            backup_path = backup_dir / backup_name
-
-            # Backup data
-            data_dir = workspace_path / "data"
-            if data_dir.exists():
-                shutil.copytree(data_dir, backup_path)
-
-            # Delete all data
-            if data_dir.exists():
-                shutil.rmtree(data_dir)
-
-            # Recreate empty data directory
-            data_dir.mkdir(parents=True, exist_ok=True)
-
-            info(self, "Fresh Start Complete",
-                 f"All data has been deleted.\n\nBackup saved to:\n{backup_path}")
-
-        except Exception as e:
-            error(self, "Fresh Start Failed", f"Error during fresh start:\n{str(e)}")
+            result = fresh_start(self.ctx.ws)
+        except RISError as exc:
+            failure = exc
+        finally:
+            QGuiApplication.restoreOverrideCursor()
+        if failure is not None or result is None:
+            error(self, "Fresh Start", failure.user_message if failure else "Nothing was deleted.",
+                  failure.detail if failure else "")
+            return
+        self.ctx.invalidate()
+        self.ctx.flush()
+        self.last_fresh_start = result
+        info(self, "Fresh Start complete", result.summary())
+        self.ctx.navigate.emit("profile", "")
 
 
 _ = (QCheckBox, set_banner)

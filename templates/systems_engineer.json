@@ -1,0 +1,69 @@
+{
+  "id": "systems_engineer",
+  "name": "Systems Engineer",
+  "version": "1.0.0",
+  "family": "margin-label",
+  "description": "Structured engineering resume with section labels in a left margin column and tools listed as bullets, suited to long technical histories.",
+  "recommended_modes": [
+    "technical_specialist",
+    "defence_technical"
+  ],
+  "page": {
+    "margin_top_mm": 15,
+    "margin_bottom_mm": 15,
+    "margin_left_mm": 17,
+    "margin_right_mm": 17
+  },
+  "fonts": {
+    "body": "Arial",
+    "heading": "Arial",
+    "name": "Arial",
+    "body_size": 10,
+    "heading_size": 10.5,
+    "name_size": 22,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#23395B",
+    "rule": "#23395B",
+    "fill": "#EEF2F7",
+    "banner_fill": "#23395B",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#23395B"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "upper",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "separator": "  ·  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "margin_label",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 9,
+    "space_after": 2,
+    "label_width_mm": 34
+  },
+  "entry": {
+    "style": "stacked",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

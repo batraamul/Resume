@@ -27,8 +27,10 @@ from ris.domain.enums import RecordKind, label
 from ris.strings import NAV_SECTIONS, SAMPLE_BANNER, WINDOW_TITLE
 from ris.ui import theme
 from ris.ui.pages.backup import BackupPage
+from ris.ui.pages.deputation import DeputationPage
 from ris.ui.pages.diary import DiaryPage
 from ris.ui.pages.exports import ExportsPage
+from ris.ui.pages.gallery import GalleryPage, preview_mode_for
 from ris.ui.pages.interview import InterviewPage
 from ris.ui.pages.letters import LettersPage
 from ris.ui.pages.library import LibraryPage
@@ -40,10 +42,9 @@ from ris.ui.pages.studio import StudioPage
 from ris.ui.pages.sync import SyncPage
 from ris.ui.pages.targets import TargetsPage
 from ris.ui.pages.tracker import TrackerPage
-from ris.ui.pages.upsc_format import UPSCFormatPage
-from ris.ui.pages.templates_studio import TemplatesStudioPage
 from ris.ui.updates import UpdateChecker, due_for_check, updates_allowed
 from ris.ui.widgets.common import error
+from ris.ui.widgets.help_system import GUIDES, HelpDialog, guide_button
 from ris.ui.widgets.records import CollectionWidget
 from ris.ui.workers import run_task
 
@@ -102,7 +103,10 @@ class MainWindow(QMainWindow):
         self.auto_timer.setInterval(30 * 60 * 1000)
         self.auto_timer.timeout.connect(self._auto_backup)
         self.auto_timer.start()
+        self.help_dialog: HelpDialog | None = None
         QShortcut(QKeySequence("Ctrl+F"), self, activated=lambda: (self.search.setFocus(), self.search.selectAll()))
+        QShortcut(QKeySequence(QKeySequence.StandardKey.HelpContents), self,
+                  activated=lambda: self.show_help(self.current_key))
         for i, key in enumerate(["diary", "profile", "experience", "studio", "opportunities", "library", "tracker",
                                  "backup", "settings"], start=1):
             QShortcut(QKeySequence(f"Ctrl+{i}"), self, activated=lambda k=key: self.navigate(k, ""))
@@ -186,6 +190,11 @@ class MainWindow(QMainWindow):
         self.search.returnPressed.connect(self._search)
         lay.addWidget(self.search)
         lay.addStretch(1)
+        self.help_button = QPushButton("Help")
+        self.help_button.setAccessibleName("Help and writing guide")
+        self.help_button.setToolTip("Help and writing guide for this page (F1)")
+        self.help_button.clicked.connect(lambda _=False: self.show_help(self.current_key))
+        lay.addWidget(self.help_button)
         self.update_button = QPushButton("")
         self.update_button.setProperty("kind", "primary")
         self.update_button.setAccessibleName("Update available")
@@ -206,13 +215,16 @@ class MainWindow(QMainWindow):
                   ("interview", InterviewPage(ctx)), ("portals", PortalsPage(ctx)), ("studio", StudioPage(ctx)),
                   ("library", LibraryPage(ctx)), ("letters", LettersPage(ctx)), ("tracker", TrackerPage(ctx)),
                   ("exports", ExportsPage(ctx)), ("sync", SyncPage(ctx)), ("backup", BackupPage(ctx)),
-                  ("upsc_format", UPSCFormatPage(ctx)), ("templates_studio", TemplatesStudioPage(ctx)),
+                  ("gallery", GalleryPage(ctx, on_apply=self.apply_template, on_new=self.new_with_template)),
+                  ("deputation", DeputationPage(ctx, on_create=self.create_for_mode)),
                   ("settings", SettingsPage(ctx, on_theme=self.apply_theme, on_workspace=self.switch_workspace,
                                             on_check_updates=lambda: self.check_updates(manual=True)))]
         for key, page in pages:
             page.key = key
             self.pages[key] = page
             self.stack.addWidget(page)
+            if key in GUIDES and hasattr(page, "header"):
+                page.header.add_action(guide_button(page, key))
 
     # ------------------------------------------------------------------ navigation
     def navigate(self, key: str, record_id: str = "") -> None:
@@ -237,6 +249,52 @@ class MainWindow(QMainWindow):
             if page._dirty:
                 page.refresh_if_needed()
             page.focus_record(record_id)
+
+    # ------------------------------------------------------------------ help, templates and formats
+    def show_help(self, topic: str = "") -> HelpDialog:
+        """Open the (single, non-modal) help window on a topic."""
+        if self.help_dialog is None:
+            self.help_dialog = HelpDialog(self)
+        self.help_dialog.show_topic(topic)
+        self.help_dialog.show()
+        self.help_dialog.raise_()
+        return self.help_dialog
+
+    def new_with_template(self, template_id: str) -> str | None:
+        """Start a new resume variant that uses a template chosen in the gallery."""
+        spec = self.ctx.templates.find(template_id)
+        if spec is None or not self.ctx.has_workspace:
+            return None
+        self.navigate("studio", "")
+        if self.current_key != "studio":
+            return None
+        rid = self.pages["studio"].start_variant(preview_mode_for(spec), template_id, f"{spec.name} resume")
+        self._status(f"New resume created with the template '{spec.name}'.", 6000)
+        return rid
+
+    def apply_template(self, template_id: str) -> bool:
+        """Apply a gallery template to the resume open in Resume Studio (or start one if there is none)."""
+        spec = self.ctx.templates.find(template_id)
+        if spec is None or not self.ctx.has_workspace:
+            return False
+        self.navigate("studio", "")
+        if self.current_key != "studio":
+            return False
+        if self.pages["studio"].use_template(template_id):
+            self._status(f"Template '{spec.name}' applied to the open resume.", 6000)
+            return True
+        return self.new_with_template(template_id) is not None
+
+    def create_for_mode(self, mode_id: str) -> str | None:
+        """Create a resume in a given format (deputation proforma, senior scientist CV, bio-data)."""
+        if not self.ctx.has_workspace:
+            return None
+        self.navigate("studio", "")
+        if self.current_key != "studio":
+            return None
+        rid = self.pages["studio"].start_variant(mode_id)
+        self._status("Resume created. Review it in Resume Studio.", 6000)
+        return rid
 
     def _page_for_record(self, record_id: str) -> tuple[str, str]:
         if not self.ctx.has_workspace or not record_id:

@@ -1,0 +1,73 @@
+{
+  "id": "compact_one_page",
+  "name": "Compact One-Page",
+  "version": "1.0.0",
+  "family": "single-column compact",
+  "description": "Dense single-page resume with narrow margins and tight spacing for short applications and portals with a page limit. Single column and ATS-safe.",
+  "recommended_modes": [
+    "executive_summary",
+    "ats_plain",
+    "general_professional"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "page": {
+    "margin_top_mm": 11,
+    "margin_bottom_mm": 11,
+    "margin_left_mm": 13,
+    "margin_right_mm": 13
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 9.5,
+    "heading_size": 10.5,
+    "name_size": 19,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.0
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#1F3A5F",
+    "rule": "#8A94A3",
+    "fill": "#EEF2F7",
+    "banner_fill": "#1F3A5F",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#1F3A5F"
+  },
+  "header": {
+    "style": "centered",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "separator": " | ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "rule_below",
+    "case": "upper",
+    "colour": "accent",
+    "space_before": 7,
+    "space_after": 2,
+    "rule_weight": 0.5
+  },
+  "entry": {
+    "style": "inline",
+    "date_style": "mon_year",
+    "subtitle_italic": false,
+    "space_between": 3,
+    "show_description": false
+  },
+  "skills": {
+    "style": "inline",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "none",
+    "show_name": false
+  }
+}

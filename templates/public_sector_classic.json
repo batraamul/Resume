@@ -1,0 +1,75 @@
+{
+  "id": "public_sector_classic",
+  "name": "Public Sector Classic",
+  "version": "1.0.0",
+  "family": "single-column formal",
+  "description": "Plain formal CV for government, PSU and autonomous-body applications: black type, ruled headings, organisation-first entries and full month names. Single column and ATS-safe.",
+  "recommended_modes": [
+    "government_biodata",
+    "senior_scientist",
+    "general_professional"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "page": {
+    "margin_top_mm": 17,
+    "margin_bottom_mm": 17,
+    "margin_left_mm": 20,
+    "margin_right_mm": 20
+  },
+  "fonts": {
+    "body": "Times New Roman",
+    "heading": "Times New Roman",
+    "name": "Times New Roman",
+    "body_size": 11,
+    "heading_size": 11.5,
+    "name_size": 20,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#000000",
+    "muted": "#333333",
+    "accent": "#000000",
+    "rule": "#000000",
+    "fill": "#EEF2F7",
+    "banner_fill": "#000000",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#000000"
+  },
+  "header": {
+    "style": "centered",
+    "name_case": "upper",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "separator": "  |  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "rule_below",
+    "case": "upper",
+    "colour": "text",
+    "space_before": 11,
+    "space_after": 4,
+    "rule_weight": 1.0
+  },
+  "entry": {
+    "style": "org_first",
+    "date_style": "month_year",
+    "subtitle_italic": false
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "publications": {
+    "style": "numbered",
+    "highlight_name": true
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

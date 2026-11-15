@@ -1,0 +1,71 @@
+{
+  "id": "boardroom_serif",
+  "name": "Boardroom Serif",
+  "version": "1.0.0",
+  "family": "single-column serif",
+  "description": "Conservative board-level resume in Times New Roman: left-aligned name over a thick rule, small-capital headings and organisation-first entries. Single column and ATS-safe.",
+  "recommended_modes": [
+    "executive_summary",
+    "general_professional",
+    "government_biodata"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "page": {
+    "margin_top_mm": 17,
+    "margin_bottom_mm": 17,
+    "margin_left_mm": 21,
+    "margin_right_mm": 21
+  },
+  "fonts": {
+    "body": "Times New Roman",
+    "heading": "Times New Roman",
+    "name": "Times New Roman",
+    "body_size": 11,
+    "heading_size": 12,
+    "name_size": 22,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#111111",
+    "muted": "#444444",
+    "accent": "#111111",
+    "rule": "#111111",
+    "fill": "#EEF2F7",
+    "banner_fill": "#111111",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#111111"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "small_caps",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "separator": "  |  ",
+    "rule": "thick"
+  },
+  "heading": {
+    "style": "small_caps",
+    "case": "small_caps",
+    "colour": "text",
+    "letter_spacing": 0.6,
+    "space_before": 11,
+    "space_after": 3
+  },
+  "entry": {
+    "style": "org_first",
+    "date_style": "month_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

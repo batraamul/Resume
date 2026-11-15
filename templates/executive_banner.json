@@ -1,0 +1,70 @@
+{
+  "id": "executive_banner",
+  "name": "Executive Banner",
+  "version": "1.0.0",
+  "family": "banner",
+  "description": "Bold leadership profile: name and title reversed out of a deep navy banner, shaded section bars and a three-column block of core competencies.",
+  "recommended_modes": [
+    "executive_summary",
+    "general_professional"
+  ],
+  "summary_style": "italic",
+  "page": {
+    "margin_top_mm": 14,
+    "margin_bottom_mm": 14,
+    "margin_left_mm": 18,
+    "margin_right_mm": 18
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 10.5,
+    "heading_size": 11.5,
+    "name_size": 26,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#14213D",
+    "rule": "#14213D",
+    "fill": "#E9EDF5",
+    "banner_fill": "#14213D",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#14213D"
+  },
+  "header": {
+    "style": "banner",
+    "name_case": "upper",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "separator": "  •  ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "shaded_bar",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 10,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": false
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "columns",
+    "columns": 3
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

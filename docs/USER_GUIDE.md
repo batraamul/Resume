@@ -76,7 +76,7 @@ Pick or create a **variant** (a named set of choices). Settings save automatical
   **Graphical career profile**, **Research portfolio**, **Project portfolio**, and for Scientist F/G posts
   **Deputation application — DoPT bio-data proforma**, **Senior Scientist (F/G) — R&D leadership CV** and
   **Senior scientist graphical profile** (see *Scientist F/G applications* below).
-* **Template** — visual layout (18). ATS-safe templates are single-column without tables or images.
+* **Template** — visual layout (38; browse them in Template Gallery). ATS-safe templates are single-column without tables or images.
 * **Target / vacancy** — drive ordering and emphasis; a vacancy adds the "required vs possessed" table to
   bio-data.
 * **Sections** — drag to reorder, untick to hide, **Add section ▾** to include any other section (for

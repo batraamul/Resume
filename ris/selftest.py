@@ -62,7 +62,7 @@ def run(out: Callable[[str], None] = print, gui: bool = True) -> int:
 
         lib = TemplateLibrary()
         n = len(lib.list())
-        if lib.load_errors or n < 12:
+        if lib.load_errors or n < 30:
             raise RuntimeError(f"{n} templates; errors: {lib.load_errors}")
         return f"{n} templates"
 
@@ -132,5 +132,47 @@ def run(out: Callable[[str], None] = print, gui: bool = True) -> int:
             return f"PySide6 {pv}, platform '{app.platformName()}'"
 
         check("Desktop toolkit", qt)
+
+        def main_window():
+            """Build every page of the main window on the sample profile: catches a page that fails to load."""
+            from PySide6.QtWidgets import QApplication
+
+            from ris.config import AppConfig
+            from ris.strings import NAV_SECTIONS
+            from ris.ui.context import AppContext
+            from ris.ui.main_window import MainWindow
+
+            saved = {k: os.environ.get(k) for k in ("RIS_DATA_DIR", "RIS_CONFIG_DIR")}
+            with tempfile.TemporaryDirectory(prefix="ris-selftest-ui-") as tmp:
+                os.environ["RIS_DATA_DIR"] = str(Path(tmp) / "data")
+                os.environ["RIS_CONFIG_DIR"] = str(Path(tmp) / "config")
+                ctx = None
+                win = None
+                try:
+                    ctx = AppContext(AppConfig.load())
+                    ctx.open_active(prefer_sample=True)
+                    win = MainWindow(ctx)
+                    keys = [k for _g, items in NAV_SECTIONS for k, _t in items]
+                    missing = sorted(set(keys) ^ set(win.pages))
+                    if missing:
+                        raise RuntimeError(f"navigation and pages differ: {missing}")
+                    for key in keys:
+                        win.navigate(key, "")
+                        win.pages[key].refresh()
+                    return f"{len(keys)} pages opened"
+                finally:
+                    if ctx is not None:
+                        ctx.close_workspace(backup=False)
+                    if win is not None:
+                        win.close()
+                        win.deleteLater()
+                    QApplication.processEvents()
+                    for k, v in saved.items():
+                        if v is None:
+                            os.environ.pop(k, None)
+                        else:
+                            os.environ[k] = v
+
+        check("Main window (all pages)", main_window)
     out("Self-test passed." if not failures else f"Self-test found {failures} problem(s).")
     return 0 if not failures else 1

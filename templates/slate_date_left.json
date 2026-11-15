@@ -1,0 +1,70 @@
+{
+  "id": "slate_date_left",
+  "name": "Slate Date-Left",
+  "version": "1.0.0",
+  "family": "date-left chronology",
+  "description": "Chronological layout with dates in a left gutter and the role beside them, which makes a long career easy to scan. Slate-blue numbered headings.",
+  "recommended_modes": [
+    "general_professional",
+    "government_biodata",
+    "defence_technical"
+  ],
+  "page": {
+    "margin_top_mm": 15,
+    "margin_bottom_mm": 15,
+    "margin_left_mm": 18,
+    "margin_right_mm": 18
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10.5,
+    "heading_size": 11.5,
+    "name_size": 22,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#34495E",
+    "rule": "#34495E",
+    "fill": "#EEF2F7",
+    "banner_fill": "#34495E",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#34495E"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "separator": "  |  ",
+    "rule": "double"
+  },
+  "heading": {
+    "style": "numbered",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.6,
+    "space_before": 11,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "date_left",
+    "date_style": "mm_yyyy",
+    "subtitle_italic": true,
+    "gutter_mm": 30
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

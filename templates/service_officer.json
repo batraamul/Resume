@@ -1,0 +1,69 @@
+{
+  "id": "service_officer",
+  "name": "Service Officer Bio-data",
+  "version": "1.0.0",
+  "family": "formal date-left",
+  "description": "Formal bio-data for serving officers: centred name over a double rule, numbered section headings, dates in a left column and a skills table, printed black on white in Times New Roman.",
+  "recommended_modes": [
+    "government_biodata",
+    "defence_technical",
+    "senior_scientist"
+  ],
+  "page": {
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 19,
+    "margin_right_mm": 19
+  },
+  "fonts": {
+    "body": "Times New Roman",
+    "heading": "Times New Roman",
+    "name": "Times New Roman",
+    "body_size": 11,
+    "heading_size": 11.5,
+    "name_size": 20,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#000000",
+    "muted": "#333333",
+    "accent": "#000000",
+    "rule": "#000000",
+    "fill": "#F0F0F0",
+    "banner_fill": "#000000",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#000000"
+  },
+  "header": {
+    "style": "centered",
+    "name_case": "upper",
+    "name_colour": "text",
+    "headline_colour": "text",
+    "separator": "  |  ",
+    "rule": "double"
+  },
+  "heading": {
+    "style": "numbered",
+    "case": "upper",
+    "colour": "text",
+    "space_before": 11,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "date_left",
+    "date_style": "mm_yyyy",
+    "subtitle_italic": false,
+    "gutter_mm": 32
+  },
+  "skills": {
+    "style": "table",
+    "competencies_style": "bullets"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

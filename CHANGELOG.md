@@ -1,5 +1,43 @@
 # Changelog
 
+## 1.7.0 — 2026-11-15
+
+Replaces 1.4.0–1.6.0, which crashed on start-up on macOS with
+`ImportError: cannot import name 'pyqtSignal' from 'PySide6.QtCore'`.
+
+### Fixed
+* The help module imported `pyqtSignal`, a PyQt name that does not exist in PySide6, so the main window could
+  not open. It now uses PySide6's `Signal`. A test now fails the build if any PyQt-only name is imported.
+* The templates page read template records as dictionaries and crashed when it opened; it has been replaced.
+* Fresh Start deleted a folder that does not hold the profile (records live in the workspace database), so it
+  removed nothing. It now works on the database (see below).
+* The built-in self-test now opens the main window and every page, so a page that fails to load stops the release
+  build instead of reaching users.
+
+### Added
+* **Template Gallery** (Documents): all 38 templates with a layout sketch, filters (recommended, ATS-safe,
+  government & deputation, executive, scientific, technical, two-column, graphical, your own), search, a preview
+  rendered with your own profile, and *Use template* (apply to the open resume or start a new one).
+* **20 new templates**, each a working layout that exports to DOCX and PDF: Executive Classic, Executive Banner,
+  Executive Sidebar, Boardroom Serif, Modern Minimal, Modern Split Header, Clean Two-Column, Slate Date-Left,
+  Compact One-Page, Corporate Blue, Elegant Burgundy, Consultant Brief, Technical Lead, Programme Manager,
+  Systems Engineer, Service Officer Bio-data, Public Sector Classic, Academic Classic, Research Two-Column and
+  Graphical Executive. Styles follow the common families on executive and modern resume sites (centred classic,
+  banner, sidebar, split header, date-left, minimal), built on this application's own layout engine.
+* **Recommended for my profile**: templates ranked from facts in your profile (service in government, defence or
+  PSUs; years of experience; publications; projects; your career targets' preferred template; a deputation
+  vacancy in your list), each with the reason.
+* **Deputation & UPSC Formats** (System): which format each route needs (deputation / absorption / short-term
+  contract in the DoPT proforma of OM dated 02.07.2015; direct and lateral recruitment such as UPSC ORA and
+  DRDO RAC with a detailed CV), readiness of your profile for each of proforma items 1–18 with a link to where
+  each is recorded, the checklist of enclosures, and one-click creation of the document.
+* **Help while filling in**: a ? button beside form fields with advice on what to write; a *? Guide* button on
+  each page; a searchable *Help* window (top bar or F1) with writing guidance for every section, including weak
+  and stronger example wordings.
+* **Fresh Start** (Settings → Privacy & security): writes and verifies a full backup, asks you to type DELETE,
+  then removes every record in the workspace. Restore the backup from Backup & Restore to undo. The sample
+  workspace is protected; with synchronisation on, records are deleted so the deletion reaches other devices.
+
 ## 1.2.0 — 2026-10-25
 
 ### Added

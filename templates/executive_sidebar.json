@@ -1,0 +1,84 @@
+{
+  "id": "executive_sidebar",
+  "name": "Executive Sidebar",
+  "version": "1.0.0",
+  "family": "two-column sidebar",
+  "description": "Two-column executive layout: a tinted left sidebar carries contact details, competencies, skills and education, leaving the main column for experience and achievements.",
+  "recommended_modes": [
+    "executive_summary",
+    "general_professional",
+    "technical_specialist"
+  ],
+  "page": {
+    "margin_top_mm": 14,
+    "margin_bottom_mm": 14,
+    "margin_left_mm": 15,
+    "margin_right_mm": 15
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10,
+    "heading_size": 11.5,
+    "name_size": 23,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#243B55",
+    "rule": "#243B55",
+    "fill": "#E8EDF3",
+    "banner_fill": "#243B55",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#E8EDF3",
+    "link": "#243B55"
+  },
+  "header": {
+    "style": "sidebar",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "contact_style": "stacked",
+    "separator": " | ",
+    "rule": "none"
+  },
+  "heading": {
+    "style": "caps_rule",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 1.0,
+    "space_before": 10,
+    "space_after": 3,
+    "rule_weight": 0.6
+  },
+  "entry": {
+    "style": "stacked",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "bullets",
+    "competencies_style": "bullets"
+  },
+  "columns": {
+    "enabled": true,
+    "side": "left",
+    "width_frac": 0.32,
+    "gap_mm": 7,
+    "sidebar_sections": [
+      "competencies",
+      "skills",
+      "education",
+      "training",
+      "languages"
+    ]
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

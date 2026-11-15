@@ -1,0 +1,87 @@
+{
+  "id": "research_two_column",
+  "name": "Research Two-Column",
+  "version": "1.0.0",
+  "family": "two-column sidebar",
+  "description": "Research profile with a narrow left column for expertise, skills, education and training beside the publications and projects. Indigo accents.",
+  "recommended_modes": [
+    "scientific_research",
+    "research_portfolio",
+    "senior_scientist"
+  ],
+  "page": {
+    "margin_top_mm": 14,
+    "margin_bottom_mm": 14,
+    "margin_left_mm": 15,
+    "margin_right_mm": 15
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10,
+    "heading_size": 11.5,
+    "name_size": 22,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#3D348B",
+    "rule": "#3D348B",
+    "fill": "#EFEEF8",
+    "banner_fill": "#3D348B",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#EFEEF8",
+    "link": "#3D348B"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "separator": "  ·  ",
+    "rule": "double"
+  },
+  "heading": {
+    "style": "caps_rule",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 1.0,
+    "space_before": 9,
+    "space_after": 3,
+    "rule_weight": 0.6
+  },
+  "entry": {
+    "style": "stacked",
+    "date_style": "year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "bullets",
+    "competencies_style": "bullets"
+  },
+  "publications": {
+    "style": "numbered",
+    "highlight_name": true
+  },
+  "columns": {
+    "enabled": true,
+    "side": "left",
+    "width_frac": 0.3,
+    "gap_mm": 7,
+    "sidebar_sections": [
+      "competencies",
+      "skills",
+      "education",
+      "training",
+      "languages"
+    ]
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

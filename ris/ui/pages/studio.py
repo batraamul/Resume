@@ -1042,6 +1042,32 @@ class StudioPage(Page):
         self.ctx.invalidate()
         self.focus_record(rec.id)
 
+    def start_variant(self, mode_id: str, template_id: str = "", name: str = "") -> str:
+        """Create a resume variant for a mode / template chosen elsewhere (template gallery, deputation guide)
+        and open it. Returns the id of the new variant."""
+        mode = get_mode(mode_id)
+        template = template_id if template_id and self.ctx.templates.find(template_id) else mode.default_template
+        length = mode.default_length.value if hasattr(mode.default_length, "value") else str(mode.default_length)
+        rec = self.ctx.repo.create(RecordKind.VARIANT, {"name": name or mode.name, "mode": mode.id,
+                                                        "template_id": template, "length": length})
+        self.ctx.invalidate()
+        self.focus_record(rec.id)
+        return rec.id
+
+    def use_template(self, template_id: str) -> bool:
+        """Switch the open resume variant to another template. False when no variant is open or the template
+        is not available."""
+        if self.variant_id is None or self.ctx.repo.find(self.variant_id) is None:
+            return False
+        self.refresh()
+        idx = self.template.findData(template_id)
+        if idx < 0:
+            return False
+        if idx != self.template.currentIndex():
+            self.template.setCurrentIndex(idx)  # saves the variant and refreshes the preview
+        self._flush_save()
+        return True
+
     def duplicate_variant(self) -> None:
         rec = self.ctx.repo.find(self.variant_id) if self.variant_id else None
         if rec is None:

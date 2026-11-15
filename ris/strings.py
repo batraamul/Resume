@@ -24,14 +24,14 @@ NAV_SECTIONS: list[tuple[str, list[tuple[str, str]]]] = [
     ]),
     ("Documents", [
         ("studio", "Resume Studio"),
-        ("templates_studio", "Templates & Recommendations"),
+        ("gallery", "Template Gallery"),
+        ("deputation", "Deputation & UPSC Formats"),
         ("library", "Resume Library"),
         ("letters", "Cover Letters"),
         ("tracker", "Application Tracker"),
         ("exports", "Documents & Exports"),
     ]),
     ("System", [
-        ("upsc_format", "UPSC Deputation Format"),
         ("sync", "Synchronisation"),
         ("backup", "Backup & Restore"),
         ("settings", "Settings & Security"),
@@ -59,13 +59,14 @@ PAGE_SUBTITLES = {
     "opportunities": "Vacancies: paste or import a notice, extract requirements and map your evidence.",
     "studio": "Compose a tailored resume — plain, government, academic or graphical — review every claim, preview "
               "the layout and export.",
-    "templates_studio": "Browse 30+ professional templates, get AI recommendations based on your profile, and apply "
-                        "ATS-optimized layouts.",
+    "gallery": "Every resume layout with a sketch, filters and advice for your profile. Preview any template with "
+               "your own data, then use it in Resume Studio.",
+    "deputation": "What each recruitment route asks for, your readiness for the DoPT bio-data proforma "
+                  "(OM dated 02.07.2015) and one-click creation of the right document.",
     "library": "Saved resume variants, immutable versions and comparisons.",
     "letters": "Factual cover letters drafted from your profile and the vacancy.",
     "tracker": "Applications, statuses and deadlines.",
     "exports": "Every exported file, with its checksum and validation report.",
-    "upsc_format": "UPSC Bio-data Proforma (DoPT OM 02.07.2015) for deputation, lateral entry and research scientist recruitment.",
     "sync": "Optional encrypted cloud backup and record-level synchronisation.",
     "backup": "Local backups, restore, integrity checks and portable exports.",
     "settings": "Appearance, PDF engine, privacy, optional AI provider and data location.",

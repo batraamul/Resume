@@ -1,0 +1,71 @@
+{
+  "id": "consultant_brief",
+  "name": "Consultant Brief",
+  "version": "1.0.0",
+  "family": "organisation-first",
+  "description": "Consulting-style resume that leads each entry with the organisation and gives skills as a single line, for readers who scan employers first. Single column and ATS-safe.",
+  "recommended_modes": [
+    "general_professional",
+    "executive_summary",
+    "project_portfolio"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "page": {
+    "margin_top_mm": 15,
+    "margin_bottom_mm": 15,
+    "margin_left_mm": 18,
+    "margin_right_mm": 18
+  },
+  "fonts": {
+    "body": "Arial",
+    "heading": "Arial",
+    "name": "Arial",
+    "body_size": 10,
+    "heading_size": 11,
+    "name_size": 21,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#2B3A42",
+    "rule": "#2B3A42",
+    "fill": "#EEF2F7",
+    "banner_fill": "#2B3A42",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#2B3A42"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "upper",
+    "name_colour": "text",
+    "headline_colour": "accent",
+    "separator": "  |  ",
+    "rule": "thick"
+  },
+  "heading": {
+    "style": "left_bar",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 10,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "org_first",
+    "date_style": "year",
+    "subtitle_italic": false
+  },
+  "skills": {
+    "style": "inline",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

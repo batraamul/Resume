@@ -1,0 +1,71 @@
+{
+  "id": "technical_lead",
+  "name": "Technical Lead",
+  "version": "1.0.0",
+  "family": "technical",
+  "description": "Engineering-leadership resume: skills in a category table near the top, green accent bars and project cards for flagship systems.",
+  "recommended_modes": [
+    "technical_specialist",
+    "defence_technical",
+    "project_portfolio"
+  ],
+  "page": {
+    "margin_top_mm": 14,
+    "margin_bottom_mm": 14,
+    "margin_left_mm": 17,
+    "margin_right_mm": 17
+  },
+  "fonts": {
+    "body": "Calibri",
+    "heading": "Calibri",
+    "name": "Calibri",
+    "body_size": 10,
+    "heading_size": 11.5,
+    "name_size": 22,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#1E5631",
+    "rule": "#1E5631",
+    "fill": "#EAF3EC",
+    "banner_fill": "#1E5631",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#1E5631"
+  },
+  "header": {
+    "style": "left",
+    "name_case": "normal",
+    "name_colour": "accent",
+    "headline_colour": "text",
+    "separator": "  |  ",
+    "rule": "thick"
+  },
+  "heading": {
+    "style": "left_bar",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 0.6,
+    "space_before": 10,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "title_date_right",
+    "date_style": "mon_year",
+    "subtitle_italic": false,
+    "project_style": "cards"
+  },
+  "skills": {
+    "style": "table",
+    "competencies_style": "columns",
+    "columns": 3
+  },
+  "footer": {
+    "page_numbers": "x_of_y",
+    "show_name": true
+  }
+}

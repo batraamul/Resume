@@ -1,0 +1,75 @@
+{
+  "id": "academic_classic",
+  "name": "Academic Classic",
+  "version": "1.0.0",
+  "family": "single-column serif",
+  "description": "Classic academic CV: centred name, small-capital headings, numbered publications with your name highlighted and year-only dates. Single column and ATS-safe.",
+  "recommended_modes": [
+    "academic_cv",
+    "scientific_research",
+    "research_portfolio"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "page": {
+    "margin_top_mm": 18,
+    "margin_bottom_mm": 18,
+    "margin_left_mm": 21,
+    "margin_right_mm": 21
+  },
+  "fonts": {
+    "body": "Cambria",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10.5,
+    "heading_size": 11.5,
+    "name_size": 22,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#2C2C54",
+    "rule": "#2C2C54",
+    "fill": "#EEF2F7",
+    "banner_fill": "#2C2C54",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#2C2C54"
+  },
+  "header": {
+    "style": "centered",
+    "name_case": "normal",
+    "name_colour": "text",
+    "headline_colour": "muted",
+    "separator": "  |  ",
+    "rule": "single"
+  },
+  "heading": {
+    "style": "small_caps",
+    "case": "small_caps",
+    "colour": "accent",
+    "letter_spacing": 0.8,
+    "space_before": 12,
+    "space_after": 4
+  },
+  "entry": {
+    "style": "stacked",
+    "date_style": "year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "bullets",
+    "competencies_style": "inline"
+  },
+  "publications": {
+    "style": "numbered",
+    "highlight_name": true
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}

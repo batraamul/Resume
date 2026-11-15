@@ -1,0 +1,73 @@
+{
+  "id": "elegant_burgundy",
+  "name": "Elegant Burgundy",
+  "version": "1.0.0",
+  "family": "centered classic",
+  "description": "Elegant serif resume with a centred name over a double rule, letter-spaced burgundy headings and organisation-first entries. Single column and ATS-safe.",
+  "recommended_modes": [
+    "general_professional",
+    "academic_cv",
+    "executive_summary"
+  ],
+  "ats_safe": true,
+  "tables_allowed": false,
+  "summary_style": "italic",
+  "page": {
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 20,
+    "margin_right_mm": 20
+  },
+  "fonts": {
+    "body": "Cambria",
+    "heading": "Cambria",
+    "name": "Cambria",
+    "body_size": 10.5,
+    "heading_size": 11.5,
+    "name_size": 24,
+    "headline_size": 11,
+    "small_size": 9,
+    "line_spacing": 1.08
+  },
+  "colours": {
+    "text": "#1E1E1E",
+    "muted": "#4A4F57",
+    "accent": "#6D1F2B",
+    "rule": "#6D1F2B",
+    "fill": "#F6ECEE",
+    "banner_fill": "#6D1F2B",
+    "banner_text": "#FFFFFF",
+    "sidebar_fill": "#F2F4F8",
+    "link": "#6D1F2B"
+  },
+  "header": {
+    "style": "centered",
+    "name_case": "small_caps",
+    "name_colour": "accent",
+    "headline_colour": "muted",
+    "separator": "  •  ",
+    "rule": "double"
+  },
+  "heading": {
+    "style": "caps_rule",
+    "case": "upper",
+    "colour": "accent",
+    "letter_spacing": 1.4,
+    "space_before": 11,
+    "space_after": 4,
+    "rule_weight": 0.6
+  },
+  "entry": {
+    "style": "org_first",
+    "date_style": "mon_year",
+    "subtitle_italic": true
+  },
+  "skills": {
+    "style": "inline_categories",
+    "competencies_style": "inline"
+  },
+  "footer": {
+    "page_numbers": "page_x_of_y",
+    "show_name": true
+  }
+}
