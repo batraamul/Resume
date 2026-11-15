@@ -74,7 +74,7 @@ GUIDES: dict[str, Guide] = {
          "Write in the third person without 'I', and keep to facts recorded elsewhere in your profile."],
         weak="Hard-working scientist with vast experience in many areas seeking a challenging position.",
         strong="Scientist F with 18 years in airborne instrumentation and embedded systems; led a 12-member "
-               "division that fielded a telemetry system at six stations; PhD candidate in image super-resolution.",
+               "division that fielded a data-acquisition system at six stations; PhD candidate in image super-resolution.",
         keywords="objective profile about me headline"),
     "experience": Guide(
         "Experience",
@@ -139,7 +139,7 @@ GUIDES: dict[str, Guide] = {
          "For official projects use the 'approved external description' and mark the disclosure status.",
          "Mention the technologies used; they feed the skills evidence and keyword match."],
         weak="Worked on a drone project.",
-        strong="Designed the flight-control and telemetry electronics of a 25 kg fixed-wing UAV; led integration "
+        strong="Designed the flight-control and data-link electronics of a 25 kg fixed-wing UAV; led integration "
                "and 40 flight trials; endurance improved from 2 h to 3.5 h.",
         keywords="achievement system development result contribution"),
     "leadership": Guide(
